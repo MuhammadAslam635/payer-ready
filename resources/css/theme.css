@@ -1,0 +1,130 @@
+/* PayerReady Theme - CSS Custom Properties */
+:root {
+    /* Primary Colors - Teal/Green theme */
+    --color-primary-50: #f0fdfa;
+    --color-primary-100: #ccfbf1;
+    --color-primary-200: #99f6e4;
+    --color-primary-300: #5eead4;
+    --color-primary-400: #2dd4bf;
+    --color-primary-500: #14b8a6;
+    --color-primary-600: #0d9488;
+    --color-primary-700: #0f766e;
+    --color-primary-800: #115e59;
+    --color-primary-900: #134e4a;
+    --color-primary-950: #042f2e;
+
+    /* Secondary Colors - Blue theme */
+    --color-secondary-50: #eff6ff;
+    --color-secondary-100: #dbeafe;
+    --color-secondary-200: #bfdbfe;
+    --color-secondary-300: #93c5fd;
+    --color-secondary-400: #60a5fa;
+    --color-secondary-500: #3b82f6;
+    --color-secondary-600: #2563eb;
+    --color-secondary-700: #1d4ed8;
+    --color-secondary-800: #1e40af;
+    --color-secondary-900: #1e3a8a;
+    --color-secondary-950: #172554;
+
+    /* Text Colors */
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-tertiary: #94a3b8;
+
+    /* Background Colors */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-bg-tertiary: #f1f5f9;
+
+    /* Border Colors */
+    --color-border: #e2e8f0;
+    --color-border-light: #f1f5f9;
+}
+
+/* Dark mode */
+.dark {
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-text-tertiary: #94a3b8;
+    --color-border: #334155;
+    --color-border-light: #475569;
+}
+
+/* Custom utility classes using Tailwind @apply */
+@layer utilities {
+    .bg-primary {
+        background-color: var(--color-primary-500);
+    }
+    .bg-primary-50 {
+        background-color: var(--color-primary-50);
+    }
+    .bg-primary-100 {
+        background-color: var(--color-primary-100);
+    }
+    .bg-primary-600 {
+        background-color: var(--color-primary-600);
+    }
+    .bg-primary-700 {
+        background-color: var(--color-primary-700);
+    }
+
+    .text-primary-600 {
+        color: var(--color-primary-600);
+    }
+    .text-secondary-800 {
+        color: var(--color-secondary-800);
+    }
+
+    .text-text-primary {
+        color: var(--color-text-primary);
+    }
+    .text-text-secondary {
+        color: var(--color-text-secondary);
+    }
+    .text-text-tertiary {
+        color: var(--color-text-tertiary);
+    }
+
+    .bg-bg-primary {
+        background-color: var(--color-bg-primary);
+    }
+    .bg-bg-secondary {
+        background-color: var(--color-bg-secondary);
+    }
+    .bg-bg-tertiary {
+        background-color: var(--color-bg-tertiary);
+    }
+
+    .border-border {
+        border-color: var(--color-border);
+    }
+    .border-border-light {
+        border-color: var(--color-border-light);
+    }
+}
+
+/* Custom components */
+@layer components {
+    .btn-primary {
+        @apply bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+    }
+
+    .btn-secondary {
+        @apply bg-white hover:bg-gray-50 text-slate-800 font-semibold py-3 px-6 rounded-lg border border-gray-300 transition-colors;
+    }
+
+    .card {
+        @apply bg-white rounded-xl shadow-lg p-6;
+    }
+
+    .section-padding {
+        @apply py-20;
+    }
+
+    .container-custom {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+}
