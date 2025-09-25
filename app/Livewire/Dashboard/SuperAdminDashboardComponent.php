@@ -150,7 +150,7 @@ class SuperAdminDashboardComponent extends Component
                     'is_active' => $user->is_active,
                     'profile_photo_url' => $user->profile_photo_url,
                     'created_at' => $user->created_at,
-                    'organization_name' => $user->organization?->business_name,
+                    'organization_name' => $user->organization->first()?->business_name,
                 ];
             });
     }
