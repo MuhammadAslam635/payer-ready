@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\ESignatureRecord;
 
-class ESignatureRecord
+class ESignatureRecordService
 {
     /**
      * Create a new class instance.

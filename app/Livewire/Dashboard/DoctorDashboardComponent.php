@@ -33,41 +33,24 @@ class DoctorDashboardComponent extends Component
     private function getDashboardStats()
     {
         $user = Auth::user();
-        $doctorProfile = $user->doctorProfile;
 
-        if (!$doctorProfile) {
-            return [
-                'totalLicenses' => 0,
-                'totalDocuments' => 0,
-                'totalWorkHistory' => 0,
-                'totalReferences' => 0,
-                'activeLicenses' => 0,
-                'verifiedDocuments' => 0,
-                'latestLicenses' => collect(),
-                'latestDocuments' => collect(),
-                'latestWorkHistory' => collect(),
-                'latestReferences' => collect(),
-                'clinic' => null,
-            ];
-        }
-
-        // Get doctor-specific counts
-        $totalLicenses = DoctorLicense::where('doctor_profile_id', $doctorProfile->id)->count();
-        $totalDocuments = DoctorDocument::where('doctor_profile_id', $doctorProfile->id)->count();
-        $totalWorkHistory = DoctorWorkHistory::where('doctor_profile_id', $doctorProfile->id)->count();
-        $totalReferences = DoctorReference::where('doctor_profile_id', $doctorProfile->id)->count();
+        // Get doctor-specific counts using user_id directly
+        $totalLicenses = DoctorLicense::where('user_id', $user->id)->count();
+        $totalDocuments = DoctorDocument::where('user_id', $user->id)->count();
+        $totalWorkHistory = DoctorWorkHistory::where('user_id', $user->id)->count();
+        $totalReferences = DoctorReference::where('user_id', $user->id)->count();
 
         // Active/verified counts
-        $activeLicenses = DoctorLicense::where('doctor_profile_id', $doctorProfile->id)
+        $activeLicenses = DoctorLicense::where('user_id', $user->id)
             ->where('expiration_date', '>', now())
             ->count();
-        $verifiedDocuments = DoctorDocument::where('doctor_profile_id', $doctorProfile->id)
+        $verifiedDocuments = DoctorDocument::where('user_id', $user->id)
             ->where('is_verified', true)
             ->count();
 
         // Latest licenses
         $latestLicenses = DoctorLicense::with('state')
-            ->where('doctor_profile_id', $doctorProfile->id)
+            ->where('user_id', $user->id)
             ->latest()
             ->take(5)
             ->get()
@@ -85,7 +68,7 @@ class DoctorDashboardComponent extends Component
 
         // Latest documents
         $latestDocuments = DoctorDocument::with('documentType')
-            ->where('doctor_profile_id', $doctorProfile->id)
+            ->where('user_id', $user->id)
             ->latest()
             ->take(5)
             ->get()
@@ -101,7 +84,7 @@ class DoctorDashboardComponent extends Component
             });
 
         // Latest work history
-        $latestWorkHistory = DoctorWorkHistory::where('doctor_profile_id', $doctorProfile->id)
+        $latestWorkHistory = DoctorWorkHistory::where('user_id', $user->id)
             ->latest()
             ->take(5)
             ->get()
@@ -118,7 +101,7 @@ class DoctorDashboardComponent extends Component
             });
 
         // Latest references
-        $latestReferences = DoctorReference::where('doctor_profile_id', $doctorProfile->id)
+        $latestReferences = DoctorReference::where('user_id', $user->id)
             ->latest()
             ->take(5)
             ->get()
@@ -127,8 +110,32 @@ class DoctorDashboardComponent extends Component
                     'id' => $reference->id,
                     'reference_full_name' => $reference->reference_full_name,
                     'reference_title' => $reference->reference_title,
+                    'reference_specialty' => $reference->reference_specialty,
+                    'organization_name' => $reference->organization_name,
                     'phone' => $reference->phone,
                     'email' => $reference->email,
+                    'relationship_type' => $reference->relationship_type,
+                    'years_known' => $reference->years_known,
+                    'status' => $reference->status,
+                    'created_at' => $reference->created_at,
+                ];
+            });
+
+        // All reference providers for the main table
+        $allReferences = DoctorReference::where('user_id', $user->id)
+            ->latest()
+            ->get()
+            ->map(function ($reference) {
+                return [
+                    'id' => $reference->id,
+                    'reference_full_name' => $reference->reference_full_name,
+                    'reference_title' => $reference->reference_title,
+                    'reference_specialty' => $reference->reference_specialty,
+                    'organization_name' => $reference->organization_name,
+                    'phone' => $reference->phone,
+                    'email' => $reference->email,
+                    'relationship_type' => $reference->relationship_type,
+                    'years_known' => $reference->years_known,
                     'status' => $reference->status,
                     'created_at' => $reference->created_at,
                 ];
@@ -138,7 +145,7 @@ class DoctorDashboardComponent extends Component
         $clinic = $user->clinic;
 
         return [
-            'doctorProfile' => $doctorProfile,
+            'doctorProfile' => null, // No longer using doctor profile
             'clinic' => $clinic,
             'totalLicenses' => $totalLicenses,
             'totalDocuments' => $totalDocuments,
@@ -150,6 +157,7 @@ class DoctorDashboardComponent extends Component
             'latestDocuments' => $latestDocuments,
             'latestWorkHistory' => $latestWorkHistory,
             'latestReferences' => $latestReferences,
+            'allReferences' => $allReferences,
         ];
     }
 }

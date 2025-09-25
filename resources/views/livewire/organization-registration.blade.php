@@ -152,11 +152,27 @@
                         @elseif($currentStep == 5)
                             <x-auth.insurance-form :userType="$userType" />
                         @elseif($currentStep == 6)
-                            <x-auth.document-from :userType="$userType" />
+                            <x-auth.document-from 
+                                :userType="$userType" 
+                                :cv="$cv"
+                                :professionalLicense="$professionalLicense"
+                                :pictureId="$pictureId"
+                                :socialSecurityCard="$socialSecurityCard"
+                                :certificateOfLiabilityInsurance="$certificateOfLiabilityInsurance"
+                                :copiesOfDiplomasCertifications="$copiesOfDiplomasCertifications"
+                                :stateCredentialingApplication="$stateCredentialingApplication"
+                                :passportStylePhoto="$passportStylePhoto"
+                                :ecfmgCertificate="$ecfmgCertificate"
+                                :boardCertificate="$boardCertificate"
+                                :procedureLog="$procedureLog"
+                                :cmeCs="$cmeCs"
+                                :immunizationShotRecords="$immunizationShotRecords"
+                                :aclsBlsCertificate="$aclsBlsCertificate"
+                            />
                         @elseif($currentStep == 7)
                             <x-auth.review-sign-form :userType="$userType" :name="$name" :email="$email"
                              :organizationName="$organizationName" :primarySpecialty="$primarySpecialty"
-                             :taxonomyCode="$taxonomyCode" :primaryState="$primaryState" :specialties="$specialties"
+                             :primaryState="$primaryState" :specialties="$specialties"
                               :dateOfBirth="$dateOfBirth" :ssn="$ssn" :homeAddress="$homeAddress"
                               :practiceAddress="$practiceAddress" :phoneNumber="$phoneNumber"
                               :npiNumber="$npiNumber" :caqhId="$caqhId" :caqhLogin="$caqhLogin"
@@ -178,6 +194,8 @@
                                     class="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-lg transition-colors">
                                 Back
                             </button>
+                        @else
+                            <div></div>
                         @endif
 
                         <div class="flex items-center gap-4">

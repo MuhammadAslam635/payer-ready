@@ -19,63 +19,54 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Insurance Carrier -->
             <div>
-                <label for="insuranceCarrier" class="block text-sm font-medium text-text-primary mb-2">
-                    Insurance Carrier *
-                </label>
-                <input type="text"
-                       id="insuranceCarrier"
-                       wire:model="insuranceCarrier"
-                       class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('insuranceCarrier') border-error-500 @enderror"
-                       placeholder="e.g., The Doctors Company">
-                <x-ui.error name="insuranceCarrier" />
+                <x-ui.input
+                    label="Insurance Carrier *"
+                    name="insuranceCarrier"
+                    wire:model="insuranceCarrier"
+                    placeholder="e.g., The Doctors Company"
+                    required />
             </div>
 
             <!-- Policy Number -->
             <div>
-                <label for="policyNumber" class="block text-sm font-medium text-text-primary mb-2">
-                    Policy Number *
-                </label>
-                <input type="text"
-                       id="policyNumber"
-                       wire:model="policyNumber"
-                       class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('policyNumber') border-error-500 @enderror"
-                       placeholder="Policy number">
-                <x-ui.error name="policyNumber" />
+                <x-ui.input
+                    label="Policy Number *"
+                    name="policyNumber"
+                    wire:model="policyNumber"
+                    placeholder="Policy number"
+                    required />
             </div>
 
             <!-- Coverage Amount -->
             <div>
-                <label for="coverageAmount" class="block text-sm font-medium text-text-primary mb-2">
-                    Coverage Amount (per occurrence/aggregate) *
-                </label>
-                <input type="text"
-                       id="coverageAmount"
-                       wire:model="coverageAmount"
-                       class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('coverageAmount') border-error-500 @enderror"
-                       placeholder="$1,000,000 / $3,000,000">
+                <x-ui.input
+                    label="Coverage Amount (per occurrence/aggregate) *"
+                    name="coverageAmount"
+                    type="number"
+                    wire:model="coverageAmount"
+                    placeholder="1000000"
+                    min="0"
+                    step="1"/>
+                <p class="text-xs text-gray-500 mt-1">Enter amount in dollars (e.g., 1000000 for $1,000,000)</p>
                 <x-ui.error name="coverageAmount" />
             </div>
 
             <!-- Policy Effective Date -->
             <div>
-                <label for="policyEffectiveDate" class="block text-sm font-medium text-text-primary mb-2">
-                    Policy Effective Date
-                </label>
-                <input type="date"
-                       id="policyEffectiveDate"
-                       wire:model="policyEffectiveDate"
-                       class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                <x-ui.input
+                    label="Policy Effective Date"
+                    name="policyEffectiveDate"
+                    type="date"
+                    wire:model="policyEffectiveDate" />
             </div>
 
             <!-- Policy Expiration Date -->
             <div class="lg:col-span-1">
-                <label for="policyExpirationDate" class="block text-sm font-medium text-text-primary mb-2">
-                    Policy Expiration Date
-                </label>
-                <input type="date"
-                       id="policyExpirationDate"
-                       wire:model="policyExpirationDate"
-                       class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                <x-ui.input
+                    label="Policy Expiration Date"
+                    name="policyExpirationDate"
+                    type="date"
+                    wire:model="policyExpirationDate" />
             </div>
         </div>
     </div>
@@ -87,73 +78,46 @@
         <div class="space-y-6">
             <!-- License Suspension Question -->
             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <label class="block text-sm font-medium text-text-primary mb-4">
-                    Has the provider's medical license ever been suspended, revoked, or restricted? *
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input 
+                        type="checkbox" 
+                        wire:model="licenseSuspended"
+                        class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    />
+                    <span class="text-sm text-text-primary">
+                        Has the provider's license ever been suspended, revoked, or restricted? *
+                    </span>
                 </label>
-                <div class="flex items-center gap-6">
-                    <label class="flex items-center">
-                        <input type="radio"
-                               wire:model="licenseSuspended"
-                               value="1"
-                               class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('licenseSuspended') border-error-500 @enderror">
-                        <span class="ml-2 text-sm text-text-primary">Yes</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio"
-                               wire:model="licenseSuspended"
-                               value="0"
-                               class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('licenseSuspended') border-error-500 @enderror">
-                        <span class="ml-2 text-sm text-text-primary">No</span>
-                    </label>
-                </div>
                 <x-ui.error name="licenseSuspended" />
             </div>
 
             <!-- Felony Conviction Question -->
             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <label class="block text-sm font-medium text-text-primary mb-4">
-                    Has the provider ever been convicted of a felony? *
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input 
+                        type="checkbox" 
+                        wire:model="felonyConviction"
+                        class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    />
+                    <span class="text-sm text-text-primary">
+                        Has the provider ever been convicted of a felony? *
+                    </span>
                 </label>
-                <div class="flex items-center gap-6">
-                    <label class="flex items-center">
-                        <input type="radio"
-                               wire:model="felonyConviction"
-                               value="1"
-                               class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('felonyConviction') border-error-500 @enderror">
-                        <span class="ml-2 text-sm text-text-primary">Yes</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio"
-                               wire:model="felonyConviction"
-                               value="0"
-                               class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('felonyConviction') border-error-500 @enderror">
-                        <span class="ml-2 text-sm text-text-primary">No</span>
-                    </label>
-                </div>
                 <x-ui.error name="felonyConviction" />
             </div>
 
             <!-- Malpractice Claims Question -->
             <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <label class="block text-sm font-medium text-text-primary mb-4">
-                    Have there been any malpractice claims filed against the provider in the last 5 years? *
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input 
+                        type="checkbox" 
+                        wire:model="malpracticeClaims"
+                        class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    />
+                    <span class="text-sm text-text-primary">
+                        Has the provider ever had any malpractice claims or settlements? *
+                    </span>
                 </label>
-                <div class="flex items-center gap-6">
-                    <label class="flex items-center">
-                        <input type="radio"
-                               wire:model="malpracticeClaims"
-                               value="1"
-                               class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('malpracticeClaims') border-error-500 @enderror">
-                        <span class="ml-2 text-sm text-text-primary">Yes</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio"
-                               wire:model="malpracticeClaims"
-                               value="0"
-                               class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 @error('malpracticeClaims') border-error-500 @enderror">
-                        <span class="ml-2 text-sm text-text-primary">No</span>
-                    </label>
-                </div>
                 <x-ui.error name="malpracticeClaims" />
             </div>
         </div>

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('insurances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('carrier');
-            $table->string('policy_number');
+            $table->string('carrier')->nullable();
+            $table->string('policy_number')->nullable();
             $table->decimal('coverage_amount', 15, 2)->nullable();
-            $table->date('effective_date')->nullable();
-            $table->date('expiration_date')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->date('policy_effective_date')->nullable();
+            $table->date('policy_expiration_date')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected', 'expired', 'cancelled', 'return_for_correction', 'completed', 'requested'])->default('pending');
             $table->timestamps();
 
             // Indexes

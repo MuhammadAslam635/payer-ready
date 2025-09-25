@@ -2,11 +2,14 @@
 
 namespace App\Traits\Admin;
 
+use App\Traits\HasToast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Livewire\WithPagination;
 
 trait CrudTrait
 {
+    use HasToast, WithPagination;
     public $search = '';
     public $sortField = 'id';
     public $sortDirection = 'desc';
@@ -103,10 +106,10 @@ trait CrudTrait
         if ($this->editing) {
             $model = $modelClass::findOrFail($this->modelId);
             $model->update($this->formData);
-            session()->flash('message', 'Record updated successfully.');
+            $this->toastSuccess('Record updated successfully.');
         } else {
             $modelClass::create($this->formData);
-            session()->flash('message', 'Record created successfully.');
+            $this->toastSuccess('Record created successfully.');
         }
 
         $this->resetForm();
@@ -127,10 +130,10 @@ trait CrudTrait
     public function confirmDelete()
     {
         $modelClass = $this->getModelClass();
+        // $this->toastSuccess('Record deleted successfully.');
         $model = $modelClass::findOrFail($this->deleteId);
         $model->delete();
-
-        session()->flash('message', 'Record deleted successfully.');
+        $this->toastSuccess('Record deleted successfully.');
         $this->resetForm();
     }
 
@@ -185,7 +188,7 @@ trait CrudTrait
             $searchableFields = $this->getSearchableFields();
             $query->where(function ($q) use ($searchableFields) {
                 foreach ($searchableFields as $field) {
-                    $q->orWhere($field, 'like', '%' . $this->search . '%');
+                    $q->orWhere($field, 'ilike', '%' . $this->search . '%');
                 }
             });
         }

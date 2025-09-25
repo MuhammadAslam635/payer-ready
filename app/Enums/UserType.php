@@ -10,9 +10,9 @@ enum UserType: string
     case COORDINATOR = 'coordinator';              // Coordinator
     case ORGANIZATION_ADMIN = 'organization_admin'; // Organization admin
 
-    public function label(): string
+    public static function label(self $userType): string
     {
-        return match($this) {
+        return match($userType) {
             self::DOCTOR => 'Doctor',
             self::ORGANIZATION => 'Organization',
             self::SUPER_ADMIN => 'Super Admin',
@@ -20,20 +20,36 @@ enum UserType: string
             self::ORGANIZATION_ADMIN => 'Organization Admin',
         };
     }
+    public static function values(): array
+    {
+        return [
+            self::DOCTOR->value,
+            self::ORGANIZATION->value,
+            self::SUPER_ADMIN->value,
+            self::COORDINATOR->value,
+            self::ORGANIZATION_ADMIN->value,
+        ];
+    }
 
     public static function options(): array
     {
-        return collect(self::cases())
-            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
-            ->toArray();
+        return
+        [
+            self::DOCTOR->value => 'Doctor',
+            self::ORGANIZATION->value => 'Organization',
+            self::SUPER_ADMIN->value => 'Super Admin',
+            self::COORDINATOR->value => 'Coordinator',
+            self::ORGANIZATION_ADMIN->value => 'Organization Admin',
+        ];
     }
     public static function cssClass(): array{
         return [
-            self::DOCTOR->value => 'bg-green-500 text-white',
-            self::ORGANIZATION->value => 'bg-cyan-500 text-white',
-            self::SUPER_ADMIN->value => 'bg-teal-500 text-white',
-            self::COORDINATOR->value => 'bg-indigo-500 text-white',
+            self::DOCTOR => 'bg-green-500 text-white',
+            self::ORGANIZATION => 'bg-cyan-500 text-white',
+            self::SUPER_ADMIN => 'bg-teal-500 text-white',
+            self::COORDINATOR => 'bg-indigo-500 text-white',
             self::ORGANIZATION_ADMIN->value => 'bg-purple-500 text-white',
+            self::ORGANIZATION_ADMIN => 'bg-purple-500 text-white',
         ];
     }
 }

@@ -11,29 +11,20 @@ class DoctorReference extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_profile_id',
-        'reference_full_name',
-        'reference_title',
-        'reference_specialty',
-        'organization_name',
+        'user_id',
+        'full_name',
+        'title',
+        'address',
         'phone',
         'email',
-        'relationship_type',
-        'years_known',
-        'status',
-        'notes',
-    ];
-
-    protected $casts = [
-        'status' => 'string',
     ];
 
     /**
-     * Get the doctor profile that owns the reference
+     * Get the user that owns the reference
      */
-    public function doctorProfile(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(DoctorProfile::class);
+        return $this->belongsTo(User::class);
     }
 }
 

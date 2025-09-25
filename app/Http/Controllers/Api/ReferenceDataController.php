@@ -35,7 +35,7 @@ class ReferenceDataController extends Controller
     {
         $specialties = Specialty::where('is_active', true)
             ->orderBy('name')
-            ->get(['id', 'code', 'name', 'taxonomy_code']);
+            ->get(['id', 'code', 'name']);
 
         return response()->json([
             'success' => true,
@@ -110,7 +110,7 @@ class ReferenceDataController extends Controller
     {
         $data = [
             'states' => State::where('is_active', true)->orderBy('name')->get(['id', 'code', 'name', 'country']),
-            'specialties' => Specialty::where('is_active', true)->orderBy('name')->get(['id', 'code', 'name', 'taxonomy_code']),
+            'specialties' => Specialty::where('is_active', true)->orderBy('name')->get(['id', 'code', 'name']),
             'roles' => Role::where('is_active', true)->orderBy('name')->get(['id', 'code', 'name', 'description']),
             'license_types' => LicenseType::where('is_active', true)->orderBy('name')->get(['id', 'code', 'name', 'description']),
             'document_types' => DocumentType::where('is_active', true)->orderBy('name')->get(['id', 'code', 'name', 'description', 'max_file_size_mb', 'allowed_extensions', 'is_required']),

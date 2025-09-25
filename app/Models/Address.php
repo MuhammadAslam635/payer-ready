@@ -5,23 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Address extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'address_line_1',
-        'address_line_2',
-        'city',
+        'address',
         'state_id',
-        'zip_code',
         'country',
         'address_type',
-        'addressable_id',
-        'addressable_type',
         'is_primary',
+        'user_id',
     ];
 
     protected $casts = [
@@ -37,11 +32,11 @@ class Address extends Model
     }
 
     /**
-     * Get the parent addressable model (User, Organization, etc.)
+     * Get the user for this address
      */
-    public function addressable(): MorphTo
+    public function user(): BelongsTo
     {
-        return $this->morphTo();
+        return $this->belongsTo(User::class);
     }
 }
 

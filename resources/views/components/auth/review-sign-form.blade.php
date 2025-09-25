@@ -1,5 +1,5 @@
 @props([
-    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '', 'taxonomyCode' => '',
+    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '',
     'primaryState', 'specialties' => [], 'states' => [], 'dateOfBirth' => '', 'ssn' => '', 'homeAddress' => '',
     'practiceAddress' => '', 'phoneNumber' => '', 'npiNumber' => '', 'caqhId' => '',
     'caqhLogin' => '', 'caqhPassword' => '', 'pecosLogin' => '', 'pecosPassword' => '',
@@ -45,10 +45,6 @@
             <div>
                 <span class="font-medium text-text-primary">Primary Specialty:</span>
                 <span class="ml-2 text-text-secondary">{{ $primarySpecialty ? $specialties->find($primarySpecialty)?->name : 'Not provided' }}</span>
-            </div>
-            <div>
-                <span class="font-medium text-text-primary">Taxonomy Code:</span>
-                <span class="ml-2 text-text-secondary">{{ $taxonomyCode ?: 'Not provided' }}</span>
             </div>
             <div>
                 <span class="font-medium text-text-primary">Primary State:</span>
@@ -167,15 +163,15 @@
             </button>
         </div>
 
-        @if(count($workHistory) > 0 && $workHistory[0]['practice_name'])
+        @if(count($workHistory) > 0 && !empty($workHistory[0]['employer']))
             <div class="mb-4">
                 <h4 class="font-medium text-text-primary mb-2">Work History:</h4>
                 @foreach($workHistory as $work)
-                    @if($work['practice_name'])
+                    @if(!empty($work['employer']))
                         <div class="text-sm text-text-secondary mb-2">
-                            <strong>{{ $work['position'] }}</strong> at {{ $work['practice_name'] }}
-                            @if($work['start_date'] || $work['end_date'])
-                                <br><span class="text-xs">{{ $work['start_date'] }} - {{ $work['end_date'] ?: 'Present' }}</span>
+                            <strong>{{ $work['position'] ?? 'N/A' }}</strong> at {{ $work['employer'] }}
+                            @if(!empty($work['start_date']) || !empty($work['end_date']))
+                                <br><span class="text-xs">{{ $work['start_date'] ?? '' }} - {{ $work['end_date'] ?: 'Present' }}</span>
                             @endif
                         </div>
                     @endif
@@ -183,13 +179,20 @@
             </div>
         @endif
 
-        @if(count($references) > 0 && $references[0]['full_name'])
+        @if(count($references) > 0 && !empty($references[0]['name']))
             <div>
                 <h4 class="font-medium text-text-primary mb-2">References:</h4>
                 @foreach($references as $reference)
-                    @if($reference['full_name'])
-                        <div class="text-sm text-text-secondary mb-1">
-                            {{ $reference['full_name'] }}{{ $reference['title'] ? ', ' . $reference['title'] : '' }}
+                    @if(!empty($reference['name']))
+                        <div class="text-sm text-text-secondary mb-2">
+                            {{ $reference['name'] }}{{ !empty($reference['relationship']) ? ', ' . $reference['relationship'] : '' }}
+                            @if(!empty($reference['phone']) || !empty($reference['email']))
+                                <br><span class="text-xs">
+                                    @if(!empty($reference['phone']))Phone: {{ $reference['phone'] }}@endif
+                                    @if(!empty($reference['phone']) && !empty($reference['email'])) | @endif
+                                    @if(!empty($reference['email']))Email: {{ $reference['email'] }}@endif
+                                </span>
+                            @endif
                         </div>
                     @endif
                 @endforeach
@@ -244,32 +247,29 @@
 
         <!-- Terms Agreement -->
         <div class="mb-6">
-            <label class="flex items-start">
-                <input type="checkbox"
-                       wire:model="agreeToTerms"
-                       class="rounded border-gray-300 text-primary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500 mt-1 @error('agreeToTerms') border-error-500 @enderror">
-                <span class="ml-2 text-sm text-text-secondary">
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input 
+                    type="checkbox" 
+                    wire:model="agreeToTerms"
+                    class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                />
+                <span class="text-sm text-text-primary">
                     I agree to the terms and electronically sign this document.
                 </span>
             </label>
-            @error('agreeToTerms')
-                <p class="text-error-600 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            <x-ui.error name="agreeToTerms" />
         </div>
 
         <!-- Electronic Signature -->
         <div>
-            <label for="eSignature" class="block text-sm font-medium text-text-primary mb-2">
+            <x-ui.label for="eSignature">
                 Type your full name to sign *
-            </label>
-            <input type="text"
+            </x-ui.label>
+            <x-ui.input type="text"
                    id="eSignature"
                    wire:model="eSignature"
-                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('eSignature') border-error-500 @enderror"
-                   placeholder="Your Full Name">
-            @error('eSignature')
-                <p class="text-error-600 text-sm mt-1">{{ $message }}</p>
-            @enderror
+                   placeholder="Your Full Name" />
+            <x-ui.error name="eSignature" />
         </div>
     </div>
 

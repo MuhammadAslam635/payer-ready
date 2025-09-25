@@ -96,6 +96,11 @@
                                 {{ $licenseType->validity_years }} years
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $licenseType->requires_renewal ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800' }}">
+                                    {{ $licenseType->requires_renewal ? 'Yes' : 'No' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $licenseType->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                     {{ $licenseType->is_active ? 'Active' : 'Inactive' }}
                                 </span>
@@ -198,13 +203,27 @@
                                             @error('formData.description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="flex items-center">
-                                            <input type="checkbox"
-                                                   wire:model="formData.is_active"
-                                                   id="is_active"
-                                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                            <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                                                Active
+                                        <div>
+                                            <label class="flex items-start gap-3 cursor-pointer">
+                                                <input type="checkbox"
+                                                       wire:model="formData.requires_renewal"
+                                                       id="requires_renewal"
+                                                       class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                                <span class="text-sm text-gray-900">
+                                                    Requires Renewal
+                                                </span>
+                                            </label>
+                                        </div>
+
+                                        <div>
+                                            <label class="flex items-start gap-3 cursor-pointer">
+                                                <input type="checkbox"
+                                                       wire:model="formData.is_active"
+                                                       id="is_active"
+                                                       class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                                <span class="text-sm text-gray-900">
+                                                    Active
+                                                </span>
                                             </label>
                                         </div>
                                     </div>

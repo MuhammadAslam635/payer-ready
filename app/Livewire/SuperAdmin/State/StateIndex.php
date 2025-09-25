@@ -5,10 +5,13 @@ namespace App\Livewire\SuperAdmin\State;
 use App\Models\State;
 use App\Traits\Admin\CrudTrait;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\Attributes\Layout as AttributesLayout;
 
+#[AttributesLayout('layouts.dashboard')]
 class StateIndex extends Component
 {
-    use CrudTrait;
+    use CrudTrait, WithPagination;
 
     protected function getModelClass(): string
     {
@@ -42,8 +45,13 @@ class StateIndex extends Component
 
     protected function rules(): array
     {
+        $uniqueRule = 'required|string|max:10|unique:states,code';
+        if ($this->editing && $this->modelId) {
+            $uniqueRule .= ',' . $this->modelId;
+        }
+
         return [
-            'formData.code' => 'required|string|max:10|unique:states,code,' . $this->modelId,
+            'formData.code' => $uniqueRule,
             'formData.name' => 'required|string|max:255',
             'formData.country' => 'required|string|max:10',
             'formData.is_active' => 'boolean',
@@ -65,6 +73,6 @@ class StateIndex extends Component
         return view('livewire.super-admin.state.state-index', [
             'states' => $this->results,
             'columns' => $this->getTableColumns(),
-        ])->layout('layouts.dashboard');
+        ]);
     }
 }

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('doctor_certificates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_profile_id')->constrained('doctor_profiles')->onDelete('cascade');
-            $table->foreignId('certificate_type_id')->constrained('certificate_types');
-            $table->string('certificate_name');
-            $table->string('issuing_organization');
-            $table->date('issue_date');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('certificate_type_id')->constrained('certificate_types')->nullable();
+            $table->string('certificate_name')->nullable();
+            $table->string('issuing_organization')->nullable();
+            $table->date('issue_date')->nullable();
             $table->date('expiration_date')->nullable();
             $table->string('certificate_number')->nullable();
             $table->boolean('is_current')->default(true);

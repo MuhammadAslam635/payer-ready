@@ -30,7 +30,7 @@ class OrganizationManagerDashboardComponent extends Component
     private function getDashboardStats()
     {
         $user = Auth::user();
-        $organization = $user->primaryOrganization()->first();
+        $organization = $user->organization()->first();
 
         if (!$organization) {
             return [

@@ -11,7 +11,7 @@ class DoctorCredential extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_profile_id',
+        'user_id',
         'credential_type',
         'credential_name',
         'issuing_organization',
@@ -37,11 +37,11 @@ class DoctorCredential extends Model
     ];
 
     /**
-     * Get the doctor profile that owns this credential
+     * Get the user that owns this credential
      */
-    public function doctorProfile(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(DoctorProfile::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

@@ -1,6 +1,6 @@
 @php
     $user = Auth::user();
-    $organization = $user->organizationStaff->first()?->organization;
+    // $organization = $user->organizationStaff->first()?->organization;
 @endphp
 
 <header class="bg-white border-b border-slate-200 shadow-sm p-4 z-10">

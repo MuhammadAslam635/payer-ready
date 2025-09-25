@@ -5,7 +5,11 @@ namespace App\Livewire\SuperAdmin\Specialty;
 use App\Models\Specialty;
 use App\Traits\Admin\CrudTrait;
 use Livewire\Component;
+use Livewire\Attributes\Layout as AttributesLayout;
+use Livewire\WithPagination;
 
+
+#[AttributesLayout('layouts.dashboard')]
 class SpecialtyIndex extends Component
 {
     use CrudTrait;
@@ -20,7 +24,6 @@ class SpecialtyIndex extends Component
         return [
             'code' => '',
             'name' => '',
-            'taxonomy_code' => '',
             'description' => '',
             'is_active' => true,
         ];
@@ -31,7 +34,6 @@ class SpecialtyIndex extends Component
         return [
             'code' => 'Code',
             'name' => 'Name',
-            'taxonomy_code' => 'Taxonomy Code',
             'description' => 'Description',
             'is_active' => 'Status',
         ];
@@ -39,15 +41,19 @@ class SpecialtyIndex extends Component
 
     protected function getSearchableFields(): array
     {
-        return ['code', 'name', 'taxonomy_code', 'description'];
+        return ['code', 'name', 'description'];
     }
 
     protected function rules(): array
     {
+        $uniqueRule = 'required|string|max:10|unique:specialties,code';
+        if ($this->editing && $this->modelId) {
+            $uniqueRule .= ',' . $this->modelId;
+        }
+
         return [
-            'formData.code' => 'required|string|max:10|unique:specialties,code,' . $this->modelId,
+            'formData.code' => $uniqueRule,
             'formData.name' => 'required|string|max:255',
-            'formData.taxonomy_code' => 'nullable|string|max:20',
             'formData.description' => 'nullable|string|max:1000',
             'formData.is_active' => 'boolean',
         ];
@@ -67,6 +73,6 @@ class SpecialtyIndex extends Component
         return view('livewire.super-admin.specialty.specialty-index', [
             'specialties' => $this->results,
             'columns' => $this->getTableColumns(),
-        ])->layout('layouts.dashboard');
+        ]);
     }
 }

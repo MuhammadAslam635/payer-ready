@@ -32,54 +32,50 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <!-- State -->
                     <div>
-                        <label for="stateLicense_{{ $index }}_state" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="stateLicense_{{ $index }}_state">
                             State @if($index == 0)*@endif
-                        </label>
-                        <select id="stateLicense_{{ $index }}_state"
+                        </x-ui.label>
+                        <x-ui.select id="stateLicense_{{ $index }}_state"
                                 wire:model="stateLicenses.{{ $index }}.state"
-                                class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('stateLicenses.'.$index.'.state') border-error-500 @enderror">
-                            <option value="">Select a state...</option>
+                                placeholder="Select a state...">
+                            <x-ui.select.option value="">Select a state...</x-ui.select.option>
                             @foreach($states as $state)
-                                <option value="{{ $state->code }}">{{ $state->name }}</option>
+                                <x-ui.select.option value="{{ $state->code }}">{{ $state->name }}</x-ui.select.option>
                             @endforeach
-                        </select>
+                        </x-ui.select>
                         <x-ui.error name="stateLicenses.{{ $index }}.state" />
                     </div>
 
                     <!-- License Number -->
                     <div>
-                        <label for="stateLicense_{{ $index }}_number" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="stateLicense_{{ $index }}_number">
                             License Number @if($index == 0)*@endif
-                        </label>
-                        <input type="text"
+                        </x-ui.label>
+                        <x-ui.input type="text"
                                id="stateLicense_{{ $index }}_number"
-                               wire:model="stateLicenses.{{ $index }}.license_number"
-                               class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('stateLicenses.'.$index.'.license_number') border-error-500 @enderror"
-                               placeholder="License number">
+                               wire:model="stateLicenses.{{ $index }}.license_number" />
                         <x-ui.error name="stateLicenses.{{ $index }}.license_number" />
                     </div>
 
                     <!-- Issue Date -->
                     <div>
-                        <label for="stateLicense_{{ $index }}_issue" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="stateLicense_{{ $index }}_issue">
                             Issue Date
-                        </label>
-                        <input type="date"
+                        </x-ui.label>
+                        <x-ui.input type="date"
                                id="stateLicense_{{ $index }}_issue"
-                               wire:model="stateLicenses.{{ $index }}.issue_date"
-                               class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('stateLicenses.'.$index.'.issue_date') border-error-500 @enderror">
+                               wire:model="stateLicenses.{{ $index }}.issue_date" />
                         <x-ui.error name="stateLicenses.{{ $index }}.issue_date" />
                     </div>
 
                     <!-- Expiration Date -->
                     <div>
-                        <label for="stateLicense_{{ $index }}_expiration" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="stateLicense_{{ $index }}_expiration">
                             Expiration Date
-                        </label>
-                        <input type="date"
+                        </x-ui.label>
+                        <x-ui.input type="date"
                                id="stateLicense_{{ $index }}_expiration"
-                               wire:model="stateLicenses.{{ $index }}.expiration_date"
-                               class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('stateLicenses.'.$index.'.expiration_date') border-error-500 @enderror">
+                               wire:model="stateLicenses.{{ $index }}.expiration_date" />
                         <x-ui.error name="stateLicenses.{{ $index }}.expiration_date" />
                     </div>
                 </div>
@@ -116,42 +112,39 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     <!-- Institution -->
                     <div>
-                        <label for="education_{{ $index }}_institution" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="education_{{ $index }}_institution">
                             Institution @if($index == 0)*@endif
-                        </label>
-                        <input type="text"
+                        </x-ui.label>
+                        <x-ui.input type="text"
                                id="education_{{ $index }}_institution"
                                wire:model="educations.{{ $index }}.institution"
-                               class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('educations.'.$index.'.institution') border-error-500 @enderror"
-                               placeholder="e.g., Johns Hopkins University">
+                               placeholder="e.g., Johns Hopkins University" />
                         <x-ui.error name="educations.{{ $index }}.institution" />
                     </div>
 
                     <!-- Degree -->
                     <div>
-                        <label for="education_{{ $index }}_degree" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="education_{{ $index }}_degree">
                             Degree @if($index == 0)*@endif
-                        </label>
-                        <input type="text"
+                        </x-ui.label>
+                        <x-ui.input type="text"
                                id="education_{{ $index }}_degree"
                                wire:model="educations.{{ $index }}.degree"
-                               class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('educations.'.$index.'.degree') border-error-500 @enderror"
-                               placeholder="MD, DO, NP">
+                               placeholder="MD, DO, NP" />
                         <x-ui.error name="educations.{{ $index }}.degree" />
                     </div>
 
                     <!-- Year Completed -->
                     <div>
-                        <label for="education_{{ $index }}_year" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="education_{{ $index }}_year">
                             Year Completed
-                        </label>
-                        <input type="number"
+                        </x-ui.label>
+                        <x-ui.input type="number"
                                id="education_{{ $index }}_year"
                                wire:model="educations.{{ $index }}.year_completed"
-                               class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('educations.'.$index.'.year_completed') border-error-500 @enderror"
                                placeholder="YYYY"
                                min="1950"
-                               max="{{ date('Y') + 10 }}">
+                               max="{{ date('Y') + 10 }}" />
                         <x-ui.error name="educations.{{ $index }}.year_completed" />
                     </div>
                 </div>
@@ -171,25 +164,23 @@
     <!-- DEA Information -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-            <label for="deaNumber" class="block text-sm font-medium text-text-primary mb-2">
+            <x-ui.label for="deaNumber">
                 DEA Registration Number (if applicable)
-            </label>
-            <input type="text"
+            </x-ui.label>
+            <x-ui.input type="text"
                    id="deaNumber"
                    wire:model="deaNumber"
-                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('deaNumber') border-error-500 @enderror"
-                   placeholder="AB1234567">
+                   placeholder="AB1234567" />
             <x-ui.error name="deaNumber" />
         </div>
 
         <div>
-            <label for="deaExpiration" class="block text-sm font-medium text-text-primary mb-2">
+            <x-ui.label for="deaExpiration">
                 DEA Expiration Date
-            </label>
-            <input type="date"
+            </x-ui.label>
+            <x-ui.input type="date"
                    id="deaExpiration"
-                   wire:model="deaExpiration"
-                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('deaExpiration') border-error-500 @enderror">
+                   wire:model="deaExpiration" />
             <x-ui.error name="deaExpiration" />
         </div>
     </div>

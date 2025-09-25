@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('doctor_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_profile_id')->constrained('doctor_profiles')->onDelete('cascade');
-            $table->foreignId('document_type_id')->constrained('document_types');
-            $table->string('original_filename');
-            $table->string('stored_filename');
-            $table->string('file_path');
-            $table->bigInteger('file_size_bytes');
-            $table->string('mime_type');
-            $table->string('file_hash');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('document_type_id')->constrained('document_types')->nullable();
+            $table->string('original_filename')->nullable();
+            $table->string('stored_filename')->nullable();
+            $table->string('file_path')->nullable();
+            $table->bigInteger('file_size_bytes')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->string('file_hash')->nullable();
             $table->date('upload_date');
             $table->boolean('is_verified')->default(false);
             $table->timestamp('verified_at')->nullable();

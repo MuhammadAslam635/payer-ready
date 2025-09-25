@@ -10,12 +10,10 @@
     <x-slot name="form">
         <!-- Profile Photo -->
         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-            <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-4">
+            <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4">
                 <!-- Profile Photo File Input -->
-                <input type="file" id="photo" class="hidden"
-                            wire:model.live="photo"
-                            x-ref="photo"
-                            x-on:change="
+                <input type="file" id="photo" class="hidden" wire:model.live="photo" x-ref="photo"
+                    x-on:change="
                                     photoName = $refs.photo.files[0].name;
                                     const reader = new FileReader();
                                     reader.onload = (e) => {
@@ -28,13 +26,14 @@
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" x-show="! photoPreview">
-                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full size-20 object-cover">
+                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}"
+                        class="rounded-full size-20 object-cover">
                 </div>
 
                 <!-- New Profile Photo Preview -->
                 <div class="mt-2" x-show="photoPreview" style="display: none;">
                     <span class="block rounded-full size-20 bg-cover bg-no-repeat bg-center"
-                          x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                        x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                     </span>
                 </div>
 
@@ -52,34 +51,152 @@
             </div>
         @endif
 
-        <!-- Name -->
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="name" value="{{ __('Name') }}" />
-            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required autocomplete="name" />
-            <x-input-error for="name" class="mt-2" />
-        </div>
+        <!-- Name and Middle Name Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Name -->
+            <div class="col-span-1">
+                <x-label for="name" value="{{ __('Name') }}" />
+                <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required
+                    autocomplete="name" />
+                <x-input-error for="name" class="mt-2" />
+            </div>
 
-        <!-- Email -->
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" required autocomplete="username" />
-            <x-input-error for="email" class="mt-2" />
+            <!-- Middle Name -->
+            <div class="col-span-1">
+                <x-label for="middle_name" value="{{ __('Middle Name') }}" />
+                <x-input id="middle_name" type="text" class="mt-1 block w-full" wire:model="state.middle_name"
+                    autocomplete="additional-name" />
+                <x-input-error for="middle_name" class="mt-2" />
+            </div>
 
-            @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! $this->user->hasVerifiedEmail())
-                <p class="text-sm mt-2 dark:text-white">
-                    {{ __('Your email address is unverified.') }}
 
-                    <button type="button" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" wire:click.prevent="sendEmailVerification">
-                        {{ __('Click here to re-send the verification email.') }}
-                    </button>
-                </p>
+            <!-- Email -->
+            <div class="col-span-2">
+                <x-label for="email" value="{{ __('Email') }}" />
+                <x-input id="email" type="email" class="mt-1 block w-full" wire:model="state.email" required
+                    autocomplete="username" />
+                <x-input-error for="email" class="mt-2" />
 
-                @if ($this->verificationLinkSent)
-                    <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                        {{ __('A new verification link has been sent to your email address.') }}
+                @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) &&
+                        !$this->user->hasVerifiedEmail())
+                    <p class="text-sm mt-2 dark:text-white">
+                        {{ __('Your email address is unverified.') }}
+
+                        <button type="button"
+                            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            wire:click.prevent="sendEmailVerification">
+                            {{ __('Click here to re-send the verification email.') }}
+                        </button>
                     </p>
+
+                    @if ($this->verificationLinkSent)
+                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+                            {{ __('A new verification link has been sent to your email address.') }}
+                        </p>
+                    @endif
                 @endif
-            @endif
+            </div>
+
+            <!-- Phone and Date of Birth Row -->
+            <div class="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Phone -->
+                <div>
+                    <x-label for="phone" value="{{ __('Phone') }}" />
+                    <x-input id="phone" type="tel" class="mt-1 block w-full" wire:model="state.phone"
+                        autocomplete="tel" />
+                    <x-input-error for="phone" class="mt-2" />
+                </div>
+
+                <!-- Date of Birth -->
+                <div>
+                    <x-label for="date_of_birth" value="{{ __('Date of Birth') }}" />
+                    <x-input id="date_of_birth" type="date" class="mt-1 block w-full"
+                        wire:model="state.date_of_birth" />
+                    <x-input-error for="date_of_birth" class="mt-2" />
+                </div>
+            </div>
+
+            <!-- NPI Number and DEA Number Row -->
+            <div class="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- NPI Number -->
+                <div>
+                    <x-label for="npi_number" value="{{ __('NPI Number') }}" />
+                    <x-input id="npi_number" type="text" class="mt-1 block w-full" wire:model="state.npi_number"
+                        maxlength="10" />
+                    <x-input-error for="npi_number" class="mt-2" />
+                </div>
+
+                <!-- DEA Number -->
+                <div>
+                    <x-label for="dea_number" value="{{ __('DEA Number') }}" />
+                    <x-input id="dea_number" type="text" class="mt-1 block w-full" wire:model="state.dea_number"
+                        maxlength="20" />
+                    <x-input-error for="dea_number" class="mt-2" />
+                </div>
+            </div>
+
+            <!-- DEA Expiration Date and CAQH ID Row -->
+            <div class="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- DEA Expiration Date -->
+                <div>
+                    <x-label for="dea_expiration_date" value="{{ __('DEA Expiration Date') }}" />
+                    <x-input id="dea_expiration_date" type="date" class="mt-1 block w-full"
+                        wire:model="state.dea_expiration_date" />
+                    <x-input-error for="dea_expiration_date" class="mt-2" />
+                </div>
+
+                <!-- CAQH ID -->
+                <div>
+                    <x-label for="caqh_id" value="{{ __('CAQH ID') }}" />
+                    <x-input id="caqh_id" type="text" class="mt-1 block w-full" wire:model="state.caqh_id"
+                        maxlength="20" />
+                    <x-input-error for="caqh_id" class="mt-2" />
+                </div>
+            </div>
+
+            <!-- CAQH Login and CAQH Password Row -->
+            <div class="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- CAQH Login -->
+                <div>
+                    <x-label for="caqh_login" value="{{ __('CAQH Login') }}" />
+                    <x-input id="caqh_login" type="text" class="mt-1 block w-full"
+                        wire:model="state.caqh_login" />
+                    <x-input-error for="caqh_login" class="mt-2" />
+                </div>
+
+                <!-- CAQH Password -->
+                <div>
+                    <x-label for="caqh_password" value="{{ __('CAQH Password') }}" />
+                    <x-input id="caqh_password" type="password" class="mt-1 block w-full"
+                        wire:model="state.caqh_password" />
+                    <x-input-error for="caqh_password" class="mt-2" />
+                </div>
+            </div>
+
+            <!-- PECOS Login -->
+            <div class="col-span-1">
+                <x-label for="pecos_login" value="{{ __('PECOS Login') }}" />
+                <x-input id="pecos_login" type="text" class="mt-1 block w-full" wire:model="state.pecos_login" />
+                <x-input-error for="pecos_login" class="mt-2" />
+            </div>
+
+            <!-- PECOS Password -->
+            <div class="col-span-1">
+                <x-label for="pecos_password" value="{{ __('PECOS Password') }}" />
+                <x-input id="pecos_password" type="password" class="mt-1 block w-full"
+                    wire:model="state.pecos_password" />
+                <x-input-error for="pecos_password" class="mt-2" />
+            </div>
+        </div>
+        <!-- Active Status -->
+        <div class="col-span-2">
+            <div class="flex items-center">
+                <input id="is_active" type="checkbox"
+                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                    wire:model="state.is_active" />
+                <x-label for="is_active" value="{{ __('Active Status') }}" class="ml-2" />
+            </div>
+            <x-input-error for="is_active" class="mt-2" />
         </div>
     </x-slot>
 

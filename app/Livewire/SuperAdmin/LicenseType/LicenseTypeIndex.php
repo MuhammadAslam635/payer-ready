@@ -6,6 +6,9 @@ use App\Models\LicenseType;
 use App\Traits\Admin\CrudTrait;
 use Livewire\Component;
 
+use Livewire\Attributes\Layout as AttributesLayout;
+
+#[AttributesLayout('layouts.dashboard')]
 class LicenseTypeIndex extends Component
 {
     use CrudTrait;
@@ -47,9 +50,11 @@ class LicenseTypeIndex extends Component
 
     protected function rules(): array
     {
+        $modelId = $this->modelId ?: 'NULL';
+        
         return [
             'formData.name' => 'required|string|max:255',
-            'formData.code' => 'required|string|max:20|unique:license_types,code,' . $this->modelId,
+            'formData.code' => 'required|string|max:20|unique:license_types,code,' . $modelId,
             'formData.description' => 'nullable|string|max:1000',
             'formData.issuing_authority' => 'required|string|max:255',
             'formData.validity_years' => 'required|integer|min:1|max:100',
@@ -75,6 +80,6 @@ class LicenseTypeIndex extends Component
         return view('livewire.super-admin.license-type.license-type-index', [
             'licenseTypes' => $this->results,
             'columns' => $this->getTableColumns(),
-        ])->layout('layouts.dashboard');
+        ]);
     }
 }

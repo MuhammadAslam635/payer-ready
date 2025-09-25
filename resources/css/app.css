@@ -6,4 +6,15 @@
 [x-cloak] {
     display: none;
 }
- @custom-variant dark (&:where(.dark, .dark *)); /* By Sheaf.dev */
+
+/* Custom scrollbar styles - hide scrollbar but keep functionality */
+.scrollable-content {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollable-content::-webkit-scrollbar {
+    display: none; /* WebKit */
+}
+
+@custom-variant dark (&:where(.dark, .dark *)); /* By Sheaf.dev */

@@ -32,10 +32,26 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'middle_name',
         'email',
         'password',
+        'taxnomy_code',
         'user_type',
         'is_admin',
+        'is_active',
+        'phone',
+        'ssn_encrypted',
+        'date_of_birth',
+        'npi_number',
+        'caqh_id',
+        'caqh_login',
+        'caqh_password',
+        'pecos_login',
+        'pecos_password',
+        'dea_number',
+        'dea_expiration_date',
+        'current_team_id',
+        'profile_photo_path',
     ];
 
     /**
@@ -74,6 +90,8 @@ class User extends Authenticatable
         ];
     }
 
+
+
     /**
      * Get the doctor profile for this user
      */
@@ -83,29 +101,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Get all organizations this user belongs to
+     * Get the organization this user belongs to through organization staff
      */
-    public function organizations()
+    public function organization()
     {
         return $this->belongsToMany(Organization::class, 'organization_staff')
                     ->withPivot(['role_id', 'position_title', 'department', 'start_date', 'end_date', 'is_active', 'is_primary'])
-                    ->withTimestamps();
-    }
-
-    /**
-     * Get the primary organization for this user
-     */
-    public function primaryOrganization()
-    {
-        return $this->organizations()->wherePivot('is_primary', true);
-    }
-
-    /**
-     * Get all organization staff records for this user
-     */
-    public function organizationStaff(): HasMany
-    {
-        return $this->hasMany(OrganizationStaff::class);
+                    ->withTimestamps()
+                    ->wherePivot('is_active', true)
+                    ->wherePivot('is_primary', true);
     }
 
     /**
@@ -113,7 +117,7 @@ class User extends Authenticatable
      */
     public function licenses(): HasMany
     {
-        return $this->hasManyThrough(DoctorLicense::class, DoctorProfile::class);
+        return $this->hasMany(DoctorLicense::class);
     }
 
     /**
@@ -121,47 +125,54 @@ class User extends Authenticatable
      */
     public function workHistory(): HasMany
     {
-        return $this->hasManyThrough(DoctorWorkHistory::class, DoctorProfile::class);
+        return $this->hasMany(DoctorWorkHistory::class);
     }
 
-    /**
-     * Get all professional references for this user through doctor profile
-     */
-    public function professionalReferences(): HasMany
-    {
-        return $this->hasManyThrough(DoctorReference::class, DoctorProfile::class);
-    }
+
 
     /**
      * Get all documents for this user through doctor profile
      */
     public function documents(): HasMany
     {
-        return $this->hasManyThrough(DoctorDocument::class, DoctorProfile::class);
+        return $this->hasMany(DoctorDocument::class);
+    }
+
+    public function addresses():HasMany{
+        return $this->hasMany(Address::class);
     }
 
     /**
-     * Get all user specialties
+     * Get all doctor specialties
      */
-    public function specialties()
+    public function specialties(): BelongsToMany
     {
-        return $this->belongsToMany(Specialty::class, 'user_specialties');
+        return $this->belongsToMany(Specialty::class, 'doctor_specialties')
+                    ->withPivot(['is_primary'])
+                    ->withTimestamps();
     }
 
     /**
-     * Get all user certificates through doctor profile
+     * Get all doctor certificates through doctor profile
      */
     public function certificates(): HasMany
     {
-        return $this->hasManyThrough(DoctorCertificate::class, DoctorProfile::class);
+        return $this->hasMany(DoctorCertificate::class);
     }
 
     /**
-     * Get all user tasks through doctor profile
+     * Get all doctor tasks
      */
     public function tasks(): HasMany
     {
-        return $this->hasManyThrough(DoctorTask::class, DoctorProfile::class);
+        return $this->hasMany(DoctorTask::class);
+    }
+    /**
+     * Get all professional references for this doctor
+     */
+    public function professionalReferences(): HasMany
+    {
+        return $this->hasMany(DoctorReference::class);
     }
     /**
      * Check if user is a doctor
@@ -169,22 +180,6 @@ class User extends Authenticatable
     public function isDoctor(): bool
     {
         return $this->user_type === UserType::DOCTOR;
-    }
-
-    /**
-     * Check if user is a clinic manager
-     */
-    public function isClinicManager(): bool
-    {
-        return $this->user_type === UserType::CLINIC_MANAGER && $this->is_admin;
-    }
-
-    /**
-     * Check if user is clinic staff
-     */
-    public function isClinicStaff(): bool
-    {
-        return $this->user_type === UserType::CLINIC_STAFF;
     }
 
     /**
@@ -203,7 +198,7 @@ class User extends Authenticatable
         return $this->user_type === UserType::COORDINATOR;
     }
     /**
-     * Get all transactions for this user
+     * Get all transactions for this doctor
      */
     public function transactions(): HasMany
     {
@@ -211,7 +206,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's full name
+     * Get the doctor's full name
      */
     public function getFullNameAttribute(): string
     {
@@ -219,15 +214,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's display name with type
+     * Get the doctor's display name with type
      */
     public function getDisplayNameAttribute(): string
     {
-        return $this->name . ' (' . $this->user_type->label() . ')';
+        return $this->name . ' (' . UserType::label($this->user_type) . ')';
     }
 
     /**
-     * Check if user has a doctor profile
+     * Check if doctor has a doctor profile
      */
     public function hasDoctorProfile(): bool
     {
@@ -235,28 +230,20 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user has any organizations
+     * Check if doctor has any organizations
      */
-    public function hasOrganizations(): bool
+    public function hasOrganization(): bool
     {
-        return $this->organizations()->exists();
+        return $this->organization()->exists();
     }
 
     /**
-     * Check if user has a primary organization
+        * Get the doctor's primary organization
      */
-    public function hasPrimaryOrganization(): bool
-    {
-        return $this->primaryOrganization()->exists();
-    }
-
-    /**
-     * Get the user's primary organization
-     */
-    public function getPrimaryOrganizationAttribute()
-    {
-        return $this->primaryOrganization()->first();
-    }
+    // public function getPrimaryOrganizationAttribute()
+    // {
+    //     return $this->organization()->first();
+    // }
 
     /**
      * Get the clinic associated with this user (for doctors/providers)

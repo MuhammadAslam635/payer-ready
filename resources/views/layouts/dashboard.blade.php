@@ -13,8 +13,8 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('css')
     @livewireStyles
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="font-sans antialiased bg-slate-50" x-data="{ sidebarOpen: false }">
     <div class="h-screen flex bg-slate-100">
@@ -51,6 +51,7 @@
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
+            <x-ui.toast progressBarVariant="thin" />
             <!-- Header -->
             <x-dashboard-header />
 
@@ -71,6 +72,7 @@
     {{-- <x-notifications /> --}}
 
     @stack('modals')
+    @stack('js')
     @livewireScripts
 </body>
 </html>

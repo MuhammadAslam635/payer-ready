@@ -18,12 +18,14 @@ class Organization extends Model
         'phone',
         'website',
         'description',
-        'admin_user_id',
+        'is_admin',
+        'user_id',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_admin' => 'boolean',
     ];
 
     /**
@@ -31,24 +33,9 @@ class Organization extends Model
      */
     public function adminUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'admin_user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Get all addresses for this organization
-     */
-    public function addresses(): HasMany
-    {
-        return $this->hasMany(Address::class);
-    }
-
-    /**
-     * Get all clinics for this organization
-     */
-    public function clinics(): HasMany
-    {
-        return $this->hasMany(Clinic::class);
-    }
 
     /**
      * Get all staff members for this organization

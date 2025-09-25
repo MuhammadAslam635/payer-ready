@@ -5,7 +5,9 @@ namespace App\Livewire\SuperAdmin\CertificateType;
 use App\Models\CertificateType;
 use App\Traits\Admin\CrudTrait;
 use Livewire\Component;
+use Livewire\Attributes\Layout as AttributesLayout;
 
+#[AttributesLayout('layouts.dashboard')]
 class CertificateTypeIndex extends Component
 {
     use CrudTrait;
@@ -47,9 +49,11 @@ class CertificateTypeIndex extends Component
 
     protected function rules(): array
     {
+        $modelId = $this->modelId ?: 'NULL';
+        
         return [
             'formData.name' => 'required|string|max:255',
-            'formData.code' => 'required|string|max:20|unique:certificate_types,code,' . $this->modelId,
+            'formData.code' => 'required|string|max:20|unique:certificate_types,code,' . $modelId,
             'formData.description' => 'nullable|string|max:1000',
             'formData.issuing_organization' => 'required|string|max:255',
             'formData.validity_years' => 'required|integer|min:1|max:100',
@@ -70,11 +74,20 @@ class CertificateTypeIndex extends Component
         ];
     }
 
+    public function toggleStatus($id)
+    {
+        $certificateType = CertificateType::findOrFail($id);
+        $certificateType->update(['is_active' => !$certificateType->is_active]);
+        
+        $status = $certificateType->is_active ? 'activated' : 'deactivated';
+        $this->toastSuccess("Certificate type {$status} successfully.");
+    }
+
     public function render()
     {
         return view('livewire.super-admin.certificate-type.certificate-type-index', [
             'certificateTypes' => $this->results,
             'columns' => $this->getTableColumns(),
-        ])->layout('layouts.dashboard');
+        ]);
     }
 }

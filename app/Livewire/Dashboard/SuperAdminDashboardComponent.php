@@ -137,7 +137,7 @@ class SuperAdminDashboardComponent extends Component
 
     private function getLatestUsers()
     {
-        return User::with(['organizationStaff.organization'])
+        return User::with(['organization'])
             ->latest()
             ->take(5)
             ->get()
@@ -150,7 +150,7 @@ class SuperAdminDashboardComponent extends Component
                     'is_active' => $user->is_active,
                     'profile_photo_url' => $user->profile_photo_url,
                     'created_at' => $user->created_at,
-                    'organization_name' => $user->organizationStaff->first()?->organization?->business_name,
+                    'organization_name' => $user->organization?->business_name,
                 ];
             });
     }

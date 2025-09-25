@@ -14,7 +14,7 @@ use App\Models\Specialty;
 use App\Models\State;
 use App\Models\User;
 use App\Models\UserPersonalInfo;
-use App\Models\UserSpecialty;
+use App\Models\DoctorSpecialty;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +60,7 @@ class RegistrationController extends Controller
             ]);
 
             // Add primary specialty
-            UserSpecialty::create([
+            DoctorSpecialty::create([
                 'user_id' => $user->id,
                 'specialty_id' => Specialty::where('code', $request->primary_specialty)->first()->id,
                 'is_primary' => true,
@@ -108,24 +108,16 @@ class RegistrationController extends Controller
 
             // Create home address
             $homeAddress = Address::create([
-                'user_id' => $user->id,
-                'address_line_1' => $request->home_address_line_1,
-                'address_line_2' => $request->home_address_line_2,
-                'city' => $request->home_city,
+                'address' => $request->home_address_line_1 . ($request->home_address_line_2 ? ', ' . $request->home_address_line_2 : '') . ', ' . $request->home_city . ', ' . $request->home_zip_code,
                 'state_id' => State::where('code', $request->home_state)->first()->id,
-                'zip_code' => $request->home_zip_code,
                 'country' => 'US',
                 'address_type' => 'home',
             ]);
 
             // Create practice address
             $practiceAddress = Address::create([
-                'user_id' => $user->id,
-                'address_line_1' => $request->practice_address_line_1,
-                'address_line_2' => $request->practice_address_line_2,
-                'city' => $request->practice_city,
+                'address' => $request->practice_address_line_1 . ($request->practice_address_line_2 ? ', ' . $request->practice_address_line_2 : '') . ', ' . $request->practice_city . ', ' . $request->practice_zip_code,
                 'state_id' => State::where('code', $request->practice_state)->first()->id,
-                'zip_code' => $request->practice_zip_code,
                 'country' => 'US',
                 'address_type' => 'practice',
             ]);

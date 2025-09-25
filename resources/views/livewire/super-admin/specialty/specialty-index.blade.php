@@ -89,9 +89,6 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $specialty->name }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $specialty->taxonomy_code ?? '-' }}
-                            </td>
                             <td class="px-6 py-4 text-sm text-gray-500">
                                 <div class="max-w-xs truncate">
                                     {{ $specialty->description ?? '-' }}
@@ -171,14 +168,6 @@
                                             @error('formData.name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div>
-                                            <label for="taxonomy_code" class="block text-sm font-medium text-gray-700">Taxonomy Code</label>
-                                            <input type="text"
-                                                   wire:model="formData.taxonomy_code"
-                                                   id="taxonomy_code"
-                                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                            @error('formData.taxonomy_code') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                                        </div>
 
                                         <div>
                                             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
@@ -189,13 +178,15 @@
                                             @error('formData.description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="flex items-center">
-                                            <input type="checkbox"
-                                                   wire:model="formData.is_active"
-                                                   id="is_active"
-                                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                            <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                                                Active
+                                        <div>
+                                            <label class="flex items-start gap-3 cursor-pointer">
+                                                <input type="checkbox"
+                                                       wire:model="formData.is_active"
+                                                       id="is_active"
+                                                       class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                                <span class="text-sm text-gray-900">
+                                                    Active
+                                                </span>
                                             </label>
                                         </div>
                                     </div>

@@ -71,7 +71,7 @@
                 } else {
                     // filter options by search query
                     this.filteredOptions = this.options.filter(option =>
-                        option.value.toLowerCase().includes(val.toLowerCase().trim())
+                        option.label.toLowerCase().includes(val.toLowerCase().trim())
                     );
                 }
             })
@@ -112,7 +112,8 @@
 
         isItemShown(value) {
             if (!this.isSearchable || !this.isTyping) return true;
-            return value.toLowerCase().includes(this.search.toLowerCase().trim());
+            const option = this.options.find(opt => opt.value === value);
+            return option ? option.label.toLowerCase().includes(this.search.toLowerCase().trim()) : false;
         },
 
         close() {

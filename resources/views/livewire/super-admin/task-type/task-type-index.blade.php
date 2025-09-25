@@ -1,5 +1,6 @@
 <div>
     <!-- Page Header -->
+
     <div class="mb-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -179,10 +180,10 @@
                                             <select wire:model="formData.default_priority"
                                                     id="default_priority"
                                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                                <option value="low">Low</option>
-                                                <option value="medium">Medium</option>
-                                                <option value="high">High</option>
-                                                <option value="urgent">Urgent</option>
+                                                <option value="1">Low</option>
+                                                <option value="2">Medium</option>
+                                                <option value="3">High</option>
+                                                <option value="4">Urgent</option>
                                             </select>
                                             @error('formData.default_priority') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
@@ -207,13 +208,15 @@
                                             @error('formData.description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="flex items-center">
-                                            <input type="checkbox"
-                                                   wire:model="formData.is_active"
-                                                   id="is_active"
-                                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                            <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                                                Active
+                                        <div>
+                                            <label class="flex items-start gap-3 cursor-pointer">
+                                                <input type="checkbox"
+                                                       wire:model="formData.is_active"
+                                                       id="is_active"
+                                                       class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                                <span class="text-sm text-gray-900">
+                                                    Active
+                                                </span>
                                             </label>
                                         </div>
                                     </div>

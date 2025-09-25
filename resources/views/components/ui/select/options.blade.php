@@ -17,7 +17,7 @@
     x-on:click.away="close()"
     x-on:keydown.escape="close()"
     style="display: none;"
-    class="bg-white w-full dark:bg-neutral-800 z-50 rounded-(--round) border border-neutral-200 dark:border-neutral-700"
+    class="bg-white w-full dark:bg-neutral-800 z-50 rounded-(--round) border border-neutral-200 dark:border-neutral-700 max-h-60 overflow-y-auto"
 >
     @if ($searchable)
         <div

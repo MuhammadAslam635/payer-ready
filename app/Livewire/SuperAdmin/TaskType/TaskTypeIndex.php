@@ -5,7 +5,9 @@ namespace App\Livewire\SuperAdmin\TaskType;
 use App\Models\TaskType;
 use App\Traits\Admin\CrudTrait;
 use Livewire\Component;
+use Livewire\Attributes\Layout as AttributesLayout;
 
+#[AttributesLayout('layouts.dashboard')]
 class TaskTypeIndex extends Component
 {
     use CrudTrait;
@@ -21,7 +23,7 @@ class TaskTypeIndex extends Component
             'name' => '',
             'code' => '',
             'description' => '',
-            'default_priority' => 'medium',
+            'default_priority' => 2, // 2 = medium
             'estimated_days' => 1,
             'is_active' => true,
         ];
@@ -45,11 +47,13 @@ class TaskTypeIndex extends Component
 
     protected function rules(): array
     {
+        $modelId = $this->modelId ?: 'NULL';
+        
         return [
             'formData.name' => 'required|string|max:255',
-            'formData.code' => 'required|string|max:20|unique:task_types,code,' . $this->modelId,
+            'formData.code' => 'required|string|max:20|unique:task_types,code,' . $modelId,
             'formData.description' => 'nullable|string|max:1000',
-            'formData.default_priority' => 'required|in:low,medium,high,urgent',
+            'formData.default_priority' => 'required|integer|in:1,2,3,4',
             'formData.estimated_days' => 'required|integer|min:1|max:365',
             'formData.is_active' => 'boolean',
         ];
@@ -72,6 +76,6 @@ class TaskTypeIndex extends Component
         return view('livewire.super-admin.task-type.task-type-index', [
             'taskTypes' => $this->results,
             'columns' => $this->getTableColumns(),
-        ])->layout('layouts.dashboard');
+        ]);
     }
 }

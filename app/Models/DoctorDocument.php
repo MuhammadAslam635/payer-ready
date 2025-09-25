@@ -11,7 +11,7 @@ class DoctorDocument extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_profile_id',
+        'user_id',
         'document_type_id',
         'original_filename',
         'stored_filename',
@@ -36,11 +36,11 @@ class DoctorDocument extends Model
     ];
 
     /**
-     * Get the doctor profile that owns the document
+     * Get the user that owns the document
      */
-    public function doctorProfile(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(DoctorProfile::class);
+        return $this->belongsTo(User::class);
     }
 
     /**

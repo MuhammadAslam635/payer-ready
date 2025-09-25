@@ -13,18 +13,12 @@ return new class extends Migration
     {
         Schema::create('doctor_work_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_profile_id')->constrained('doctor_profiles')->onDelete('cascade');
-            $table->string('organization_name');
-            $table->string('position_title');
-            $table->string('department')->nullable();
-            $table->foreignId('work_address_id')->nullable()->constrained('addresses');
-            $table->date('start_date');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('hospital_name')->nullable();
+            $table->string('position_title')->nullable();
+            $table->string('address')->nullable();
+            $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->boolean('is_current')->default(false);
-            $table->string('supervisor_name')->nullable();
-            $table->string('supervisor_phone')->nullable();
-            $table->text('description')->nullable();
-            $table->text('responsibilities')->nullable();
             $table->timestamps();
         });
     }

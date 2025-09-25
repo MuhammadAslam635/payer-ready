@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
             $table->text('description')->nullable();
-            $table->foreignId('admin_user_id')->constrained('users')->onDelete('cascade');
+            $table->tinyInteger('is_admin')->default(0);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Registration Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This value determines whether user registration is enabled for the
+    | application. When disabled, registration routes will return 404.
+    |
+    */
+
+    'registration_enabled' => env('REGISTRATION_ENABLED', true),
+
 ];

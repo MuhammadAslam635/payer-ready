@@ -21,9 +21,10 @@ class DatabaseSeeder extends Seeder
             ['email' => 'superadmin@gmail.com'],
             [
                 'name' => 'Super Admin',
-                'user_type' => UserType::SUPER_ADMIN,
+                'user_type' => UserType::SUPER_ADMIN->value,
                 'password' => Hash::make('12345678'),
                 'is_active' => true,
+                'is_admin' => true,
                 'email_verified_at' => now()
             ]
         );

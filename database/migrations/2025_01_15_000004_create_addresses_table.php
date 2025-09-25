@@ -13,14 +13,11 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address_line_1');
-            $table->string('address_line_2')->nullable();
-            $table->string('city');
-            $table->string('state');
-            $table->string('zip_code');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('address');
+            $table->foreignId('state_id')->nullable()->constrained('states')->onDelete('cascade');
             $table->string('country')->default('US');
-            $table->string('address_type')->default('primary'); // primary, billing, mailing
-            $table->morphs('addressable'); // polymorphic relationship
+            $table->string('address_type')->default('home');
             $table->boolean('is_primary')->default(false);
             $table->timestamps();
         });

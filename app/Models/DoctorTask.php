@@ -11,7 +11,7 @@ class DoctorTask extends Model
     use HasFactory;
 
     protected $fillable = [
-        'doctor_profile_id',
+        'user_id',
         'task_type_id',
         'title',
         'description',
@@ -30,11 +30,11 @@ class DoctorTask extends Model
     ];
 
     /**
-     * Get the doctor profile this task belongs to
+     * Get the user this task belongs to
      */
-    public function doctorProfile(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(DoctorProfile::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

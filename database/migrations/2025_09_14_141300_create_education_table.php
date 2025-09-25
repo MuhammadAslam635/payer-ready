@@ -14,12 +14,9 @@ return new class extends Migration
         Schema::create('education', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('institution_name');
-            $table->string('degree');
-            $table->string('field_of_study')->nullable();
-            $table->date('graduation_date')->nullable();
-            $table->decimal('gpa', 3, 2)->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->string('institution_name')->nullable();
+            $table->string('degree')->nullable();
+            $table->year('completed_year')->nullable();
             $table->timestamps();
 
             // Indexes

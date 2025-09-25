@@ -101,9 +101,10 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $certificateType->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                <button wire:click="toggleStatus({{ $certificateType->id }})"
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer transition-colors {{ $certificateType->is_active ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200' }}">
                                     {{ $certificateType->is_active ? 'Active' : 'Inactive' }}
-                                </span>
+                                </button>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center space-x-2">
@@ -203,23 +204,27 @@
                                             @error('formData.description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="flex items-center">
-                                            <input type="checkbox"
-                                                   wire:model="formData.requires_renewal"
-                                                   id="requires_renewal"
-                                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                            <label for="requires_renewal" class="ml-2 block text-sm text-gray-900">
-                                                Requires Renewal
+                                        <div>
+                                            <label class="flex items-start gap-3 cursor-pointer">
+                                                <input type="checkbox"
+                                                       wire:model="formData.requires_renewal"
+                                                       id="requires_renewal"
+                                                       class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                                <span class="text-sm text-gray-900">
+                                                    Requires Renewal
+                                                </span>
                                             </label>
                                         </div>
 
-                                        <div class="flex items-center">
-                                            <input type="checkbox"
-                                                   wire:model="formData.is_active"
-                                                   id="is_active"
-                                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
-                                            <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                                                Active
+                                        <div>
+                                            <label class="flex items-start gap-3 cursor-pointer">
+                                                <input type="checkbox"
+                                                       wire:model="formData.is_active"
+                                                       id="is_active"
+                                                       class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                                                <span class="text-sm text-gray-900">
+                                                    Active
+                                                </span>
                                             </label>
                                         </div>
                                     </div>

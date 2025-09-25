@@ -15,14 +15,12 @@ class Education extends Model
         'institution_name',
         'degree',
         'field_of_study',
-        'graduation_date',
+        'completed_year',
         'gpa',
-        'is_active',
     ];
 
     protected $casts = [
-        'graduation_date' => 'date',
-        'is_active' => 'boolean',
+        'completed_year' => 'integer',
     ];
 
     /**

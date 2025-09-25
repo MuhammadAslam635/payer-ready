@@ -33,35 +33,33 @@
                     <!-- Practice/Hospital Name -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div>
-                            <label for="work_{{ $index }}_practice_name" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="work_{{ $index }}_employer">
                                 Practice/Hospital Name @if($index == 0)*@endif
-                            </label>
-                            <input type="text"
-                                   id="work_{{ $index }}_practice_name"
-                                   wire:model="workHistory.{{ $index }}.practice_name"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('workHistory.'.$index.'.practice_name') border-error-500 @enderror"
-                                   placeholder="Practice or hospital name">
-                            <x-ui.error name="workHistory.{{ $index }}.practice_name" />
+                            </x-ui.label>
+                            <x-ui.input type="text"
+                                       id="work_{{ $index }}_employer"
+                                       wire:model="workHistory.{{ $index }}.employer"
+                                       placeholder="Practice or hospital name" />
+                            <x-ui.error name="workHistory.{{ $index }}.employer" />
                         </div>
 
                         <div>
-                            <label for="work_{{ $index }}_position" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="work_{{ $index }}_position">
                                 Position/Title @if($index == 0)*@endif
-                            </label>
-                            <input type="text"
-                                   id="work_{{ $index }}_position"
-                                   wire:model="workHistory.{{ $index }}.position"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('workHistory.'.$index.'.position') border-error-500 @enderror"
-                                   placeholder="e.g., Staff Physician, Partner">
+                            </x-ui.label>
+                            <x-ui.input type="text"
+                                       id="work_{{ $index }}_position"
+                                       wire:model="workHistory.{{ $index }}.position"
+                                       placeholder="e.g., Staff Physician, Partner" />
                             <x-ui.error name="workHistory.{{ $index }}.position" />
                         </div>
                     </div>
 
                     <!-- Address -->
                     <div>
-                        <label for="work_{{ $index }}_address" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="work_{{ $index }}_address">
                             Address
-                        </label>
+                        </x-ui.label>
                         <textarea id="work_{{ $index }}_address"
                                   wire:model="workHistory.{{ $index }}.address"
                                   rows="2"
@@ -72,23 +70,23 @@
                     <!-- Dates -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div>
-                            <label for="work_{{ $index }}_start_date" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="work_{{ $index }}_start_date">
                                 Start Date
-                            </label>
-                            <input type="date"
-                                   id="work_{{ $index }}_start_date"
-                                   wire:model="workHistory.{{ $index }}.start_date"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            </x-ui.label>
+                            <x-ui.input type="date"
+                                       id="work_{{ $index }}_start_date"
+                                       wire:model="workHistory.{{ $index }}.start_date" />
+                            <x-ui.error name="workHistory.{{ $index }}.start_date" />
                         </div>
 
                         <div>
-                            <label for="work_{{ $index }}_end_date" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="work_{{ $index }}_end_date">
                                 End Date
-                            </label>
-                            <input type="date"
-                                   id="work_{{ $index }}_end_date"
-                                   wire:model="workHistory.{{ $index }}.end_date"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            </x-ui.label>
+                            <x-ui.input type="date"
+                                       id="work_{{ $index }}_end_date"
+                                       wire:model="workHistory.{{ $index }}.end_date" />
+                            <x-ui.error name="workHistory.{{ $index }}.end_date" />
                         </div>
                     </div>
                 </div>
@@ -126,35 +124,53 @@
                     <!-- Name and Title -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div>
-                            <label for="ref_{{ $index }}_full_name" class="block text-sm font-medium text-text-primary mb-2">
-                                Full Name @if($index < 2)*@endif
-                            </label>
-                            <input type="text"
-                                   id="ref_{{ $index }}_full_name"
-                                   wire:model="references.{{ $index }}.full_name"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('references.'.$index.'.full_name') border-error-500 @enderror"
-                                   placeholder="Dr. Jane Smith">
-                            <x-ui.error name="references.{{ $index }}.full_name" />
+                            <x-ui.label for="ref_{{ $index }}_name">
+                                Full Name @if($index == 0)*@endif
+                            </x-ui.label>
+                            <x-ui.input type="text"
+                                       id="ref_{{ $index }}_name"
+                                       wire:model="references.{{ $index }}.name"
+                                       placeholder="Reference full name" />
+                            <x-ui.error name="references.{{ $index }}.name" />
                         </div>
 
                         <div>
-                            <label for="ref_{{ $index }}_title" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="ref_{{ $index }}_title">
                                 Title @if($index < 2)*@endif
-                            </label>
-                            <input type="text"
-                                   id="ref_{{ $index }}_title"
-                                   wire:model="references.{{ $index }}.title"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 @error('references.'.$index.'.title') border-error-500 @enderror"
-                                   placeholder="Chief of Medicine, Partner">
+                            </x-ui.label>
+                            <x-ui.input type="text"
+                                       id="ref_{{ $index }}_title"
+                                       wire:model="references.{{ $index }}.title"
+                                       placeholder="Chief of Medicine, Partner" />
                             <x-ui.error name="references.{{ $index }}.title" />
                         </div>
                     </div>
 
+                    <!-- Relationship -->
+                    <div>
+                        <x-ui.label for="ref_{{ $index }}_relationship">
+                            Relationship @if($index < 2)*@endif
+                        </x-ui.label>
+                        <x-ui.select wire:model="references.{{ $index }}.relationship" 
+                                    id="ref_{{ $index }}_relationship"
+                                    placeholder="Select relationship...">
+                            <x-ui.select.option value="">Select relationship...</x-ui.select.option>
+                            <x-ui.select.option value="colleague">Colleague</x-ui.select.option>
+                            <x-ui.select.option value="supervisor">Supervisor</x-ui.select.option>
+                            <x-ui.select.option value="peer">Peer</x-ui.select.option>
+                            <x-ui.select.option value="department_head">Department Head</x-ui.select.option>
+                            <x-ui.select.option value="chief_of_staff">Chief of Staff</x-ui.select.option>
+                            <x-ui.select.option value="medical_director">Medical Director</x-ui.select.option>
+                            <x-ui.select.option value="other">Other</x-ui.select.option>
+                        </x-ui.select>
+                        <x-ui.error name="references.{{ $index }}.relationship" />
+                    </div>
+
                     <!-- Facility/Work Address -->
                     <div>
-                        <label for="ref_{{ $index }}_facility_address" class="block text-sm font-medium text-text-primary mb-2">
+                        <x-ui.label for="ref_{{ $index }}_facility_address">
                             Facility/Work Address
-                        </label>
+                        </x-ui.label>
                         <textarea id="ref_{{ $index }}_facility_address"
                                   wire:model="references.{{ $index }}.facility_address"
                                   rows="2"
@@ -165,25 +181,23 @@
                     <!-- Phone and Email -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div>
-                            <label for="ref_{{ $index }}_phone" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="ref_{{ $index }}_phone">
                                 Phone
-                            </label>
-                            <input type="tel"
-                                   id="ref_{{ $index }}_phone"
-                                   wire:model="references.{{ $index }}.phone"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                   placeholder="(555) 123-4567">
+                            </x-ui.label>
+                            <x-ui.input type="tel"
+                                       id="ref_{{ $index }}_phone"
+                                       wire:model="references.{{ $index }}.phone"
+                                       placeholder="(555) 123-4567" />
                         </div>
 
                         <div>
-                            <label for="ref_{{ $index }}_email" class="block text-sm font-medium text-text-primary mb-2">
+                            <x-ui.label for="ref_{{ $index }}_email">
                                 Email
-                            </label>
-                            <input type="email"
-                                   id="ref_{{ $index }}_email"
-                                   wire:model="references.{{ $index }}.email"
-                                   class="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                                   placeholder="reference@hospital.com">
+                            </x-ui.label>
+                            <x-ui.input type="email"
+                                       id="ref_{{ $index }}_email"
+                                       wire:model="references.{{ $index }}.email"
+                                       placeholder="reference@hospital.com" />
                         </div>
                     </div>
                 </div>

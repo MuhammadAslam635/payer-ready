@@ -15,12 +15,25 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('middle_name')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('user_type',UserType::options())->default(UserType::DOCTOR);
+            $table->string('taxnomy_code')->nullable();
+            $table->enum('user_type',UserType::values())->default(UserType::DOCTOR);
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->string('phone')->nullable();
+            $table->string('ssn_encrypted')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('npi_number')->nullable();
+            $table->string('caqh_id')->nullable();
+            $table->string('caqh_login')->nullable();
+            $table->string('caqh_password')->nullable();
+            $table->string('pecos_login')->nullable();
+            $table->string('pecos_password')->nullable();
+            $table->string('dea_number')->nullable();
+            $table->date('dea_expiration_date')->nullable();
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();

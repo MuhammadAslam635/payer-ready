@@ -13,7 +13,6 @@ class Specialty extends Model
     protected $fillable = [
         'code',
         'name',
-        'taxonomy_code',
         'description',
         'is_active',
     ];
@@ -27,10 +26,11 @@ class Specialty extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_specialties')
+        return $this->belongsToMany(User::class, 'doctor_specialties')
                     ->withPivot(['is_primary'])
                     ->withTimestamps();
     }
+
 }
 
 
