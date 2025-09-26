@@ -52,6 +52,8 @@ class User extends Authenticatable
         'dea_expiration_date',
         'current_team_id',
         'profile_photo_path',
+        'specialty_id',
+        'state_id',
     ];
 
     /**
@@ -244,20 +246,4 @@ class User extends Authenticatable
     // {
     //     return $this->organization()->first();
     // }
-
-    /**
-     * Get the clinic associated with this user (for doctors/providers)
-     */
-    public function clinic(): HasOne
-    {
-        return $this->hasOne(Clinic::class);
-    }
-
-    /**
-     * Check if user has a clinic
-     */
-    public function hasClinic(): bool
-    {
-        return $this->clinic()->exists();
-    }
 }

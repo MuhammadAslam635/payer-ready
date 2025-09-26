@@ -25,8 +25,8 @@ trait Step3CredentialsLicensesTrait
     private function validateStep3CredentialsLicenses()
     {
         $rules = [
-            'deaNumber' => 'nullable|string|regex:/^[A-Z]{2}\d{7}$/',
-            'deaExpiration' => 'nullable|date|after:today',
+            'deaNumber' => 'nullable|string|min:3',
+            'deaExpiration' => 'nullable|date',
         ];
 
         // Validate licenses if any are provided
@@ -69,45 +69,16 @@ trait Step3CredentialsLicensesTrait
         if (!empty($this->educations)) {
             $educations = $this->createEducationRecords($user);
         }
+        
         $this->updateUserCredentials($user);
+        
         return [
             'licenses' => $licenses,
             'educations' => $educations,
         ];
     }
 
-    /**
-     * Check if credentials data is provided
-     */
-    private function hasCredentialsData()
-    {
-        // Check if any state license fields have data
-        if (!empty($this->stateLicenses)) {
-            foreach ($this->stateLicenses as $license) {
-                if (!empty($license['state']) || !empty($license['license_number']) || 
-                    !empty($license['issue_date']) || !empty($license['expiration_date'])) {
-                    return true;
-                }
-            }
-        }
-
-        // Check if any education fields have data
-        if (!empty($this->educations)) {
-            foreach ($this->educations as $education) {
-                if (!empty($education['institution']) || !empty($education['degree']) || 
-                    !empty($education['year_completed'])) {
-                    return true;
-                }
-            }
-        }
-
-        // Check if DEA fields have data
-        if (!empty($this->deaNumber) || !empty($this->deaExpiration)) {
-            return true;
-        }
-
-        return false;
-    }
+    // hasCredentialsData method is now centralized in RegistrationTrait
 
     /**
      * Create state licenses
@@ -122,25 +93,10 @@ trait Step3CredentialsLicensesTrait
         ]);
 
         foreach ($this->stateLicenses as $index => $licenseData) {
-            Log::info("Processing license item {$index}", [
-                'user_id' => $user->id,
-                'item_index' => $index,
-                'has_state' => !empty($licenseData['state']),
-                'has_license_number' => !empty($licenseData['license_number']),
-                'state' => $licenseData['state'] ?? 'N/A',
-                'license_number' => $licenseData['license_number'] ?? 'N/A'
-            ]);
+
 
             if (!empty($licenseData['state']) && !empty($licenseData['license_number'])) {
                 $state = \App\Models\State::where('code', $licenseData['state'])->first();
-
-                Log::info('Creating doctor license', [
-                    'user_id' => $user->id,
-                    'state_code' => $licenseData['state'],
-                    'state_found' => $state ? true : false,
-                    'state_id' => $state ? $state->id : null,
-                    'license_number' => $licenseData['license_number']
-                ]);
 
                 try {
                     $license = DoctorLicense::create([
@@ -156,15 +112,6 @@ trait Step3CredentialsLicensesTrait
                     ]);
 
                     $licenses[] = $license;
-
-                    Log::info('Doctor license created successfully', [
-                        'license_id' => $license->id,
-                        'user_id' => $license->user_id,
-                        'state_id' => $license->state_id,
-                        'license_number' => $license->license_number,
-                        'license_type_id' => $license->license_type_id,
-                        'status' => $license->status->value
-                    ]);
                 } catch (\Exception $e) {
                     Log::error('Failed to create doctor license', [
                         'user_id' => $user->id,
@@ -182,12 +129,6 @@ trait Step3CredentialsLicensesTrait
             }
         }
 
-        Log::info('License creation summary', [
-            'user_id' => $user->id,
-            'total_items_processed' => count($this->stateLicenses),
-            'successful_records' => count($licenses)
-        ]);
-
         return $licenses;
     }
 
@@ -197,12 +138,6 @@ trait Step3CredentialsLicensesTrait
     private function createEducationRecords(User $user)
     {
         $educations = [];
-
-        Log::info('Creating education records for user', [
-            'user_id' => $user->id,
-            'education_count' => count($this->educations)
-        ]);
-
         foreach ($this->educations as $index => $educationData) {
             Log::info("Processing education item {$index}", [
                 'user_id' => $user->id,
@@ -214,12 +149,6 @@ trait Step3CredentialsLicensesTrait
             ]);
 
             if (!empty($educationData['institution']) && !empty($educationData['degree'])) {
-                Log::info('Creating education record', [
-                    'user_id' => $user->id,
-                    'institution' => $educationData['institution'],
-                    'degree' => $educationData['degree'],
-                    'year_completed' => $educationData['year_completed'] ?? null
-                ]);
 
                 try {
                     $education = Education::create([
@@ -230,14 +159,6 @@ trait Step3CredentialsLicensesTrait
                     ]);
 
                     $educations[] = $education;
-
-                    Log::info('Education record created successfully', [
-                        'education_id' => $education->id,
-                        'user_id' => $education->user_id,
-                        'institution_name' => $education->institution_name,
-                        'degree' => $education->degree,
-                        'completed_year' => $education->completed_year
-                    ]);
                 } catch (\Exception $e) {
                     Log::error('Failed to create education record', [
                         'user_id' => $user->id,

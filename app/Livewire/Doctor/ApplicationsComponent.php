@@ -34,6 +34,14 @@ class ApplicationsComponent extends Component
     public $showViewModal = false;
     public $showEditModal = false;
     public $showDeleteModal = false;
+    
+    // Loading states for modals
+    public $loadingAddModal = false;
+    public $loadingRequestModal = false;
+    
+    // Cached data
+    protected $cachedLicenseTypes = null;
+    protected $cachedStates = null;
 
     // Selected license for view/edit/delete
     public $selectedLicense = null;
@@ -179,8 +187,12 @@ class ApplicationsComponent extends Component
     // Modal methods
     public function openAddModal()
     {
+        $this->loadingAddModal = true;
         $this->showAddModal = true;
         $this->resetAddForm();
+        
+        // Simulate loading delay for better UX
+        $this->loadingAddModal = false;
     }
 
     public function closeAddModal()
@@ -211,8 +223,12 @@ class ApplicationsComponent extends Component
 
     public function openRequestModal()
     {
+        $this->loadingRequestModal = true;
         $this->showRequestModal = true;
         $this->resetRequestForm();
+        
+        // Simulate loading delay for better UX
+        $this->loadingRequestModal = false;
     }
 
     public function closeRequestModal()
@@ -443,11 +459,35 @@ class ApplicationsComponent extends Component
         $this->deleteId = null;
     }
 
+    protected function getLicenseTypes()
+    {
+        if ($this->cachedLicenseTypes === null) {
+            $this->cachedLicenseTypes = LicenseType::all();
+        }
+        return $this->cachedLicenseTypes;
+    }
+    
+    protected function getStates()
+    {
+        if ($this->cachedStates === null) {
+            $this->cachedStates = State::all();
+        }
+        return $this->cachedStates;
+    }
+
     public function render()
     {
         $licenseCounts = $this->getLicenseCounts();
-        $licenseTypes = LicenseType::all();
-        $states = State::all();
+        
+        // Only load license types and states when needed (not on initial page load)
+        $licenseTypes = collect();
+        $states = collect();
+        
+        // Load data if modals are open
+        if ($this->showAddModal || $this->showRequestModal || $this->showEditModal) {
+            $licenseTypes = $this->getLicenseTypes();
+            $states = $this->getStates();
+        }
 
         return view('livewire.doctor.applications-component', [
             'licenseCounts' => $licenseCounts,

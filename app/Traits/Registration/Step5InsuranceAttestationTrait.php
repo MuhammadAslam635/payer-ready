@@ -6,51 +6,49 @@ use App\Models\Insurance;
 use App\Models\Attestation;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Validate;
 
 trait Step5InsuranceAttestationTrait
 {
     // Step 5: Insurance & Attestation Variables
+    #[Validate('nullable|string')]
     public $insuranceCarrier = '';
+    #[Validate('nullable|string')]
     public $policyNumber = '';
+    #[Validate('nullable|numeric')]
     public $coverageAmount = '';
+    #[Validate('nullable|date')]
     public $policyEffectiveDate = '';
+    #[Validate('nullable|date')]
     public $policyExpirationDate = '';
-    
+
     // Attestation questions (changed from radio to checkbox)
+    #[Validate('nullable|boolean')]
     public $licenseSuspended = false;
+    #[Validate('nullable|boolean')]
     public $felonyConviction = false;
+    #[Validate('nullable|boolean')]
     public $malpracticeClaims = false;
 
     /**
      * Validate Step 5: Insurance & Attestation
      */
-    private function validateStep5InsuranceAttestation()
-    {
-        $rules = [
-            'insuranceCarrier' => 'nullable|string|max:255',
-            'policyNumber' => 'nullable|string|max:100',
-            'coverageAmount' => 'nullable|numeric|min:0',
-            'policyEffectiveDate' => 'nullable|date',
-            'policyExpirationDate' => 'nullable|date|after:policyEffectiveDate',
-            'licenseSuspended' => 'boolean',
-            'felonyConviction' => 'boolean',
-            'malpracticeClaims' => 'boolean',
-        ];
-
-        $this->validate($rules);
-    }
+    // private function validateStep5InsuranceAttestation()
+    // {
+    //     $this->validate();
+    // }
     /**
      * Process Step 5: Insurance & Attestation data
      */
     public function processStep5InsuranceAttestation(User $user)
     {
         // Validate step 5 data internally
-        $this->validateStep5InsuranceAttestation();
+        // $this->validateStep5InsuranceAttestation();
 
-        Log::info('Processing Step 5: Insurance & Attestation', [
-            'user_id' => $user->id,
-            'has_insurance_data' => $this->hasInsuranceData(),
-        ]);
+        // Only process if there's data to process
+        if (!$this->hasInsuranceData() && !$this->hasAttestationData()) {
+            return null;
+        }
 
         $insurance = null;
         $attestation = null;
@@ -71,17 +69,7 @@ trait Step5InsuranceAttestationTrait
         ];
     }
 
-    /**
-     * Check if insurance data is provided
-     */
-    private function hasInsuranceData()
-    {
-        return !empty($this->insuranceCarrier) ||
-               !empty($this->policyNumber) ||
-               !empty($this->coverageAmount) ||
-               !empty($this->policyEffectiveDate) ||
-               !empty($this->policyExpirationDate);
-    }
+    // hasInsuranceData method is now centralized in RegistrationTrait
 
     /**
      * Check if attestation data is provided
@@ -107,16 +95,6 @@ trait Step5InsuranceAttestationTrait
             $coverageAmount = 0.00;
         }
 
-        Log::info('Creating insurance record', [
-            'user_id' => $user->id,
-            'carrier' => $this->insuranceCarrier,
-            'policy_number' => $this->policyNumber,
-            'coverage_amount_original' => $this->coverageAmount,
-            'coverage_amount_processed' => $coverageAmount,
-            'policy_effective_date' => $this->policyEffectiveDate,
-            'policy_expiration_date' => $this->policyExpirationDate
-        ]);
-
         try {
             $insurance = Insurance::create([
                 'user_id' => $user->id,
@@ -126,14 +104,6 @@ trait Step5InsuranceAttestationTrait
                 'policy_effective_date' => $this->policyEffectiveDate ?: null,
                 'policy_expiration_date' => $this->policyExpirationDate ?: null,
                 'status' => 'pending',
-            ]);
-
-            Log::info('Insurance record created successfully', [
-                'insurance_id' => $insurance->id,
-                'user_id' => $insurance->user_id,
-                'carrier' => $insurance->carrier,
-                'policy_number' => $insurance->policy_number,
-                'coverage_amount' => $insurance->coverage_amount
             ]);
 
             return $insurance;
@@ -156,12 +126,6 @@ trait Step5InsuranceAttestationTrait
      */
     private function createAttestationRecord(User $user)
     {
-        Log::info('Creating attestation record', [
-            'user_id' => $user->id,
-            'license_suspended' => $this->licenseSuspended ?? false,
-            'felony_conviction' => $this->felonyConviction ?? false,
-            'malpractice_claims' => $this->malpracticeClaims ?? false
-        ]);
 
         try {
             $attestation = Attestation::create([
@@ -170,15 +134,6 @@ trait Step5InsuranceAttestationTrait
                 'felony_conviction' => $this->felonyConviction ?? false,
                 'malpractice_claims' => $this->malpracticeClaims ?? false,
             ]);
-
-            Log::info('Attestation record created successfully', [
-                'attestation_id' => $attestation->id,
-                'user_id' => $attestation->user_id,
-                'license_suspended' => $attestation->license_suspended,
-                'felony_conviction' => $attestation->felony_conviction,
-                'malpractice_claims' => $attestation->malpractice_claims
-            ]);
-
             return $attestation;
         } catch (\Exception $e) {
             Log::error('Failed to create attestation record', [

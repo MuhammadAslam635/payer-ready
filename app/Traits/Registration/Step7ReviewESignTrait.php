@@ -5,34 +5,18 @@ namespace App\Traits\Registration;
 use App\Models\ESignatureRecord;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Validate;
 
 trait Step7ReviewESignTrait
 {
     // Step 7: Review & E-Sign Variables
+    #[Validate('required|accepted')]
     public $agreeToTerms = false;
+    #[Validate('required|string|min:2')]
     public $eSignature = '';
 
-    /**
-     * Validate Step 7: Review & E-Sign (Strict validation)
-     */
-    private function validateStep7Strictly()
-    {
-        $this->validate([
-            'agreeToTerms' => 'required|accepted',
-            'eSignature' => 'required|string|min:2',
-        ]);
-    }
     public function processStep7ReviewESign(User $user)
     {
-        Log::info('Processing Step 7: Review & E-Sign', [
-            'user_id' => $user->id,
-            'has_e_signature' => !empty($this->eSignature),
-            'terms_accepted' => $this->agreeToTerms ?? false,
-            'e_signature_length' => strlen($this->eSignature ?? ''),
-            'user_email' => $user->email,
-            'user_name' => $user->name
-        ]);
-
         $eSignatureRecord = null;
 
         // Create e-signature record
@@ -60,11 +44,6 @@ trait Step7ReviewESignTrait
      */
     private function createESignatureRecord($user)
     {
-        Log::info('Creating e-signature record', [
-            'user_id' => $user->id,
-            'signature_provided' => !empty($this->eSignature),
-            'terms_accepted' => $this->agreeToTerms ?? false
-        ]);
 
         try {
             $eSignatureRecord = ESignatureRecord::create([
@@ -75,15 +54,6 @@ trait Step7ReviewESignTrait
                 'user_agent' => request()->userAgent(),
                 'document_type' => 'provider_profile_submission',
                 'is_valid' => true,
-            ]);
-
-            Log::info('E-signature record created successfully', [
-                'e_signature_id' => $eSignatureRecord->id,
-                'user_id' => $eSignatureRecord->user_id,
-                'signature_text' => $eSignatureRecord->signature_text,
-                'signature_date' => $eSignatureRecord->signature_date,
-                'ip_address' => $eSignatureRecord->ip_address,
-                'document_type' => $eSignatureRecord->document_type
             ]);
 
             return $eSignatureRecord;

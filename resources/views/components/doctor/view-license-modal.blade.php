@@ -11,23 +11,23 @@
                         <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">
                             License Details
                         </h3>
-                        
+
                         @if($license)
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Provider Information -->
                             <div class="space-y-4">
                                 <h4 class="text-md font-semibold text-gray-800 border-b pb-2">Provider Information</h4>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Provider Name</label>
                                     <p class="mt-1 text-sm text-gray-900">{{ $license->user->name ?? 'N/A' }}</p>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Email</label>
                                     <p class="mt-1 text-sm text-gray-900">{{ $license->user->email ?? 'N/A' }}</p>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">State</label>
                                     <p class="mt-1 text-sm text-gray-900">{{ $license->state->name ?? 'N/A' }} ({{ $license->state->code ?? 'N/A' }})</p>
@@ -37,17 +37,17 @@
                             <!-- License Information -->
                             <div class="space-y-4">
                                 <h4 class="text-md font-semibold text-gray-800 border-b pb-2">License Information</h4>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">License Type</label>
                                     <p class="mt-1 text-sm text-gray-900">{{ $license->licenseType->name ?? 'N/A' }} ({{ $license->licenseType->code ?? 'N/A' }})</p>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">License Number</label>
                                     <p class="mt-1 text-sm text-gray-900">{{ $license->license_number ?? 'Pending' }}</p>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Status</label>
                                     @php
@@ -64,25 +64,25 @@
                                     </span>
                                 </div>
                             </div>
-                            
+
                             <!-- License Details -->
                             <div class="space-y-4">
                                 <h4 class="text-md font-semibold text-gray-800 border-b pb-2">License Details</h4>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Issue Date</label>
                                     <p class="mt-1 text-sm text-gray-900">
                                         {{ $license->issue_date ? $license->issue_date->format('M d, Y') : 'N/A' }}
                                     </p>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Expiration Date</label>
                                     <p class="mt-1 text-sm text-gray-900">
                                         {{ $license->expiration_date ? $license->expiration_date->format('M d, Y') : 'N/A' }}
                                     </p>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Created</label>
                                     <p class="mt-1 text-sm text-gray-900">
@@ -91,14 +91,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Additional Information -->
                         <div class="mt-6 space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Issuing Authority</label>
                                 <p class="mt-1 text-sm text-gray-900">{{ $license->issuing_authority ?? 'N/A' }}</p>
                             </div>
-                            
+
                             <div class="flex items-center space-x-6">
                                 <div class="flex items-center">
                                     @if($license->is_verified)
@@ -113,7 +113,7 @@
                                         <span class="text-sm text-gray-600">Not Verified</span>
                                     @endif
                                 </div>
-                                
+
                                 @if($license->urgent)
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -123,7 +123,7 @@
                                 </div>
                                 @endif
                             </div>
-                            
+
                             @if($license->notes)
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Notes</label>
@@ -135,15 +135,15 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
                 @if($license && $license->status->value !== 'pending')
-                <button type="button" 
+                <button type="button"
                         wire:click="openEditModal({{ $license->id }})"
                         class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
                     Edit License
                 </button>
                 @endif
-                <button type="button" 
+                <button type="button"
                         wire:click="closeViewModal"
                         class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                     Close

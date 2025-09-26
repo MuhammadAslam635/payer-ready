@@ -85,26 +85,7 @@ trait Step6DocumentUploadTrait
         ];
     }
 
-    /**
-     * Check if document data is provided
-     */
-    private function hasDocumentData()
-    {
-        return $this->cv !== null ||
-               $this->professionalLicense !== null ||
-               $this->pictureId !== null ||
-               $this->socialSecurityCard !== null ||
-               $this->certificateOfLiabilityInsurance !== null ||
-               $this->copiesOfDiplomasCertifications !== null ||
-               $this->stateCredentialingApplication !== null ||
-               $this->passportStylePhoto !== null ||
-               $this->ecfmgCertificate !== null ||
-               $this->boardCertificate !== null ||
-               $this->procedureLog !== null ||
-               $this->cmeCs !== null ||
-               $this->immunizationShotRecords !== null ||
-               $this->aclsBlsCertificate !== null;
-    }
+    // hasDocumentData method is now centralized in RegistrationTrait
 
     /**
      * Create document records

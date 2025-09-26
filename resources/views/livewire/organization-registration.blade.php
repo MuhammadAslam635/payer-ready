@@ -1,14 +1,4 @@
-<div>
-    <!-- Success Message -->
-    @if (session('success'))
-        <div class="bg-success-50 border-b border-success-200 px-4 py-3">
-            <div class="max-w-7xl mx-auto">
-                <p class="text-success-800 text-center">{{ session('success') }}</p>
-            </div>
-        </div>
-    @endif
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex gap-8">
             <!-- Smart Checklist Sidebar -->
             <div class="w-80 bg-white rounded-xl shadow-sm border border-border p-6 h-fit">
@@ -152,8 +142,8 @@
                         @elseif($currentStep == 5)
                             <x-auth.insurance-form :userType="$userType" />
                         @elseif($currentStep == 6)
-                            <x-auth.document-from 
-                                :userType="$userType" 
+                            <x-auth.document-from
+                                :userType="$userType"
                                 :cv="$cv"
                                 :professionalLicense="$professionalLicense"
                                 :pictureId="$pictureId"
@@ -219,7 +209,14 @@
                                 wire:loading.class="opacity-50 cursor-not-allowed"
                                 x-on:click="setTimeout(() => window.scrollTo({top: 0, behavior: 'smooth'}), 100)"
                                 class="px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors">
-                                    Submit Profile
+                                    <span wire:loading.remove wire:target="submitForm">Submit Profile</span>
+                                    <span wire:loading wire:target="submitForm" class="flex items-center">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Submitting...
+                                    </span>
                                 </x-ui.button>
                             @endif
                         </div>
@@ -228,4 +225,3 @@
             </div>
         </div>
     </div>
-</div>

@@ -25,6 +25,26 @@
     <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
         <div class="min-h-screen bg-bg-secondary">
             <!-- Header -->
+            <?php if (isset($component)) { $__componentOriginal339c7fedf680433726dbafc2f156956f = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal339c7fedf680433726dbafc2f156956f = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.toast.index','data' => ['progressBarVariant' => 'thin']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.toast'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['progressBarVariant' => 'thin']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal339c7fedf680433726dbafc2f156956f)): ?>
+<?php $attributes = $__attributesOriginal339c7fedf680433726dbafc2f156956f; ?>
+<?php unset($__attributesOriginal339c7fedf680433726dbafc2f156956f); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal339c7fedf680433726dbafc2f156956f)): ?>
+<?php $component = $__componentOriginal339c7fedf680433726dbafc2f156956f; ?>
+<?php unset($__componentOriginal339c7fedf680433726dbafc2f156956f); ?>
+<?php endif; ?>
             <?php if (isset($component)) { $__componentOriginal5214b438fcc0cb574166d38dd3f20dce = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal5214b438fcc0cb574166d38dd3f20dce = $attributes; } ?>
 <?php $component = App\View\Components\Web\Header::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

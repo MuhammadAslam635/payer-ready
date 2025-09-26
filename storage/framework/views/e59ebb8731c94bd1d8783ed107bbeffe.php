@@ -368,15 +368,22 @@
                             <?php else: ?>
                                 <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['type' => 'button','wire:click' => 'submitForm','wire:loading.attr' => 'enabled','wire:target' => 'submitForm','wire:loading.class' => 'opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed','xOn:click' => 'setTimeout(() => window.scrollTo({top: 0, behavior: \'smooth\'}), 100)','class' => 'px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['type' => 'button','wire:click' => 'submitForm','wire:loading.attr' => 'disabled','wire:target' => 'submitForm','wire:loading.class' => 'opacity-50 cursor-not-allowed','xOn:click' => 'setTimeout(() => window.scrollTo({top: 0, behavior: \'smooth\'}), 100)','class' => 'px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['type' => 'button','wire:click' => 'submitForm','wire:loading.attr' => 'enabled','wire:target' => 'submitForm','wire:loading.class' => 'opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed','x-on:click' => 'setTimeout(() => window.scrollTo({top: 0, behavior: \'smooth\'}), 100)','class' => 'px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors']); ?>
-                                    Submit Profile
+<?php $component->withAttributes(['type' => 'button','wire:click' => 'submitForm','wire:loading.attr' => 'disabled','wire:target' => 'submitForm','wire:loading.class' => 'opacity-50 cursor-not-allowed','x-on:click' => 'setTimeout(() => window.scrollTo({top: 0, behavior: \'smooth\'}), 100)','class' => 'px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors']); ?>
+                                    <span wire:loading.remove wire:target="submitForm">Submit Profile</span>
+                                    <span wire:loading wire:target="submitForm" class="flex items-center">
+                                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Submitting...
+                                    </span>
                                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginala8bb031a483a05f647cb99ed3a469847)): ?>

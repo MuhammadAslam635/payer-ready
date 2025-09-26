@@ -12,12 +12,12 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">
                                 Edit License
                             </h3>
-                            
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- License Type -->
                                 <div>
                                     <label for="edit_license_type" class="block text-sm font-medium text-gray-700">License Type</label>
-                                    <select wire:model="editForm.license_type_id" 
+                                    <select wire:model="editForm.license_type_id"
                                             id="edit_license_type"
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <option value="">Select License Type</option>
@@ -31,7 +31,7 @@
                                 <!-- State -->
                                 <div>
                                     <label for="edit_state" class="block text-sm font-medium text-gray-700">State</label>
-                                    <select wire:model="editForm.state_id" 
+                                    <select wire:model="editForm.state_id"
                                             id="edit_state"
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <option value="">Select State</option>
@@ -45,9 +45,9 @@
                                 <!-- License Number -->
                                 <div>
                                     <label for="edit_license_number" class="block text-sm font-medium text-gray-700">License Number</label>
-                                    <input type="text" 
-                                           wire:model="editForm.license_number" 
-                                           id="edit_license_number" 
+                                    <input type="text"
+                                           wire:model="editForm.license_number"
+                                           id="edit_license_number"
                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                     @error('editForm.license_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -55,9 +55,9 @@
                                 <!-- Issuing Authority -->
                                 <div>
                                     <label for="edit_issuing_authority" class="block text-sm font-medium text-gray-700">Issuing Authority</label>
-                                    <input type="text" 
-                                           wire:model="editForm.issuing_authority" 
-                                           id="edit_issuing_authority" 
+                                    <input type="text"
+                                           wire:model="editForm.issuing_authority"
+                                           id="edit_issuing_authority"
                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                     @error('editForm.issuing_authority') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -65,9 +65,9 @@
                                 <!-- Issue Date -->
                                 <div>
                                     <label for="edit_issue_date" class="block text-sm font-medium text-gray-700">Issue Date</label>
-                                    <input type="date" 
-                                           wire:model="editForm.issue_date" 
-                                           id="edit_issue_date" 
+                                    <input type="date"
+                                           wire:model="editForm.issue_date"
+                                           id="edit_issue_date"
                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                     @error('editForm.issue_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -75,9 +75,9 @@
                                 <!-- Expiration Date -->
                                 <div>
                                     <label for="edit_expiration_date" class="block text-sm font-medium text-gray-700">Expiration Date</label>
-                                    <input type="date" 
-                                           wire:model="editForm.expiration_date" 
-                                           id="edit_expiration_date" 
+                                    <input type="date"
+                                           wire:model="editForm.expiration_date"
+                                           id="edit_expiration_date"
                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                     @error('editForm.expiration_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -86,9 +86,9 @@
                             <!-- Notes -->
                             <div class="mt-4">
                                 <label for="edit_notes" class="block text-sm font-medium text-gray-700">Notes</label>
-                                <textarea wire:model="editForm.notes" 
-                                          id="edit_notes" 
-                                          rows="3" 
+                                <textarea wire:model="editForm.notes"
+                                          id="edit_notes"
+                                          rows="3"
                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"></textarea>
                                 @error('editForm.notes') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
@@ -97,9 +97,9 @@
                             <div class="mt-4 space-y-3">
                                 <div>
                                     <label class="flex items-start gap-3 cursor-pointer">
-                                        <input type="checkbox" 
-                                               wire:model="editForm.is_verified" 
-                                               id="edit_is_verified" 
+                                        <input type="checkbox"
+                                               wire:model="editForm.is_verified"
+                                               id="edit_is_verified"
                                                class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                                         <span class="text-sm text-text-primary">
                                             Mark as Verified
@@ -109,9 +109,9 @@
 
                                 <div>
                                     <label class="flex items-start gap-3 cursor-pointer">
-                                        <input type="checkbox" 
-                                               wire:model="editForm.urgent" 
-                                               id="edit_urgent" 
+                                        <input type="checkbox"
+                                               wire:model="editForm.urgent"
+                                               id="edit_urgent"
                                                class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                                         <span class="text-sm text-text-primary">
                                             Mark as Urgent
@@ -122,12 +122,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="submit" 
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                    <button type="submit"
                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
                         Update License
                     </button>
-                    <button type="button" 
+                    <button type="button"
                             wire:click="closeEditModal"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Cancel

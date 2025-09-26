@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('taxnomy_code')->nullable();
-            $table->enum('user_type',UserType::values())->default(UserType::DOCTOR);
+            $table->enum('user_type', UserType::values())->default(UserType::DOCTOR);
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_active')->default(true);
             $table->string('phone')->nullable();
@@ -34,6 +34,8 @@ return new class extends Migration
             $table->string('pecos_password')->nullable();
             $table->string('dea_number')->nullable();
             $table->date('dea_expiration_date')->nullable();
+            $table->unsignedBigInteger('specialty_id')->constrained('specialties')->nullable();
+            $table->unsignedBigInteger('state_id')->constrained('states')->nullable();
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
