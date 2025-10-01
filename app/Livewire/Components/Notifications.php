@@ -1,20 +1,23 @@
 <?php
-
 namespace App\Livewire\Components;
 
+use App\Enums\UserType;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Notifications extends Component
 {
     public $notifications = [];
-    public $show = false;
-    public $unreadCount = 0;
+    public $show          = false;
+    public $unreadCount   = 0;
 
     protected $listeners = [
-        'open-notifications' => 'toggle',
-        'notification-added' => 'addNotification',
-        'notification-read' => 'markAsRead',
-        'notification-deleted' => 'removeNotification'
+        'open-notifications'    => 'toggle',
+        'notification-added'    => 'addNotification',
+        'notification-read'     => 'markAsRead',
+        'notification-deleted'  => 'removeNotification',
+        'refresh-notifications' => 'loadNotifications',
     ];
 
     public function mount()
@@ -24,97 +27,149 @@ class Notifications extends Component
 
     public function loadNotifications()
     {
-        // Load notifications from database or session
-        // This is a placeholder - implement based on your notification system
-        $this->notifications = collect([
-            [
-                'id' => 1,
-                'title' => 'New Application Submitted',
-                'message' => 'Dr. John Smith has submitted a new credentialing application.',
-                'type' => 'info',
-                'read' => false,
-                'created_at' => now()->subMinutes(5)
-            ],
-            [
-                'id' => 2,
-                'title' => 'License Expiring Soon',
-                'message' => 'Dr. Jane Doe\'s medical license expires in 30 days.',
-                'type' => 'warning',
-                'read' => false,
-                'created_at' => now()->subHours(2)
-            ],
-            [
-                'id' => 3,
-                'title' => 'Application Approved',
-                'message' => 'Dr. Mike Johnson\'s application has been approved.',
-                'type' => 'success',
-                'read' => true,
-                'created_at' => now()->subDays(1)
-            ]
-        ]);
+        if (! Auth::check()) {
+            $this->notifications = collect([]);
+            $this->unreadCount   = 0;
+            return;
+        }
+
+        $user = Auth::user();
+
+        // Get notifications based on user type
+        switch ($user->user_type) {
+            case \App\Enums\UserType::SUPER_ADMIN:
+                // Super Admin sees all notifications from all users
+                $dbNotifications = \Illuminate\Notifications\DatabaseNotification::query()
+                    ->orderBy('created_at', 'desc')
+                    ->limit(20)
+                    ->get();
+                break;
+
+            case \App\Enums\UserType::ORGANIZATION_ADMIN:
+                // Organization Admin sees notifications for their organization's users
+                $organizationUserIds = \App\Models\User::where('organization_id', $user->organization_id)
+                    ->pluck('id')
+                    ->toArray();
+
+                $dbNotifications = \Illuminate\Notifications\DatabaseNotification::query()
+                    ->whereIn('notifiable_id', $organizationUserIds)
+                    ->where('notifiable_type', \App\Models\User::class)
+                    ->orderBy('created_at', 'desc')
+                    ->limit(20)
+                    ->get();
+                break;
+
+            case \App\Enums\UserType::DOCTOR:
+            default:
+                // Doctor and other users see only their own notifications
+                $dbNotifications = $user->notifications()
+                    ->orderBy('created_at', 'desc')
+                    ->limit(20)
+                    ->get();
+                break;
+        }
+
+        $this->notifications = $dbNotifications->map(function ($notification) {
+            $data = $notification->data;
+            return [
+                'id'         => $notification->id,
+                'title'      => $data['title'] ?? 'Notification',
+                'message'    => $data['message'] ?? '',
+                'type'       => $data['type'] ?? 'info',
+                'url'        => $data['url'] ?? '#',
+                'read'       => ! is_null($notification->read_at),
+                'created_at' => Carbon::parse($notification->created_at)->diffForHumans(),
+            ];
+        });
 
         $this->unreadCount = $this->notifications->where('read', false)->count();
     }
 
     public function toggle()
     {
-        $this->show = !$this->show;
+        $this->show = ! $this->show;
     }
 
     public function addNotification($notification)
-    {
-        $this->notifications->prepend($notification);
-        $this->unreadCount++;
-    }
+{
+    $formattedNotification = [
+        'id'         => $notification['id'] ?? uniqid(),
+        'title'      => $notification['title'] ?? 'Notification',
+        'message'    => $notification['message'] ?? '',
+        'type'       => $notification['type'] ?? 'info',
+        'url'        => $notification['url'] ?? '#',
+        'read'       => $notification['read'] ?? false,
+        'created_at' => $notification['created_at'] ?? now()->diffForHumans(),
+    ];
+
+    $this->notifications->prepend($formattedNotification);
+    $this->unreadCount++;
+}
 
     public function markAsRead($notificationId)
     {
-        $notification = $this->notifications->firstWhere('id', $notificationId);
-        if ($notification && !$notification['read']) {
-            $notification['read'] = true;
-            $this->unreadCount--;
+        if (! Auth::check()) {
+            return;
+        }
+
+        // Mark notification as read in database
+        $notification = Auth::user()->notifications()->find($notificationId);
+        if ($notification && is_null($notification->read_at)) {
+            $notification->markAsRead();
+            $this->loadNotifications(); // Refresh notifications
         }
     }
 
     public function markAllAsRead()
     {
-        $this->notifications->transform(function ($notification) {
-            $notification['read'] = true;
-            return $notification;
-        });
-        $this->unreadCount = 0;
+        if (! Auth::check()) {
+            return;
+        }
+
+        // Mark all unread notifications as read
+        Auth::user()->unreadNotifications->markAsRead();
+        $this->loadNotifications(); // Refresh notifications
     }
 
     public function removeNotification($notificationId)
     {
-        $notification = $this->notifications->firstWhere('id', $notificationId);
-        if ($notification && !$notification['read']) {
-            $this->unreadCount--;
+        if (! Auth::check()) {
+            return;
         }
-        $this->notifications = $this->notifications->reject(function ($notification) use ($notificationId) {
-            return $notification['id'] === $notificationId;
-        });
+
+        // Delete notification from database
+        if (Auth::user()->user_type === UserType::DOCTOR) {
+            $notification = Auth::user()->notifications()->find($notificationId);
+        } elseif (Auth::user()->user_type === UserType::ORGANIZATION_ADMIN) {
+            $notification = Auth::user()->organization()->notifications()->find($notificationId);
+        } elseif (Auth::user()->user_type === UserType::SUPER_ADMIN) {
+            $notification = Auth::user()->notifications()->find($notificationId);
+        }
+        if ($notification) {
+            $notification->delete();
+            $this->loadNotifications(); // Refresh notifications
+        }
     }
 
     public function getNotificationIcon($type)
     {
-        return match($type) {
+        return match ($type) {
             'success' => 'check-circle',
             'warning' => 'exclamation-triangle',
-            'error' => 'x-circle',
-            'info' => 'information-circle',
-            default => 'bell'
+            'error'   => 'x-circle',
+            'info'    => 'information-circle',
+            default   => 'bell'
         };
     }
 
     public function getNotificationColor($type)
     {
-        return match($type) {
+        return match ($type) {
             'success' => 'text-green-400',
             'warning' => 'text-yellow-400',
-            'error' => 'text-red-400',
-            'info' => 'text-blue-400',
-            default => 'text-gray-400'
+            'error'   => 'text-red-400',
+            'info'    => 'text-blue-400',
+            default   => 'text-gray-400'
         };
     }
 

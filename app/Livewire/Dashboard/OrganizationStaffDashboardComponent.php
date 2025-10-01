@@ -6,8 +6,6 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use App\Models\User;
-use App\Models\Organization;
-use App\Models\OrganizationStaff;
 use App\Models\DoctorProfile;
 use App\Enums\UserType;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +28,9 @@ class OrganizationStaffDashboardComponent extends Component
     private function getDashboardStats()
     {
         $user = Auth::user();
-        $organizationStaff = $user->organizationStaff()->with('organization')->first();
-
-        if (!$organizationStaff) {
+        
+        // Check if user belongs to an organization
+        if (!$user->org_id) {
             return [
                 'totalColleagues' => 0,
                 'totalDoctors' => 0,
@@ -47,23 +45,21 @@ class OrganizationStaffDashboardComponent extends Component
             ];
         }
 
-        $organization = $organizationStaff->organization;
+        $organization = $user->parentOrganization;
 
         // Get organization staff counts (excluding current user)
-        $totalColleagues = OrganizationStaff::where('organization_id', $organization->id)
-            ->where('user_id', '!=', $user->id)
+        $totalColleagues = User::where('org_id', $user->org_id)
+            ->where('id', '!=', $user->id)
             ->count();
-        $activeColleagues = OrganizationStaff::where('organization_id', $organization->id)
-            ->where('user_id', '!=', $user->id)
+        $activeColleagues = User::where('org_id', $user->org_id)
+            ->where('id', '!=', $user->id)
             ->where('is_active', true)
             ->count();
 
         // Get doctors associated with this organization
-        $organizationDoctorIds = OrganizationStaff::where('organization_id', $organization->id)
-            ->whereHas('user', function($query) {
-                $query->where('user_type', UserType::DOCTOR);
-            })
-            ->pluck('user_id');
+        $organizationDoctorIds = User::where('org_id', $user->org_id)
+            ->where('user_type', UserType::DOCTOR)
+            ->pluck('id');
 
         $totalDoctors = $organizationDoctorIds->count();
         $activeDoctors = User::whereIn('id', $organizationDoctorIds)
@@ -71,8 +67,8 @@ class OrganizationStaffDashboardComponent extends Component
             ->count();
 
         // Recent activity (last 30 days)
-        $recentColleagues = OrganizationStaff::where('organization_id', $organization->id)
-            ->where('user_id', '!=', $user->id)
+        $recentColleagues = User::where('org_id', $user->org_id)
+            ->where('id', '!=', $user->id)
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
@@ -81,20 +77,19 @@ class OrganizationStaffDashboardComponent extends Component
             ->count();
 
         // Latest colleagues
-        $latestColleagues = OrganizationStaff::with(['user', 'role'])
-            ->where('organization_id', $organization->id)
-            ->where('user_id', '!=', $user->id)
+        $latestColleagues = User::where('org_id', $user->org_id)
+            ->where('id', '!=', $user->id)
             ->latest()
             ->take(5)
             ->get()
             ->map(function ($staff) {
                 return [
                     'id' => $staff->id,
-                    'name' => $staff->user->name,
-                    'email' => $staff->user->email,
-                    'role' => $staff->role->name ?? 'Staff',
-                    'is_active' => $staff->is_active,
-                    'profile_photo_url' => $staff->user->profile_photo_url,
+                    'name' => $staff->name,
+                    'email' => $staff->email,
+                    'role' => 'Staff', // Default role since we removed OrganizationStaff
+                    'is_active' => $staff->is_active ?? true,
+                    'profile_photo_url' => $staff->profile_photo_url,
                     'created_at' => $staff->created_at,
                 ];
             });
@@ -122,7 +117,7 @@ class OrganizationStaffDashboardComponent extends Component
 
         return [
             'organization' => $organization,
-            'userRole' => $organizationStaff->role->name ?? 'Staff',
+            'userRole' => 'Staff', // Default role since we removed OrganizationStaff
             'totalColleagues' => $totalColleagues,
             'totalDoctors' => $totalDoctors,
             'activeColleagues' => $activeColleagues,

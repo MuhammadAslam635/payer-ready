@@ -95,6 +95,9 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $licenseType->validity_years }} years
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${{ number_format($licenseType->default_amount, 2) }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $licenseType->requires_renewal ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800' }}">
                                     {{ $licenseType->requires_renewal ? 'Yes' : 'No' }}
@@ -192,6 +195,17 @@
                                                    max="10"
                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                             @error('formData.validity_years') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div>
+                                            <label for="default_amount" class="block text-sm font-medium text-gray-700">Default Amount</label>
+                                            <input type="number"
+                                                   wire:model="formData.default_amount"
+                                                   id="default_amount"
+                                                   min="0"
+                                                   step="0.01"
+                                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                            @error('formData.default_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div>

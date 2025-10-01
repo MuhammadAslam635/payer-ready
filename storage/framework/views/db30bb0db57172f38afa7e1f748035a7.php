@@ -2,7 +2,7 @@
 
 $__newAttributes = [];
 $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
-    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '',
+    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '','primaryState'=>'',
     'primaryState', 'specialties' => [], 'states' => [], 'dateOfBirth' => '', 'ssn' => '', 'homeAddress' => '',
     'practiceAddress' => '', 'phoneNumber' => '', 'npiNumber' => '', 'caqhId' => '',
     'caqhLogin' => '', 'caqhPassword' => '', 'pecosLogin' => '', 'pecosPassword' => '',
@@ -26,7 +26,7 @@ unset($__propNames);
 unset($__newAttributes);
 
 foreach (array_filter(([
-    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '',
+    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '','primaryState'=>'',
     'primaryState', 'specialties' => [], 'states' => [], 'dateOfBirth' => '', 'ssn' => '', 'homeAddress' => '',
     'practiceAddress' => '', 'phoneNumber' => '', 'npiNumber' => '', 'caqhId' => '',
     'caqhLogin' => '', 'caqhPassword' => '', 'pecosLogin' => '', 'pecosPassword' => '',
@@ -85,7 +85,7 @@ unset($__defined_vars, $__key, $__value); ?>
             </div>
             <div>
                 <span class="font-medium text-text-primary">Primary State:</span>
-                <span class="ml-2 text-text-secondary"><?php echo e($primaryState ? $states->where('code', $primaryState)->first()?->name : 'Not provided'); ?></span>
+                <span class="ml-2 text-text-secondary"><?php echo e($primaryState ? $states->where('id', $primaryState)->first()?->name : 'Not provided'); ?></span>
             </div>
         </div>
     </div>
@@ -289,8 +289,8 @@ unset($__defined_vars, $__key, $__value); ?>
         <!-- Terms Agreement -->
         <div class="mb-6">
             <label class="flex items-start gap-3 cursor-pointer">
-                <input 
-                    type="checkbox" 
+                <input
+                    type="checkbox"
                     wire:model="agreeToTerms"
                     class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />

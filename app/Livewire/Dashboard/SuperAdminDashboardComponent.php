@@ -10,6 +10,8 @@ use App\Models\Organization;
 use App\Models\Clinic;
 use App\Models\DoctorProfile;
 use App\Enums\UserType;
+use App\Models\DoctorCertificate;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 #[Title('Super Admin Dashboard')]
@@ -29,20 +31,18 @@ class SuperAdminDashboardComponent extends Component
     private function getDashboardStats()
     {
         // Total counts
-        $totalOrganizations = Organization::count();
-        $totalClinics = Clinic::count();
+        $totalOrganizations = User::where('user_type', UserType::ORGANIZATION_ADMIN)->count();
         $totalDoctors = User::where('user_type', UserType::DOCTOR)->count();
         $totalUsers = User::count();
 
         // Active counts
-        $activeOrganizations = Organization::where('is_active', true)->count();
-        $activeClinics = Clinic::where('is_active', true)->count();
+        $activeOrganizations = User::where('user_type',UserType::ORGANIZATION_ADMIN)->where('is_active', true)->count();
         $activeDoctors = User::where('user_type', UserType::DOCTOR)
             ->where('is_active', true)
             ->count();
 
         // Recent activity (last 30 days)
-        $recentOrganizations = Organization::where('created_at', '>=', now()->subDays(30))->count();
+        $recentOrganizations = User::where('user_type',UserType::ORGANIZATION_ADMIN)->where('created_at', '>=', now()->subDays(30))->count();
         $recentDoctors = User::where('user_type', UserType::DOCTOR)
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
@@ -67,11 +67,11 @@ class SuperAdminDashboardComponent extends Component
 
         return [
             'totalOrganizations' => $totalOrganizations,
-            'totalClinics' => $totalClinics,
+            'totalClinics' => 0,
             'totalDoctors' => $totalDoctors,
             'totalUsers' => $totalUsers,
             'activeOrganizations' => $activeOrganizations,
-            'activeClinics' => $activeClinics,
+            'activeClinics' => 0,
             'activeDoctors' => $activeDoctors,
             'recentOrganizations' => $recentOrganizations,
             'recentDoctors' => $recentDoctors,
@@ -93,7 +93,9 @@ class SuperAdminDashboardComponent extends Component
 
             $months[] = [
                 'month' => $date->format('M Y'),
-                'organizations' => Organization::whereBetween('created_at', [$monthStart, $monthEnd])->count(),
+                'organizations' => User::where('user_type', UserType::ORGANIZATION_ADMIN)
+                    ->whereBetween('created_at', [$monthStart, $monthEnd])
+                    ->count(),
                 'doctors' => User::where('user_type', UserType::DOCTOR)
                     ->whereBetween('created_at', [$monthStart, $monthEnd])
                     ->count(),
@@ -105,39 +107,13 @@ class SuperAdminDashboardComponent extends Component
 
     private function getLatestTransactions()
     {
-        // For now, return mock data since we don't have a transactions table yet
-        // In a real application, you would query the actual transactions table
-        return collect([
-            [
-                'id' => 1,
-                'description' => 'Credentialing Service Fee',
-                'amount' => 299.99,
-                'status' => 'completed',
-                'user_name' => 'Dr. John Smith',
-                'created_at' => now()->subHours(2),
-            ],
-            [
-                'id' => 2,
-                'description' => 'License Verification',
-                'amount' => 150.00,
-                'status' => 'pending',
-                'user_name' => 'Dr. Jane Doe',
-                'created_at' => now()->subHours(5),
-            ],
-            [
-                'id' => 3,
-                'description' => 'Background Check',
-                'amount' => 89.99,
-                'status' => 'completed',
-                'user_name' => 'Dr. Mike Johnson',
-                'created_at' => now()->subDays(1),
-            ],
-        ])->take(5);
+        return Transaction::latest()->take(5)->get();
     }
 
     private function getLatestUsers()
     {
-        return User::with(['organization'])
+        return User::with(['parentOrganization'])
+            ->whereNot('user_type',UserType::SUPER_ADMIN)
             ->latest()
             ->take(5)
             ->get()
@@ -150,52 +126,13 @@ class SuperAdminDashboardComponent extends Component
                     'is_active' => $user->is_active,
                     'profile_photo_url' => $user->profile_photo_url,
                     'created_at' => $user->created_at,
-                    'organization_name' => $user->organization->first()?->business_name,
+                    'organization_name' => $user->is_org ? $user->business_name : $user->parentOrganization?->business_name,
                 ];
             });
     }
 
     private function getLatestCertificateRequests()
     {
-        // For now, return mock data since we don't have a certificate requests table yet
-        // In a real application, you would query the actual certificate requests table
-        return collect([
-            [
-                'id' => 1,
-                'certificate_type' => 'Medical License',
-                'status' => 'pending',
-                'organization_name' => 'City Medical Center',
-                'doctor' => [
-                    'name' => 'Dr. Sarah Wilson',
-                    'email' => 'sarah.wilson@example.com',
-                    'profile_photo_url' => 'https://ui-avatars.com/api/?name=Sarah+Wilson&background=random',
-                ],
-                'created_at' => now()->subHours(1),
-            ],
-            [
-                'id' => 2,
-                'certificate_type' => 'DEA License',
-                'status' => 'approved',
-                'organization_name' => 'Regional Hospital',
-                'doctor' => [
-                    'name' => 'Dr. Robert Brown',
-                    'email' => 'robert.brown@example.com',
-                    'profile_photo_url' => 'https://ui-avatars.com/api/?name=Robert+Brown&background=random',
-                ],
-                'created_at' => now()->subHours(3),
-            ],
-            [
-                'id' => 3,
-                'certificate_type' => 'Board Certification',
-                'status' => 'pending',
-                'organization_name' => 'University Medical',
-                'doctor' => [
-                    'name' => 'Dr. Emily Davis',
-                    'email' => 'emily.davis@example.com',
-                    'profile_photo_url' => 'https://ui-avatars.com/api/?name=Emily+Davis&background=random',
-                ],
-                'created_at' => now()->subDays(1),
-            ],
-        ])->take(5);
+        return DoctorCertificate::latest()->take(5)->get();
     }
 }

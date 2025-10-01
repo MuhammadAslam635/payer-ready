@@ -8,6 +8,7 @@ enum CredentialType: string
     case CERTIFICATE = 'certificate';
     case EDUCATION = 'education';
     case TRAINING = 'training';
+    case INSURANCE = 'insurance';
 
     // Instance method to get label for current case
     public function label(): string
@@ -17,6 +18,7 @@ enum CredentialType: string
             self::CERTIFICATE => 'Certificate',
             self::EDUCATION => 'Education',
             self::TRAINING => 'Training',
+            self::INSURANCE => 'Insurance',
         };
     }
     public static function values():array{
@@ -25,6 +27,7 @@ enum CredentialType: string
             self::CERTIFICATE->value,
             self::EDUCATION->value,
             self::TRAINING->value,
+            self::INSURANCE->value,
         ];
     }
 
@@ -36,6 +39,7 @@ enum CredentialType: string
             self::CERTIFICATE->value => self::CERTIFICATE->label(),
             self::EDUCATION->value => self::EDUCATION->label(),
             self::TRAINING->value => self::TRAINING->label(),
+            self::INSURANCE->value => self::INSURANCE->label(),
         ];
     }
 
@@ -47,6 +51,7 @@ enum CredentialType: string
             self::CERTIFICATE => 'bg-cyan-500 text-white',
             self::EDUCATION => 'bg-yellow-500 text-white',
             self::TRAINING => 'bg-teal-500 text-white',
+            self::INSURANCE => 'bg-teal-700 text-white',
         };
     }
 
@@ -58,6 +63,7 @@ enum CredentialType: string
             self::CERTIFICATE->value => self::CERTIFICATE->cssClass(),
             self::EDUCATION->value => self::EDUCATION->cssClass(),
             self::TRAINING->value => self::TRAINING->cssClass(),
+            self::INSURANCE->value => self::INSURANCE->cssClass(),
         ];
     }
 }

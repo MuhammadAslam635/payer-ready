@@ -14,6 +14,7 @@ class Transaction extends Model
         'transaction_id',
         'user_id',
         'organization_id',
+        'invoice_id',
         'type',
         'status',
         'amount',
@@ -41,11 +42,11 @@ class Transaction extends Model
     }
 
     /**
-     * Get the organization for this transaction
+     * Get the invoice for this transaction
      */
-    public function organization(): BelongsTo
+    public function invoice(): BelongsTo
     {
-        return $this->belongsTo(Organization::class);
+        return $this->belongsTo(Invoice::class);
     }
 }
 

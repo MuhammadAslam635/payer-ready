@@ -34,6 +34,7 @@ class User extends Authenticatable
         'name',
         'middle_name',
         'email',
+        'email_verified_at',
         'password',
         'taxnomy_code',
         'user_type',
@@ -54,6 +55,11 @@ class User extends Authenticatable
         'profile_photo_path',
         'specialty_id',
         'state_id',
+        'e_signature',
+        'terms_condition',
+        'business_name',
+        'is_org',
+        'org_id',
     ];
 
     /**
@@ -88,6 +94,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_org' => 'boolean',
             'user_type' => UserType::class,
         ];
     }
@@ -103,15 +110,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the organization this user belongs to through organization staff
+     * Get the organization this user belongs to (parent organization)
      */
-    public function organization()
+    public function parentOrganization()
     {
-        return $this->belongsToMany(Organization::class, 'organization_staff')
-                    ->withPivot(['role_id', 'position_title', 'department', 'start_date', 'end_date', 'is_active', 'is_primary'])
-                    ->withTimestamps()
-                    ->wherePivot('is_active', true)
-                    ->wherePivot('is_primary', true);
+        return $this->belongsTo(User::class, 'org_id');
+    }
+
+    /**
+     * Get all users that belong to this organization (if this user is an organization)
+     */
+    public function organizationMembers()
+    {
+        return $this->hasMany(User::class, 'org_id');
     }
 
     /**
@@ -232,11 +243,31 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if doctor has any organizations
+     * Check if user has any organizations
      */
     public function hasOrganization(): bool
     {
-        return $this->organization()->exists();
+        return $this->org_id !== null;
+    }
+
+    /**
+     * Check if user is an organization
+     */
+    public function isOrganization(): bool
+    {
+        return $this->is_org;
+    }
+
+    /**
+     * Get the organization name (business_name if organization, or parent organization's business_name)
+     */
+    public function getOrganizationNameAttribute(): ?string
+    {
+        if ($this->is_org) {
+            return $this->business_name;
+        }
+        
+        return $this->parentOrganization?->business_name;
     }
 
     /**

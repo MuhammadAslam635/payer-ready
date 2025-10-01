@@ -1,5 +1,5 @@
 @props([
-    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '',
+    'userType', 'name', 'email', 'organizationName', 'primarySpecialty' => '','primaryState'=>'',
     'primaryState', 'specialties' => [], 'states' => [], 'dateOfBirth' => '', 'ssn' => '', 'homeAddress' => '',
     'practiceAddress' => '', 'phoneNumber' => '', 'npiNumber' => '', 'caqhId' => '',
     'caqhLogin' => '', 'caqhPassword' => '', 'pecosLogin' => '', 'pecosPassword' => '',
@@ -48,7 +48,7 @@
             </div>
             <div>
                 <span class="font-medium text-text-primary">Primary State:</span>
-                <span class="ml-2 text-text-secondary">{{ $primaryState ? $states->where('code', $primaryState)->first()?->name : 'Not provided' }}</span>
+                <span class="ml-2 text-text-secondary">{{ $primaryState ? $states->where('id', $primaryState)->first()?->name : 'Not provided' }}</span>
             </div>
         </div>
     </div>
@@ -248,8 +248,8 @@
         <!-- Terms Agreement -->
         <div class="mb-6">
             <label class="flex items-start gap-3 cursor-pointer">
-                <input 
-                    type="checkbox" 
+                <input
+                    type="checkbox"
                     wire:model="agreeToTerms"
                     class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                 />

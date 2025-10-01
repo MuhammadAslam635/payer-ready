@@ -175,6 +175,130 @@ trait Step4ProfessionalHistoryTrait
 
         return $referenceRecords;
     }
+
+    /**
+     * Add a new work history entry
+     */
+    public function addWorkHistory()
+    {
+        $this->workHistory[] = [
+            'employer' => '',
+            'position' => '',
+            'address' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'current' => false,
+            'responsibilities' => ''
+        ];
+    }
+
+    /**
+     * Remove a work history entry
+     */
+    public function removeWorkHistory($index)
+    {
+        if (isset($this->workHistory[$index])) {
+            unset($this->workHistory[$index]);
+            $this->workHistory = array_values($this->workHistory); // Re-index array
+        }
+    }
+
+    /**
+     * Add a new reference entry
+     */
+    public function addReference()
+    {
+        $this->references[] = [
+            'name' => '',
+            'title' => '',
+            'facility_address' => '',
+            'phone' => '',
+            'email' => '',
+            'relationship' => ''
+        ];
+    }
+
+    /**
+     * Remove a reference entry
+     */
+    public function removeReference($index)
+    {
+        if (isset($this->references[$index])) {
+            unset($this->references[$index]);
+            $this->references = array_values($this->references); // Re-index array
+        }
+    }
+
+    /**
+     * Initialize work history and references arrays
+     */
+    public function initializeStep4Data()
+    {
+        if (empty($this->workHistory)) {
+            $this->workHistory = [
+                [
+                    'employer' => '',
+                    'position' => '',
+                    'address' => '',
+                    'start_date' => '',
+                    'end_date' => '',
+                    'current' => false,
+                    'responsibilities' => ''
+                ]
+            ];
+        }
+
+        if (empty($this->references)) {
+            $this->references = [
+                [
+                    'name' => '',
+                    'title' => '',
+                    'facility_address' => '',
+                    'phone' => '',
+                    'email' => '',
+                    'relationship' => ''
+                ],
+                [
+                    'name' => '',
+                    'title' => '',
+                    'facility_address' => '',
+                    'phone' => '',
+                    'email' => '',
+                    'relationship' => ''
+                ]
+            ];
+        }
+    }
+
+    /**
+     * Check if work history data exists
+     */
+    private function hasWorkHistoryData()
+    {
+        if (empty($this->workHistory) && empty($this->references)) {
+            return false;
+        }
+
+        // Check if any work history has meaningful data
+        $hasWorkData = false;
+        foreach ($this->workHistory as $work) {
+            if (!empty($work['employer']) || !empty($work['position'])) {
+                $hasWorkData = true;
+                break;
+            }
+        }
+
+        // Check if any reference has meaningful data
+        $hasReferenceData = false;
+        foreach ($this->references as $reference) {
+            if (!empty($reference['name']) || !empty($reference['title']) || !empty($reference['email'])) {
+                $hasReferenceData = true;
+                break;
+            }
+        }
+
+        return $hasWorkData || $hasReferenceData;
+    }
 }
 
 

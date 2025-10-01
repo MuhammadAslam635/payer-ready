@@ -185,7 +185,7 @@
                                     <button wire:click="viewLicense({{ $license->id }})" class="text-teal-600 hover:text-teal-900" title="View License Details">
                                         <x-ui.icon name="eye" class="w-4 h-4" />
                                     </button>
-                                    @if($license->status->value !== 'pending')
+                                    @if($license->status->value !== 'requested')
                                     <button wire:click="editLicense({{ $license->id }})" class="text-blue-600 hover:text-blue-900" title="Edit License">
                                         <x-ui.icon name="pencil" class="w-4 h-4" />
                                     </button>
@@ -216,12 +216,12 @@
 
     <!-- Add License Modal -->
     @if($showAddModal)
-    <x-doctor.add-license-modal :selectedProvider="$selectedProvider" />
+    <x-doctor.add-license-modal :selectedProvider="$selectedProvider" :licenseTypes="$licenseTypes" :states="$states" />
     @endif
 
     <!-- Request New License Modal -->
     @if($showRequestModal)
-    <x-doctor.request-license-modal />
+    <x-doctor.request-license-modal :selectedProvider="$selectedProvider" :licenseTypes="$licenseTypes" :states="$states" />
     @endif
 
     <!-- View License Modal -->

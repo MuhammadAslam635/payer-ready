@@ -44,6 +44,14 @@ class SupportTicket extends Model
     }
 
     /**
+     * Get the user assigned to this ticket (alias for assignedUser)
+     */
+    public function assignedTo(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    /**
      * Get all messages for this ticket
      */
     public function messages(): HasMany

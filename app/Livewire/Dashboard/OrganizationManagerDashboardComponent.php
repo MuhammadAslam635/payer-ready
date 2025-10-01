@@ -6,9 +6,6 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use App\Models\User;
-use App\Models\Organization;
-use App\Models\OrganizationStaff;
-use App\Models\DoctorProfile;
 use App\Enums\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,9 +27,9 @@ class OrganizationManagerDashboardComponent extends Component
     private function getDashboardStats()
     {
         $user = Auth::user();
-        $organization = $user->organization()->first();
 
-        if (!$organization) {
+        // Check if user is an organization
+        if (!$user->isOrganization()) {
             return [
                 'totalStaff' => 0,
                 'totalDoctors' => 0,
@@ -46,18 +43,16 @@ class OrganizationManagerDashboardComponent extends Component
             ];
         }
 
-        // Get organization staff counts
-        $totalStaff = OrganizationStaff::where('organization_id', $organization->id)->count();
-        $activeStaff = OrganizationStaff::where('organization_id', $organization->id)
+        // Get organization staff counts (users who belong to this organization)
+        $totalStaff = User::where('org_id', $user->id)->count();
+        $activeStaff = User::where('org_id', $user->id)
             ->where('is_active', true)
             ->count();
 
         // Get doctors associated with this organization
-        $organizationDoctorIds = OrganizationStaff::where('organization_id', $organization->id)
-            ->whereHas('user', function($query) {
-                $query->where('user_type', UserType::DOCTOR);
-            })
-            ->pluck('user_id');
+        $organizationDoctorIds = User::where('org_id', $user->id)
+            ->where('user_type', UserType::DOCTOR)
+            ->pluck('id');
 
         $totalDoctors = $organizationDoctorIds->count();
         $activeDoctors = User::whereIn('id', $organizationDoctorIds)
@@ -65,7 +60,7 @@ class OrganizationManagerDashboardComponent extends Component
             ->count();
 
         // Recent activity (last 30 days)
-        $recentStaff = OrganizationStaff::where('organization_id', $organization->id)
+        $recentStaff = User::where('org_id', $user->id)
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
@@ -74,19 +69,18 @@ class OrganizationManagerDashboardComponent extends Component
             ->count();
 
         // Latest staff members
-        $latestStaff = OrganizationStaff::with(['user', 'role'])
-            ->where('organization_id', $organization->id)
+        $latestStaff = User::where('org_id', $user->id)
             ->latest()
             ->take(5)
             ->get()
             ->map(function ($staff) {
                 return [
                     'id' => $staff->id,
-                    'name' => $staff->user->name,
-                    'email' => $staff->user->email,
-                    'role' => $staff->role->name ?? 'Staff',
-                    'is_active' => $staff->is_active,
-                    'profile_photo_url' => $staff->user->profile_photo_url,
+                    'name' => $staff->name,
+                    'email' => $staff->email,
+                    'role' => 'Staff', // Default role since we removed OrganizationStaff
+                    'is_active' => $staff->is_active ?? true,
+                    'profile_photo_url' => $staff->profile_photo_url,
                     'created_at' => $staff->created_at,
                 ];
             });
@@ -113,7 +107,7 @@ class OrganizationManagerDashboardComponent extends Component
         $latestTransactions = $this->getLatestTransactions();
 
         return [
-            'organization' => $organization,
+            'organization' => $user, // The user is now the organization
             'totalStaff' => $totalStaff,
             'totalDoctors' => $totalDoctors,
             'activeStaff' => $activeStaff,

@@ -1,4 +1,4 @@
-<aside class="w-64 bg-primary-700 text-white flex flex-col p-4 flex-shrink-0 h-full">
+<aside class="w-64 bg-primary-700 text-white flex flex-col p-4 flex-shrink-0 h-screen overflow-y-auto scrollbar-hide">
     <!-- Mobile close button -->
     <div class="lg:hidden flex justify-end mb-4">
         <button @click="sidebarOpen = false"
@@ -82,6 +82,104 @@
                     <h3 class="text-xs font-semibold text-primary-300 uppercase tracking-wider">Management</h3>
                 </div>
 
+
+                <a href="<?php echo e(route('super-admin.view_all_license')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.view_all_license') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'document-text','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'document-text','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Provider License</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.view_all_credentials')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.view_all_credentials') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'key','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'key','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Provider Credentials</span>
+                </a>
+                
+                <a href="<?php echo e(route('super-admin.all_certificates')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_certificates') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'newspaper','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'newspaper','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Provider Certificates</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.all_tasks')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_tasks') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'paper-clip','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'paper-clip','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Provider Tasks</span>
+                </a>
                 <a href="<?php echo e(route('super-admin.specialties.index')); ?>" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.specialties.*') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
                     <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
@@ -106,7 +204,6 @@
 <?php endif; ?>
                     <span class="truncate">Specialties</span>
                 </a>
-
                 <a href="<?php echo e(route('super-admin.states.index')); ?>" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.states.*') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
                     <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
@@ -206,6 +303,176 @@
 <?php endif; ?>
                     <span class="truncate">License Types</span>
                 </a>
+                <a href="<?php echo e(route('super-admin.payers.index')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.payers.*') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'building-library','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'building-library','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Payers</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.sub_users')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.sub_users.*') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'users','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'users','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">System Users</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.users')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.users.*') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'users','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'users','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Provider Users</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.support-tickets')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.support-tickets') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'ticket','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'ticket','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Provider Suport Tickets</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.all_payment_gateways')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_payment_gateways') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'banknotes','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'banknotes','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">All Payment Gateways</span>
+                </a>
+                <a href="<?php echo e(route('super-admin.all_invoices')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_invoices') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'newspaper','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'newspaper','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Inoices</span>
+                </a>
+
+                <a href="<?php echo e(route('super-admin.all_transactions')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_transactions') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'currency-dollar','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'currency-dollar','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">All Transactions</span>
+                </a>
+
             </div>
         <?php endif; ?>
         <?php if(Auth::user()->user_type === \App\Enums\UserType::ORGANIZATION_ADMIN): ?>
@@ -232,10 +499,10 @@
                 </div>
             </div>
 
-                <div class="px-4 mb-2">
-                    <a href="<?php echo e(route('doctor.dashboard')); ?>" wire:navigate
-                        class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.dashboard') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
-                        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+            <div class="px-4 mb-2">
+                <a href="<?php echo e(route('doctor.dashboard')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.dashboard') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'squares-2x2','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.icon'); ?>
@@ -255,11 +522,11 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                        <span class="truncate">Overview</span>
-                    </a>
-                    <a href="<?php echo e(route('doctor.tasks')); ?>" wire:navigate
-                        class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.tasks') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
-                        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+                    <span class="truncate">Overview</span>
+                </a>
+                <a href="<?php echo e(route('doctor.tasks')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.tasks') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'clipboard-document-list','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.icon'); ?>
@@ -279,20 +546,20 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                        <span class="truncate">Tasks</span>
-                    </a>
-                    <a href="<?php echo e(route('doctor.invite-providers')); ?>" wire:navigate
-                        class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.invite-providers') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
-                        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+                    <span class="truncate">Tasks</span>
+                </a>
+                <a href="<?php echo e(route('doctor.profile')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.invite-providers') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'users','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'user','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.icon'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['name' => 'users','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php $component->withAttributes(['name' => 'user','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
@@ -303,11 +570,11 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                        <span class="truncate">Invite Providers</span>
-                    </a>
-                    <a href="<?php echo e(route('doctor.applications')); ?>" wire:navigate
-                        class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.applications') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
-                        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+                    <span class="truncate">Provider Profile</span>
+                </a>
+                <a href="<?php echo e(route('doctor.applications')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.applications') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'document-text','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.icon'); ?>
@@ -327,11 +594,11 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                        <span class="truncate">Applications</span>
-                    </a>
-                    <a href="<?php echo e(route('doctor.licensing')); ?>" wire:navigate
-                        class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.licensing') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
-                        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+                    <span class="truncate">Applications</span>
+                </a>
+                <a href="<?php echo e(route('doctor.licensing')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.licensing') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'identification','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.icon'); ?>
@@ -351,10 +618,33 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                        <span class="truncate">Licensing</span>
-                    </a>
-                </div>
-
+                    <span class="truncate">Licensing</span>
+                </a>
+                <a href="<?php echo e(route('doctor.all_support_tickets')); ?>" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('doctor.all_support_tickets') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
+                    <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'ticket','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'ticket','class' => 'w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
+<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
+<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php endif; ?>
+                    <span class="truncate">Support Tickets</span>
+                </a>
+            </div>
         <?php endif; ?>
 
     </nav>

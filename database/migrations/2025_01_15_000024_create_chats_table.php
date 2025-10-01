@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('type')->default('private'); // private, group, support
+            $table->foreignId('support_ticket_id')->nullable()->constrained('support_tickets')->onDelete('cascade');
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->boolean('is_active')->default(true);
             $table->timestamp('last_message_at')->nullable();

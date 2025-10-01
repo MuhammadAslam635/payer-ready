@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CredentialRequest;
 use App\Enums\CredentialType;
 use App\Enums\CredentialStatus;
 use App\Enums\State;
@@ -17,7 +18,7 @@ return new class extends Migration
         Schema::create('doctor_credentials', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->enum('credential_type', CredentialType::values())->nullable(); // license, certificate, education, training, etc.
+            $table->enum('request_type', CredentialRequest::values())->nullable(); 
             $table->string('credential_name')->nullable();
             $table->string('issuing_organization')->nullable();
             $table->string('credential_number')->nullable();

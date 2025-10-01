@@ -286,7 +286,7 @@
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
                                     </button>
-                                    <!--[if BLOCK]><![endif]--><?php if($license->status->value !== 'pending'): ?>
+                                    <!--[if BLOCK]><![endif]--><?php if($license->status->value !== 'requested'): ?>
                                     <button wire:click="editLicense(<?php echo e($license->id); ?>)" class="text-blue-600 hover:text-blue-900" title="Edit License">
                                         <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
@@ -383,7 +383,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\App\View\Components\Doctor\AddLicenseModal::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['licenseTypes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($licenseTypes),'states' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($states)]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal66bee738ef5e4534e2b06930f5ac356f)): ?>
@@ -407,7 +407,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\App\View\Components\Doctor\RequestLicenseModal::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes([]); ?>
+<?php $component->withAttributes(['selectedProvider' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($selectedProvider),'licenseTypes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($licenseTypes),'states' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($states)]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc568720bcd6f576a7f36cbb396ea1abf)): ?>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PaymentGateway extends Model
 {
@@ -17,16 +18,15 @@ class PaymentGateway extends Model
         'configuration',
         'is_active',
         'is_test_mode',
-        'transaction_fee_percentage',
-        'transaction_fee_fixed',
+        'barcode_screenshot_path',
+        'wallet_uri',
+        'is_local_payment',
     ];
 
     protected $casts = [
-        'configuration' => 'array',
         'is_active' => 'boolean',
         'is_test_mode' => 'boolean',
-        'transaction_fee_percentage' => 'decimal:2',
-        'transaction_fee_fixed' => 'decimal:2',
+        'is_local_payment' => 'boolean',
     ];
 }
 

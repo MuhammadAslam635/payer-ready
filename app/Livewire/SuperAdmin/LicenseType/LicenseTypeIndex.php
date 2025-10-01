@@ -26,6 +26,7 @@ class LicenseTypeIndex extends Component
             'description' => '',
             'issuing_authority' => '',
             'validity_years' => 1,
+            'default_amount' => 0.00,
             'requires_renewal' => true,
             'is_active' => true,
         ];
@@ -38,6 +39,7 @@ class LicenseTypeIndex extends Component
             'name' => 'Name',
             'issuing_authority' => 'Issuing Authority',
             'validity_years' => 'Validity (Years)',
+            'default_amount' => 'Default Amount',
             'requires_renewal' => 'Requires Renewal',
             'is_active' => 'Status',
         ];
@@ -58,6 +60,7 @@ class LicenseTypeIndex extends Component
             'formData.description' => 'nullable|string|max:1000',
             'formData.issuing_authority' => 'required|string|max:255',
             'formData.validity_years' => 'required|integer|min:1|max:100',
+            'formData.default_amount' => 'required|numeric|min:0|max:999999.99',
             'formData.requires_renewal' => 'boolean',
             'formData.is_active' => 'boolean',
         ];
@@ -72,6 +75,9 @@ class LicenseTypeIndex extends Component
             'formData.issuing_authority.required' => 'The issuing authority field is required.',
             'formData.validity_years.required' => 'The validity years field is required.',
             'formData.validity_years.min' => 'The validity years must be at least 1.',
+            'formData.default_amount.required' => 'The default amount field is required.',
+            'formData.default_amount.numeric' => 'The default amount must be a valid number.',
+            'formData.default_amount.min' => 'The default amount must be at least 0.',
         ];
     }
 

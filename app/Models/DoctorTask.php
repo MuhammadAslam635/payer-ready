@@ -13,13 +13,9 @@ class DoctorTask extends Model
     protected $fillable = [
         'user_id',
         'task_type_id',
-        'title',
-        'description',
         'status',
-        'priority',
         'due_date',
         'completed_date',
-        'assigned_to',
         'created_by',
         'notes',
     ];
@@ -42,15 +38,7 @@ class DoctorTask extends Model
      */
     public function taskType(): BelongsTo
     {
-        return $this->belongsTo(TaskType::class);
-    }
-
-    /**
-     * Get the user assigned to this task
-     */
-    public function assignedUser(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(TaskType::class, 'task_type_id');
     }
 
     /**

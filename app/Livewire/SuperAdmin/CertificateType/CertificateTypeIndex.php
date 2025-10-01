@@ -25,6 +25,7 @@ class CertificateTypeIndex extends Component
             'description' => '',
             'issuing_organization' => '',
             'validity_years' => 1,
+            'default_amount' => 0.00,
             'requires_renewal' => true,
             'is_active' => true,
         ];
@@ -37,6 +38,7 @@ class CertificateTypeIndex extends Component
             'name' => 'Name',
             'issuing_organization' => 'Issuing Organization',
             'validity_years' => 'Validity (Years)',
+            'default_amount' => 'Default Amount',
             'requires_renewal' => 'Requires Renewal',
             'is_active' => 'Status',
         ];
@@ -57,6 +59,7 @@ class CertificateTypeIndex extends Component
             'formData.description' => 'nullable|string|max:1000',
             'formData.issuing_organization' => 'required|string|max:255',
             'formData.validity_years' => 'required|integer|min:1|max:100',
+            'formData.default_amount' => 'required|numeric|min:0|max:999999.99',
             'formData.requires_renewal' => 'boolean',
             'formData.is_active' => 'boolean',
         ];
@@ -71,6 +74,9 @@ class CertificateTypeIndex extends Component
             'formData.issuing_organization.required' => 'The issuing organization field is required.',
             'formData.validity_years.required' => 'The validity years field is required.',
             'formData.validity_years.min' => 'The validity years must be at least 1.',
+            'formData.default_amount.required' => 'The default amount field is required.',
+            'formData.default_amount.numeric' => 'The default amount must be a valid number.',
+            'formData.default_amount.min' => 'The default amount must be at least 0.',
         ];
     }
 

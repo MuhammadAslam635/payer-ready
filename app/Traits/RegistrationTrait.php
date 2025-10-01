@@ -87,6 +87,35 @@ trait RegistrationTrait
     }
 
     /**
+     * Skip current step (only allowed for steps 2-6)
+     */
+    public function skipStep()
+    {
+        // Step 1 is required (core profile)
+        if ($this->currentStep == 1) {
+            $this->toastError('Step 1 is required and cannot be skipped.');
+            return;
+        }
+
+        // Step 7 is required (signature)
+        if ($this->currentStep == 7) {
+            $this->toastError('Step 7 is required and cannot be skipped.');
+            return;
+        }
+
+        // Steps 2-6 can be skipped
+        if ($this->currentStep >= 2 && $this->currentStep <= 6) {
+            $this->currentStep++;
+            Log::info('Step skipped', [
+                'skipped_step' => $this->currentStep - 1,
+                'new_step' => $this->currentStep,
+                'total_steps' => $this->totalSteps
+            ]);
+            $this->toastInfo("Step " . ($this->currentStep - 1) . " skipped. You can complete it later from your dashboard.");
+        }
+    }
+
+    /**
      * Clear step data cache when form data changes
      */
     public function clearStepDataCache($step = null)
@@ -105,34 +134,67 @@ trait RegistrationTrait
     {
         switch ($this->currentStep) {
             case 1:
-                // Step 1 validation is handled by #[Validate] attributes
+                // Step 1 is always required - validate core profile fields
+                $this->validateStep1CoreProfile();
                 break;
             case 2:
-                // Step 2 validation is handled by #[Validate] attributes
+                // Step 2 uses #[Validate] attributes - no manual validation needed
+                // Livewire automatically validates properties with #[Validate] attributes
                 break;
             case 3:
-                if ($this->hasStepData(3)) {
+                // Step 3 is optional - only validate if data is provided
+                if ($this->hasStepData(3) && method_exists($this, 'validateStep3CredentialsLicenses')) {
                     $this->validateStep3CredentialsLicenses();
                 }
                 break;
             case 4:
-                // Step 4 validation is handled by #[Validate] attributes
+                // Step 4 is optional - only validate if data is provided
+                if ($this->hasStepData(4) && method_exists($this, 'validateStep4ProfessionalHistory')) {
+                    $this->validateStep4ProfessionalHistory();
+                }
                 break;
             case 5:
-                if ($this->hasStepData(5)) {
-                    // $this->validateStep5InsuranceAttestation();
-                    true;
+                // Step 5 is optional - only validate if data is provided
+                if ($this->hasStepData(5) && method_exists($this, 'validateStep5InsuranceAttestation')) {
+                    $this->validateStep5InsuranceAttestation();
                 }
                 break;
             case 6:
-                if ($this->hasStepData(6)) {
+                // Step 6 is optional - only validate if data is provided
+                if ($this->hasStepData(6) && method_exists($this, 'validateStep6DocumentUpload')) {
                     $this->validateStep6DocumentUpload();
                 }
                 break;
             case 7:
-                $this->validateStep7Strictly();
+                // Step 7 is always required - validate signature and terms
+                if (method_exists($this, 'validateStep7ReviewESign')) {
+                    $this->validateStep7ReviewESign();
+                }
                 break;
         }
+    }
+
+    /**
+     * Validate Step 1 - Core Profile (always required)
+     */
+    private function validateStep1CoreProfile()
+    {
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => ['required', 'confirmed', Password::min(8)],
+        ];
+
+        if ($this->userType === 'doctor') {
+            $rules['organizationName'] = 'required|string|max:255';
+            $rules['primarySpecialty'] = 'required|exists:specialties,id';
+            $rules['primaryState'] = 'required|exists:states,id';
+        } elseif ($this->userType === 'organization') {
+            $rules['organizationName'] = 'required|string|max:255';
+            $rules['primaryState'] = 'required|exists:states,id';
+        }
+
+        $this->validate($rules);
     }
 
     public function prevStep()
@@ -142,16 +204,7 @@ trait RegistrationTrait
         }
     }
 
-    public function skipStep()
-    {
-        if ($this->currentStep < $this->totalSteps) {
-            $this->currentStep++;
-            Log::info('Step skipped', [
-                'new_step' => $this->currentStep,
-                'total_steps' => $this->totalSteps
-            ]);
-        }
-    }
+
 
     public function goToStep($step)
     {
@@ -289,7 +342,6 @@ trait RegistrationTrait
             $this->toastError('Registration failed: ' . $e->getMessage());
             throw $e;
         } finally {
-            // Reset submission flag in finally block to ensure it's always reset
             $this->isSubmitting = false;
         }
     }

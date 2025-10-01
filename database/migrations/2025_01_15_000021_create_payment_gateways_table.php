@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->text('description')->nullable();
-            $table->string('provider'); // stripe, paypal, square, etc.
-            $table->json('configuration'); // API keys, settings, etc.
+            $table->string('provider');
+            $table->json('configuration')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_test_mode')->default(true);
-            $table->decimal('transaction_fee_percentage', 5, 2)->default(0.00);
-            $table->decimal('transaction_fee_fixed', 8, 2)->default(0.00);
+            $table->string('barcode_screenshot_path')->nullable();
+            $table->string('wallet_uri')->nullable();
+            $table->boolean('is_local_payment')->default(false);
             $table->timestamps();
         });
     }

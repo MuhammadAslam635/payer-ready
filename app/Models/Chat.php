@@ -14,6 +14,7 @@ class Chat extends Model
     protected $fillable = [
         'name',
         'type',
+        'support_ticket_id',
         'created_by',
         'is_active',
         'last_message_at',
@@ -23,6 +24,14 @@ class Chat extends Model
         'is_active' => 'boolean',
         'last_message_at' => 'datetime',
     ];
+
+    /**
+     * Get the support ticket this chat belongs to
+     */
+    public function supportTicket(): BelongsTo
+    {
+        return $this->belongsTo(SupportTicket::class);
+    }
 
     /**
      * Get the user who created the chat

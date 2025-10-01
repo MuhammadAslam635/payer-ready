@@ -14,6 +14,19 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
+    <!-- User data for JavaScript -->
+    @auth
+    <script>
+        window.Laravel = {
+            user: {
+                id: {{ auth()->id() }},
+                name: '{{ auth()->user()->name }}',
+                email: '{{ auth()->user()->email }}'
+            }
+        };
+    </script>
+    @endauth
 </head>
 <body class="font-sans antialiased bg-slate-50">
     <div class="min-h-screen">

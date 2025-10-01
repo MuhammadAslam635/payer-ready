@@ -12,20 +12,21 @@ class DoctorCredential extends Model
 
     protected $fillable = [
         'user_id',
-        'credential_type',
         'credential_name',
         'issuing_organization',
         'credential_number',
         'issue_date',
         'expiration_date',
         'status',
-        'state',
+        'state_id',
         'description',
         'metadata',
         'is_verified',
         'verified_at',
         'verified_by',
         'verification_notes',
+        'payer_id',
+        'request_type',
     ];
 
     protected $casts = [
@@ -51,4 +52,10 @@ class DoctorCredential extends Model
     {
         return $this->belongsTo(User::class, 'verified_by');
     }
+    public function state():BelongsTo{
+        return $this->belongsTo(State::class);
+    }
+    public function payer():BelongsTo{
+        return $this->belongsto(Payer::class);
+    } 
 }

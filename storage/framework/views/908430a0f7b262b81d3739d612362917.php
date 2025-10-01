@@ -80,7 +80,7 @@
 
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                                     <div>
-                                    <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
+                                        <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalb2c43a998f3174877f99993c62e16bb4 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.label','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.label'); ?>
@@ -99,14 +99,92 @@
 <?php $component = $__componentOriginalb2c43a998f3174877f99993c62e16bb4; ?>
 <?php unset($__componentOriginalb2c43a998f3174877f99993c62e16bb4); ?>
 <?php endif; ?>
-                                    <select wire:model="addForm.license_type_id" 
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        <option value="">Select License Type</option>
-                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $licenseTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($type->id); ?>"><?php echo e($type->name); ?> (<?php echo e($type->code); ?>)</option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                                    </select>
-                                    <?php if (isset($component)) { $__componentOriginal49789f0e11f6b7c94cbebf11f344eb07 = $component; } ?>
+                                        <?php if (isset($component)) { $__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.index','data' => ['wire:model' => 'addForm.license_type_id','searchable' => true,'class' => 'mt-1 block w-full ']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model' => 'addForm.license_type_id','searchable' => true,'class' => 'mt-1 block w-full ']); ?>
+                                            <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '']); ?>Select License Type <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                                            <!--[if BLOCK]><![endif]--><?php if($licenseTypes && $licenseTypes->count() > 0): ?>
+                                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $licenseTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => ''.e($type->id).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => ''.e($type->id).'']); ?><?php echo e($type->name); ?>
+
+                                                        (<?php echo e($type->code); ?>)
+                                                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                            <?php else: ?>
+                                                <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '','disabled' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '','disabled' => true]); ?>No license types available <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862)): ?>
+<?php $attributes = $__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862; ?>
+<?php unset($__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862)): ?>
+<?php $component = $__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862; ?>
+<?php unset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
+<?php endif; ?>
+                                        <?php if (isset($component)) { $__componentOriginal49789f0e11f6b7c94cbebf11f344eb07 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal49789f0e11f6b7c94cbebf11f344eb07 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.error','data' => ['name' => 'addForm.license_type_id']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.error'); ?>
@@ -126,9 +204,9 @@
 <?php $component = $__componentOriginal49789f0e11f6b7c94cbebf11f344eb07; ?>
 <?php unset($__componentOriginal49789f0e11f6b7c94cbebf11f344eb07); ?>
 <?php endif; ?>
-                                </div>
-                                 <div>
-                                    <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
+                                    </div>
+                                     <div>
+                                        <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalb2c43a998f3174877f99993c62e16bb4 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.label','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.label'); ?>
@@ -147,14 +225,91 @@
 <?php $component = $__componentOriginalb2c43a998f3174877f99993c62e16bb4; ?>
 <?php unset($__componentOriginalb2c43a998f3174877f99993c62e16bb4); ?>
 <?php endif; ?>
-                                    <select wire:model="addForm.state_id" 
-                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                        <option value="">Select State</option>
-                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($state->id); ?>"><?php echo e($state->name); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                                    </select>
-                                    <?php if (isset($component)) { $__componentOriginal49789f0e11f6b7c94cbebf11f344eb07 = $component; } ?>
+                                        <?php if (isset($component)) { $__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.index','data' => ['wire:model' => 'addForm.state_id','searchable' => true,'class' => 'mt-1 block w-full ']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model' => 'addForm.state_id','searchable' => true,'class' => 'mt-1 block w-full ']); ?>
+                                            <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '']); ?>Select State <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                                            <!--[if BLOCK]><![endif]--><?php if($states && $states->count() > 0): ?>
+                                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => ''.e($state->id).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => ''.e($state->id).'']); ?><?php echo e($state->name); ?>
+
+                                                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                            <?php else: ?>
+                                                <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '','disabled' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '','disabled' => true]); ?>No states available <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862)): ?>
+<?php $attributes = $__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862; ?>
+<?php unset($__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862)): ?>
+<?php $component = $__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862; ?>
+<?php unset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
+<?php endif; ?>
+                                        <?php if (isset($component)) { $__componentOriginal49789f0e11f6b7c94cbebf11f344eb07 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal49789f0e11f6b7c94cbebf11f344eb07 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.error','data' => ['name' => 'addForm.state_id']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.error'); ?>
@@ -174,7 +329,7 @@
 <?php $component = $__componentOriginal49789f0e11f6b7c94cbebf11f344eb07; ?>
 <?php unset($__componentOriginal49789f0e11f6b7c94cbebf11f344eb07); ?>
 <?php endif; ?>
-                                </div>
+                                    </div>
 
                                 </div>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">

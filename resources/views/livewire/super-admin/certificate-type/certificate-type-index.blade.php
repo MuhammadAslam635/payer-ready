@@ -21,26 +21,22 @@
         <div class="p-6">
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <x-ui.icon name="magnifying-glass" class="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input wire:model.live.debounce.300ms="search"
+                    <x-ui.label>Search</x-ui.label>
+                    <x-ui.input icon="magnifying-glass" wire:model.live.debounce.300ms="search"
                                type="text"
                                placeholder="Search certificate types..."
-                               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                    </div>
+                               class="w-full" />
                 </div>
                 <div class="flex items-center gap-2">
-                    <label for="perPage" class="text-sm font-medium text-gray-700">Show:</label>
-                    <select wire:model.live="perPage"
+                    <x-ui.label>Show:</x-ui.label>
+                    <x-ui.select wire:model.live="perPage"
                             id="perPage"
-                            class="block w-20 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
+                            class="block w-20 ">
+                        <x-ui.select.option value="10">10</x-ui.select.option>
+                        <x-ui.select.option value="25">25</x-ui.select.option>
+                        <x-ui.select.option value="50">50</x-ui.select.option>
+                        <x-ui.select.option value="100">100</x-ui.select.option>
+                    </x-ui.select>
                 </div>
             </div>
         </div>
@@ -94,6 +90,9 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $certificateType->validity_years }} years
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                                ${{ number_format($certificateType->default_amount, 2) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $certificateType->requires_renewal ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800' }}">
@@ -193,6 +192,17 @@
                                                    max="100"
                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                             @error('formData.validity_years') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div>
+                                            <label for="default_amount" class="block text-sm font-medium text-gray-700">Default Amount ($)</label>
+                                            <input type="number"
+                                                   wire:model="formData.default_amount"
+                                                   id="default_amount"
+                                                   min="0"
+                                                   step="0.01"
+                                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                            @error('formData.default_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div>

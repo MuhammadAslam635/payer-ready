@@ -32,7 +32,7 @@
         </div>
 
         <!-- Sidebar -->
-        <div class="hidden lg:flex lg:flex-shrink-0">
+        <div class="hidden lg:flex lg:flex-shrink-0 lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:w-64">
             <x-sidebar />
         </div>
 
@@ -50,13 +50,13 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden lg:ml-64">
             <x-ui.toast progressBarVariant="thin" />
             <!-- Header -->
             <x-dashboard-header />
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-4 sm:p-6 lg:p-8">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-100 p-4 sm:p-6 lg:p-8 scrollbar-hide">
                 <!-- Breadcrumbs -->
                 @if(isset($breadcrumbs))
                     <x-breadcrumbs :breadcrumbs="$breadcrumbs" />
@@ -67,9 +67,6 @@
             </main>
         </div>
     </div>
-
-    <!-- Notifications -->
-    {{-- <x-notifications /> --}}
 
     @stack('modals')
     @stack('js')

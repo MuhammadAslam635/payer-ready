@@ -3,7 +3,6 @@
 namespace App\Traits\Registration;
 
 use App\Enums\UserType;
-use App\Models\Clinic;
 use App\Models\Organization;
 use App\Models\OrganizationStaff;
 use App\Models\User;
@@ -90,25 +89,13 @@ trait Step1CoreProfileTrait
      */
     private function createOrganization(User $user)
     {
-
-        $organization = Organization::create([
+        // Update the user to be an organization
+        $user->update([
             'business_name' => $this->organizationName,
-            'user_id' => $user->id,
-            'tax_id' => null,
-            'is_active' => true,
+            'is_org' => true,
         ]);
 
-        // Create organization staff relationship
-        $orgStaff = OrganizationStaff::create([
-            'user_id' => $user->id,
-            'organization_id' => $organization->id,
-            'role_id' => 2,
-            'start_date' => now()->toDateString(),
-            'is_active' => true,
-            'is_primary' => true,
-        ]);
-
-        return $organization;
+        return $user;
     }
 
     /**

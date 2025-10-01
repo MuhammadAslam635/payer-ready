@@ -11,7 +11,6 @@ use App\Models\DoctorLicense;
 use App\Models\DoctorDocument;
 use App\Models\DoctorWorkHistory;
 use App\Models\DoctorReference;
-use App\Models\Clinic;
 use App\Enums\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -142,11 +141,10 @@ class DoctorDashboardComponent extends Component
             });
 
         // Get clinic information
-        $clinic = $user->clinic;
+        // $clinic = $user->clinic; // Removed clinic reference
 
         return [
             'doctorProfile' => null, // No longer using doctor profile
-            'clinic' => $clinic,
             'totalLicenses' => $totalLicenses,
             'totalDocuments' => $totalDocuments,
             'totalWorkHistory' => $totalWorkHistory,

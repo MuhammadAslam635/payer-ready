@@ -7,6 +7,7 @@ use App\Models\State;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Support\Facades\Log;
 
 class AddLicenseModal extends Component
 {
@@ -20,8 +21,15 @@ class AddLicenseModal extends Component
     public function __construct($selectedProvider = '')
     {
         $this->selectedProvider = $selectedProvider;
-        $this->licenseTypes = LicenseType::all();
-        $this->states = State::all();
+        
+        try {
+            $this->licenseTypes = LicenseType::all();
+            $this->states = State::all();
+        } catch (\Exception $e) {
+            Log::error('Error loading data for AddLicenseModal: ' . $e->getMessage());
+            $this->licenseTypes = collect();
+            $this->states = collect();
+        }
     }
 
     /**
@@ -29,7 +37,6 @@ class AddLicenseModal extends Component
      */
     public function render(): View|Closure|string
     {
-
         return view('components.doctor.add-license-modal', [
             'licenseTypes' => $this->licenseTypes,
             'selectedProvider' => $this->selectedProvider,

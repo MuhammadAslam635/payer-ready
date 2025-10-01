@@ -1,19 +1,22 @@
 <?php
-
 namespace App\Livewire\Doctor;
 
-use Livewire\Component;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
-use Livewire\WithPagination;
+use App\Enums\LicenseStatus;
+use App\Enums\UserType;
 use App\Models\DoctorLicense;
 use App\Models\LicenseType;
 use App\Models\State;
-use App\Enums\LicenseStatus;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Notifications\LicenseNotification;
 use App\Traits\HasToast;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+use Livewire\WithPagination;
+use PharIo\Manifest\License;
 
 #[Title('Provider Licensing')]
 #[Layout('layouts.dashboard')]
@@ -21,79 +24,79 @@ class ApplicationsComponent extends Component
 {
     use WithPagination, HasToast;
 
-    public $activeTab = 'all';
-    public $licenses = [];
-    public $perPage = 10;
-    public $sortField = 'created_at';
+    public $activeTab     = 'all';
+    public $licenses      = [];
+    public $perPage       = 10;
+    public $sortField     = 'created_at';
     public $sortDirection = 'desc';
-    public $search = '';
+    public $search        = '';
 
     // Modal states
-    public $showAddModal = false;
+    public $showAddModal     = false;
     public $showRequestModal = false;
-    public $showViewModal = false;
-    public $showEditModal = false;
-    public $showDeleteModal = false;
-    
+    public $showViewModal    = false;
+    public $showEditModal    = false;
+    public $showDeleteModal  = false;
+
     // Loading states for modals
-    public $loadingAddModal = false;
+    public $loadingAddModal     = false;
     public $loadingRequestModal = false;
-    
+
     // Cached data
     protected $cachedLicenseTypes = null;
-    protected $cachedStates = null;
+    protected $cachedStates       = null;
 
     // Selected license for view/edit/delete
     public $selectedLicense = null;
-    public $deleteId = null;
+    public $deleteId        = null;
 
     // Add License Modal fields using addForm array
     public $addForm = [
-        'license_type_id' => '',
-        'license_number' => '',
-        'state_id' => '',
-        'issue_date' => '',
-        'expiration_date' => '',
+        'license_type_id'   => '',
+        'license_number'    => '',
+        'state_id'          => '',
+        'issue_date'        => '',
+        'expiration_date'   => '',
         'issuing_authority' => '',
-        'notes' => '',
-        'is_verified' => false,
+        'notes'             => '',
+        'is_verified'       => false,
     ];
 
     // Individual fields for backward compatibility
-    public $selectedProvider = '';
+    public $selectedProvider    = '';
     public $selectedLicenseType = '';
-    public $licenseNumber = '';
-    public $issueDate = '';
-    public $expiryDate = '';
+    public $licenseNumber       = '';
+    public $issueDate           = '';
+    public $expiryDate          = '';
 
     // Request New License Modal fields using requestForm array
     public $requestForm = [
         'license_type_id' => '',
-        'state_id' => '',
-        'reason' => '',
-        'urgent' => false,
+        'state_id'        => '',
+        'reason'          => '',
+        'urgent'          => false,
     ];
 
     // Individual fields for backward compatibility
-    public $requestProvider = '';
+    public $requestProvider    = '';
     public $requestLicenseType = '';
 
     // Edit License Modal fields using editForm array
     public $editForm = [
-        'license_type_id' => '',
-        'state_id' => '',
-        'license_number' => '',
-        'issue_date' => '',
-        'expiration_date' => '',
+        'license_type_id'   => '',
+        'state_id'          => '',
+        'license_number'    => '',
+        'issue_date'        => '',
+        'expiration_date'   => '',
         'issuing_authority' => '',
-        'notes' => '',
-        'is_verified' => false,
-        'urgent' => false,
+        'notes'             => '',
+        'is_verified'       => false,
+        'urgent'            => false,
     ];
 
     public function mount()
     {
-        $this->selectedProvider =Auth::user()->name;
+        $this->selectedProvider = Auth::user()->name;
         $this->loadLicenses();
     }
 
@@ -121,7 +124,7 @@ class ApplicationsComponent extends Component
         if ($this->sortField === $field) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
-            $this->sortField = $field;
+            $this->sortField     = $field;
             $this->sortDirection = 'asc';
         }
         $this->loadLicenses();
@@ -129,7 +132,7 @@ class ApplicationsComponent extends Component
 
     public function loadLicenses()
     {
-        $user = Auth::user();
+        $user   = Auth::user();
         $userId = $user->id;
 
         $query = DoctorLicense::with(['licenseType', 'state'])
@@ -145,7 +148,7 @@ class ApplicationsComponent extends Component
                 break;
             case 'expiring':
                 $query->where('expiration_date', '>', now())
-                      ->where('expiration_date', '<=', now()->addDays(30));
+                    ->where('expiration_date', '<=', now()->addDays(30));
                 break;
             case 'pending':
                 $query->where('status', LicenseStatus::PENDING);
@@ -156,27 +159,27 @@ class ApplicationsComponent extends Component
         }
 
         // Search functionality
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
                 $q->where('license_number', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('licenseType', function ($typeQuery) {
-                      $typeQuery->where('name', 'like', '%' . $this->search . '%');
-                  })
-                  ->orWhereHas('state', function ($stateQuery) {
-                      $stateQuery->where('name', 'like', '%' . $this->search . '%');
-                  });
+                    ->orWhereHas('licenseType', function ($typeQuery) {
+                        $typeQuery->where('name', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('state', function ($stateQuery) {
+                        $stateQuery->where('name', 'like', '%' . $this->search . '%');
+                    });
             });
         }
 
         // Sorting
         if ($this->sortField === 'license_type') {
             $query->join('license_types', 'doctor_licenses.license_type_id', '=', 'license_types.id')
-                  ->orderBy('license_types.name', $this->sortDirection)
-                  ->select('doctor_licenses.*');
+                ->orderBy('license_types.name', $this->sortDirection)
+                ->select('doctor_licenses.*');
         } elseif ($this->sortField === 'state') {
             $query->join('states', 'doctor_licenses.state_id', '=', 'states.id')
-                  ->orderBy('states.name', $this->sortDirection)
-                  ->select('doctor_licenses.*');
+                ->orderBy('states.name', $this->sortDirection)
+                ->select('doctor_licenses.*');
         } else {
             $query->orderBy($this->sortField, $this->sortDirection);
         }
@@ -188,9 +191,9 @@ class ApplicationsComponent extends Component
     public function openAddModal()
     {
         $this->loadingAddModal = true;
-        $this->showAddModal = true;
+        $this->showAddModal    = true;
         $this->resetAddForm();
-        
+
         // Simulate loading delay for better UX
         $this->loadingAddModal = false;
     }
@@ -204,29 +207,29 @@ class ApplicationsComponent extends Component
     public function resetAddForm()
     {
         $this->selectedProvider = Auth::user()->name;
-        $this->addForm = [
-            'license_type_id' => '',
-            'license_number' => '',
-            'state_id' => '',
-            'issue_date' => '',
-            'expiration_date' => '',
+        $this->addForm          = [
+            'license_type_id'   => '',
+            'license_number'    => '',
+            'state_id'          => '',
+            'issue_date'        => '',
+            'expiration_date'   => '',
             'issuing_authority' => '',
-            'notes' => '',
-            'is_verified' => false,
+            'notes'             => '',
+            'is_verified'       => false,
         ];
         // Reset individual fields for backward compatibility
         $this->selectedLicenseType = '';
-        $this->licenseNumber = '';
-        $this->issueDate = '';
-        $this->expiryDate = '';
+        $this->licenseNumber       = '';
+        $this->issueDate           = '';
+        $this->expiryDate          = '';
     }
 
     public function openRequestModal()
     {
         $this->loadingRequestModal = true;
-        $this->showRequestModal = true;
+        $this->showRequestModal    = true;
         $this->resetRequestForm();
-        
+
         // Simulate loading delay for better UX
         $this->loadingRequestModal = false;
     }
@@ -241,13 +244,13 @@ class ApplicationsComponent extends Component
     {
         $this->requestForm = [
             'license_type_id' => '',
-            'state_id' => '',
-            'reason' => '',
-            'urgent' => false,
+            'state_id'        => '',
+            'reason'          => '',
+            'urgent'          => false,
         ];
-        
+
         // Keep backward compatibility
-        $this->requestProvider = '';
+        $this->requestProvider    = '';
         $this->requestLicenseType = '';
     }
 
@@ -255,48 +258,51 @@ class ApplicationsComponent extends Component
     {
         $this->validate([
             'addForm.license_type_id' => 'required',
-            'addForm.license_number' => 'required|string|max:255',
-            'addForm.issue_date' => 'required|date',
+            'addForm.license_number'  => 'required|string|max:255',
+            'addForm.issue_date'      => 'required|date',
             'addForm.expiration_date' => 'required|date|after:addForm.issue_date',
         ]);
 
         try {
             // Log the data being saved for debugging
             Log::info('Attempting to save license with data:', [
-                'user_id' => Auth::id(),
-                'license_type_id' => $this->addForm['license_type_id'],
-                'license_number' => $this->addForm['license_number'],
-                'issue_date' => $this->addForm['issue_date'],
-                'expiration_date' => $this->addForm['expiration_date'],
+                'user_id'           => Auth::id(),
+                'license_type_id'   => $this->addForm['license_type_id'],
+                'license_number'    => $this->addForm['license_number'],
+                'issue_date'        => $this->addForm['issue_date'],
+                'expiration_date'   => $this->addForm['expiration_date'],
                 'issuing_authority' => $this->addForm['issuing_authority'] ?? null,
-                'notes' => $this->addForm['notes'] ?? null,
-                'status' => LicenseStatus::ACTIVE,
-                'is_verified' => $this->addForm['is_verified'] ?? false,
+                'notes'             => $this->addForm['notes'] ?? null,
+                'status'            => LicenseStatus::ACTIVE,
+                'is_verified'       => $this->addForm['is_verified'] ?? false,
             ]);
 
             $license = DoctorLicense::create([
-                'user_id' => Auth::id(),
-                'state_id' => $this->addForm['state_id'],
-                'license_type_id' => $this->addForm['license_type_id'],
-                'license_number' => $this->addForm['license_number'],
-                'issue_date' => $this->addForm['issue_date'],
-                'expiration_date' => $this->addForm['expiration_date'],
+                'user_id'           => Auth::id(),
+                'state_id'          => $this->addForm['state_id'],
+                'license_type_id'   => $this->addForm['license_type_id'],
+                'license_number'    => $this->addForm['license_number'],
+                'issue_date'        => $this->addForm['issue_date'],
+                'expiration_date'   => $this->addForm['expiration_date'],
                 'issuing_authority' => $this->addForm['issuing_authority'] ?? null,
-                'notes' => $this->addForm['notes'] ?? null,
-                'status' => LicenseStatus::ACTIVE,
-                'is_verified' => $this->addForm['is_verified'] ?? false,
+                'notes'             => $this->addForm['notes'] ?? null,
+                'status'            => LicenseStatus::ACTIVE,
+                'is_verified'       => $this->addForm['is_verified'] ?? false,
             ]);
 
             // Log successful creation
             Log::info('License created successfully with ID: ' . $license->id);
+
+            // Send notification to admins
+            $this->notifyAdminsAboutLicense($license, 'added');
 
             $this->toastSuccess('License added successfully!');
             $this->closeAddModal();
             $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error saving license: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'form_data' => $this->addForm
+                'trace'     => $e->getTraceAsString(),
+                'form_data' => $this->addForm,
             ]);
             $this->toastError('Error adding license: ' . $e->getMessage());
         }
@@ -306,28 +312,75 @@ class ApplicationsComponent extends Component
     {
         $this->validate([
             'requestForm.license_type_id' => 'required',
-            'requestForm.state_id' => 'required',
+            'requestForm.state_id'        => 'required',
         ]);
 
         try {
             // Create a pending license request with new fields
-           $license= DoctorLicense::create([
-                'user_id' => Auth::id(),
+            $license = DoctorLicense::create([
+                'user_id'         => Auth::id(),
                 'license_type_id' => $this->requestForm['license_type_id'],
-                'state_id' => $this->requestForm['state_id'],
-                'status' => LicenseStatus::REQUESTED,
-                'is_verified' => false,
+                'state_id'        => $this->requestForm['state_id'],
+                'status'          => LicenseStatus::REQUESTED,
+                'is_verified'     => false,
             ]);
+
+            // Send notification to admins
+            $this->notifyAdminsAboutLicense($license, 'requested');
 
             $this->toastSuccess('License request submitted successfully!');
             $this->closeRequestModal();
             $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error submitting license request: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'form_data' => $this->requestForm
+                'trace'     => $e->getTraceAsString(),
+                'form_data' => $this->requestForm,
             ]);
             $this->toastError('Error submitting request: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Notify admins about license actions
+     */
+    private function notifyAdminsAboutLicense($license, $action)
+    {
+        try {
+            $doctor = Auth::user();
+
+            // Prepare notification data
+            $actionText = $action === 'added' ? 'added a new license' : 'requested a new license';
+            $notificationData = [
+                'title' => 'New License ' . ucfirst($action),
+                'message' => "Dr. {$doctor->name} has {$actionText}",
+                'type' => $action === 'added' ? 'success' : 'info',
+                'license_id' => $license->id,
+                'doctor_id' => $doctor->id,
+                'action' => $action,
+                'license_type' => $license->licenseType->name ?? 'Unknown',
+                'license_number' => $license->license_number,
+                'url' => '/admin/licenses/' . $license->id,
+                'read' => null,
+                'created_at' => Carbon::now(),
+            ];
+
+            // Create notification using the LicenseNotification class
+            $admin = User::where('user_type',UserType::SUPER_ADMIN)->first();// Get admin user
+            $admin->notify(new LicenseNotification($notificationData));
+            $doctor->notify(new LicenseNotification($notificationData));
+            // Dispatch real-time notification event
+            $this->dispatch('notification-added', [
+                'id'      => \Illuminate\Support\Str::uuid(),
+                'title'   => 'New License ' . ucfirst($action),
+                'message' => "Dr. {$doctor->name} has " . ($action === 'added' ? 'added a new license' : 'requested a new license'),
+                'type'    => $action === 'added' ? 'success' : 'info',
+                'url'     => '/admin/licenses/' . $license->id,
+                'read'    => false,
+                'created_at' => now()->diffForHumans(),
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error sending license notification: ' . $e->getMessage());
         }
     }
 
@@ -335,12 +388,12 @@ class ApplicationsComponent extends Component
     public function viewLicense($licenseId)
     {
         $this->selectedLicense = DoctorLicense::with(['licenseType', 'state'])->find($licenseId);
-        $this->showViewModal = true;
+        $this->showViewModal   = true;
     }
 
     public function closeViewModal()
     {
-        $this->showViewModal = false;
+        $this->showViewModal   = false;
         $this->selectedLicense = null;
     }
 
@@ -348,19 +401,19 @@ class ApplicationsComponent extends Component
     public function editLicense($licenseId)
     {
         $license = DoctorLicense::with(['licenseType', 'state'])->find($licenseId);
-        
+
         if ($license) {
             $this->selectedLicense = $license;
-            $this->editForm = [
-                'license_type_id' => $license->license_type_id,
-                'state_id' => $license->state_id,
-                'license_number' => $license->license_number ?? '',
-                'issue_date' => $license->issue_date ? $license->issue_date->format('Y-m-d') : '',
-                'expiration_date' => $license->expiration_date ? $license->expiration_date->format('Y-m-d') : '',
+            $this->editForm        = [
+                'license_type_id'   => $license->license_type_id,
+                'state_id'          => $license->state_id,
+                'license_number'    => $license->license_number ?? '',
+                'issue_date'        => $license->issue_date ? $license->issue_date->format('Y-m-d') : '',
+                'expiration_date'   => $license->expiration_date ? $license->expiration_date->format('Y-m-d') : '',
                 'issuing_authority' => $license->issuing_authority ?? '',
-                'notes' => $license->notes ?? '',
-                'is_verified' => $license->is_verified ?? false,
-                'urgent' => $license->urgent ?? false,
+                'notes'             => $license->notes ?? '',
+                'is_verified'       => $license->is_verified ?? false,
+                'urgent'            => $license->urgent ?? false,
             ];
             $this->showEditModal = true;
         }
@@ -368,7 +421,7 @@ class ApplicationsComponent extends Component
 
     public function closeEditModal()
     {
-        $this->showEditModal = false;
+        $this->showEditModal   = false;
         $this->selectedLicense = null;
         $this->resetEditForm();
     }
@@ -376,15 +429,15 @@ class ApplicationsComponent extends Component
     public function resetEditForm()
     {
         $this->editForm = [
-            'license_type_id' => '',
-            'state_id' => '',
-            'license_number' => '',
-            'issue_date' => '',
-            'expiration_date' => '',
+            'license_type_id'   => '',
+            'state_id'          => '',
+            'license_number'    => '',
+            'issue_date'        => '',
+            'expiration_date'   => '',
             'issuing_authority' => '',
-            'notes' => '',
-            'is_verified' => false,
-            'urgent' => false,
+            'notes'             => '',
+            'is_verified'       => false,
+            'urgent'            => false,
         ];
     }
 
@@ -392,27 +445,27 @@ class ApplicationsComponent extends Component
     {
         try {
             $this->validate([
-                'editForm.license_type_id' => 'required|exists:license_types,id',
-                'editForm.state_id' => 'required|exists:states,id',
-                'editForm.license_number' => 'nullable|string|max:255',
-                'editForm.issue_date' => 'nullable|date',
-                'editForm.expiration_date' => 'nullable|date|after:editForm.issue_date',
+                'editForm.license_type_id'   => 'required|exists:license_types,id',
+                'editForm.state_id'          => 'required|exists:states,id',
+                'editForm.license_number'    => 'nullable|string|max:255',
+                'editForm.issue_date'        => 'nullable|date',
+                'editForm.expiration_date'   => 'nullable|date|after:editForm.issue_date',
                 'editForm.issuing_authority' => 'nullable|string|max:255',
-                'editForm.notes' => 'nullable|string',
-                'editForm.is_verified' => 'boolean',
-                'editForm.urgent' => 'boolean',
+                'editForm.notes'             => 'nullable|string',
+                'editForm.is_verified'       => 'boolean',
+                'editForm.urgent'            => 'boolean',
             ]);
 
             $this->selectedLicense->update([
-                'license_type_id' => $this->editForm['license_type_id'],
-                'state_id' => $this->editForm['state_id'],
-                'license_number' => $this->editForm['license_number'],
-                'issue_date' => $this->editForm['issue_date'] ? Carbon::parse($this->editForm['issue_date']) : null,
-                'expiration_date' => $this->editForm['expiration_date'] ? Carbon::parse($this->editForm['expiration_date']) : null,
+                'license_type_id'   => $this->editForm['license_type_id'],
+                'state_id'          => $this->editForm['state_id'],
+                'license_number'    => $this->editForm['license_number'],
+                'issue_date'        => $this->editForm['issue_date'] ? Carbon::parse($this->editForm['issue_date']) : null,
+                'expiration_date'   => $this->editForm['expiration_date'] ? Carbon::parse($this->editForm['expiration_date']) : null,
                 'issuing_authority' => $this->editForm['issuing_authority'],
-                'notes' => $this->editForm['notes'],
-                'is_verified' => $this->editForm['is_verified'],
-                'urgent' => $this->editForm['urgent'],
+                'notes'             => $this->editForm['notes'],
+                'is_verified'       => $this->editForm['is_verified'],
+                'urgent'            => $this->editForm['urgent'],
             ]);
 
             $this->toastSuccess('License updated successfully!');
@@ -420,9 +473,9 @@ class ApplicationsComponent extends Component
             $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error updating license: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
+                'trace'      => $e->getTraceAsString(),
                 'license_id' => $this->selectedLicense->id,
-                'form_data' => $this->editForm
+                'form_data'  => $this->editForm,
             ]);
             $this->toastError('Error updating license: ' . $e->getMessage());
         }
@@ -431,7 +484,7 @@ class ApplicationsComponent extends Component
     // Delete License Methods
     public function delete($licenseId)
     {
-        $this->deleteId = $licenseId;
+        $this->deleteId        = $licenseId;
         $this->showDeleteModal = true;
     }
 
@@ -440,14 +493,14 @@ class ApplicationsComponent extends Component
         try {
             $license = DoctorLicense::findOrFail($this->deleteId);
             $license->delete();
-            
+
             $this->toastSuccess('License deleted successfully!');
             $this->cancelDelete();
             $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error deleting license: ' . $e->getMessage(), [
-                'trace' => $e->getTraceAsString(),
-                'license_id' => $this->deleteId
+                'trace'      => $e->getTraceAsString(),
+                'license_id' => $this->deleteId,
             ]);
             $this->toastError('Error deleting license: ' . $e->getMessage());
         }
@@ -456,7 +509,7 @@ class ApplicationsComponent extends Component
     public function cancelDelete()
     {
         $this->showDeleteModal = false;
-        $this->deleteId = null;
+        $this->deleteId        = null;
     }
 
     protected function getLicenseTypes()
@@ -466,7 +519,7 @@ class ApplicationsComponent extends Component
         }
         return $this->cachedLicenseTypes;
     }
-    
+
     protected function getStates()
     {
         if ($this->cachedStates === null) {
@@ -478,32 +531,32 @@ class ApplicationsComponent extends Component
     public function render()
     {
         $licenseCounts = $this->getLicenseCounts();
-        
+
         // Only load license types and states when needed (not on initial page load)
         $licenseTypes = collect();
-        $states = collect();
-        
+        $states       = collect();
+
         // Load data if modals are open
         if ($this->showAddModal || $this->showRequestModal || $this->showEditModal) {
             $licenseTypes = $this->getLicenseTypes();
-            $states = $this->getStates();
+            $states       = $this->getStates();
         }
 
         return view('livewire.doctor.applications-component', [
             'licenseCounts' => $licenseCounts,
-            'licenseTypes' => $licenseTypes,
-            'states' => $states,
+            'licenseTypes'  => $licenseTypes,
+            'states'        => $states,
         ]);
     }
 
     private function getLicenseCounts()
     {
-        $user = Auth::user();
+        $user   = Auth::user();
         $userId = $user->id;
 
-        $allLicenses = DoctorLicense::where('user_id', $userId)->count();
-        $activeLicenses = DoctorLicense::where('user_id', $userId)->where('status', LicenseStatus::ACTIVE)->count();
-        $expiredLicenses = DoctorLicense::where('user_id', $userId)->where('expiration_date', '<', now())->count();
+        $allLicenses      = DoctorLicense::where('user_id', $userId)->count();
+        $activeLicenses   = DoctorLicense::where('user_id', $userId)->where('status', LicenseStatus::ACTIVE)->count();
+        $expiredLicenses  = DoctorLicense::where('user_id', $userId)->where('expiration_date', '<', now())->count();
         $expiringLicenses = DoctorLicense::where('user_id', $userId)
             ->where('expiration_date', '>', now())
             ->where('expiration_date', '<=', now()->addDays(30))
@@ -511,11 +564,11 @@ class ApplicationsComponent extends Component
         $pendingLicenses = DoctorLicense::where('user_id', $userId)->where('status', LicenseStatus::PENDING)->count();
 
         return [
-            'all' => $allLicenses,
-            'active' => $activeLicenses,
-            'expired' => $expiredLicenses,
+            'all'      => $allLicenses,
+            'active'   => $activeLicenses,
+            'expired'  => $expiredLicenses,
             'expiring' => $expiringLicenses,
-            'pending' => $pendingLicenses,
+            'pending'  => $pendingLicenses,
         ];
     }
 }

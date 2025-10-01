@@ -7,6 +7,7 @@ use App\Models\State;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Support\Facades\Log;
 
 class RequestLicenseModal extends Component
 {
@@ -18,8 +19,14 @@ class RequestLicenseModal extends Component
 
     public function __construct()
     {
-        $this->licenseTypes = LicenseType::all();
-        $this->states = State::all();
+        try {
+            $this->licenseTypes = LicenseType::all();
+            $this->states = State::all();
+        } catch (\Exception $e) {
+            Log::error('Error loading data for RequestLicenseModal: ' . $e->getMessage());
+            $this->licenseTypes = collect();
+            $this->states = collect();
+        }
     }
 
     /**
@@ -27,10 +34,9 @@ class RequestLicenseModal extends Component
      */
     public function render(): View|Closure|string
     {
-
-        return view('components.doctor.request-license-modal',[
-            'licenseTypes'=>$this->licenseTypes,
-            'states'=>$this->states
+        return view('components.doctor.request-license-modal', [
+            'licenseTypes' => $this->licenseTypes,
+            'states' => $this->states
         ]);
     }
 }

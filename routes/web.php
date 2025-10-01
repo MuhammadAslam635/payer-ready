@@ -12,11 +12,32 @@ use App\Livewire\SuperAdmin\State\StateIndex;
 use App\Livewire\SuperAdmin\CertificateType\CertificateTypeIndex;
 use App\Livewire\SuperAdmin\TaskType\TaskTypeIndex;
 use App\Livewire\SuperAdmin\LicenseType\LicenseTypeIndex;
+use App\Livewire\SuperAdmin\Payer\PayerIndexComponent;
 use App\Livewire\Doctor\MyTasksComponent;
 use App\Livewire\Doctor\InviteProvidersComponent;
 use App\Livewire\Doctor\ApplicationsComponent;
 use App\Livewire\Doctor\DoctorProfileComponent;
 use App\Livewire\Doctor\Application\PayerEnrollmentComponent;
+use App\Livewire\SuperAdmin\Invoice\AllInvoicesComponent;
+use App\Livewire\SuperAdmin\PaymentGateway\AllPayemntGatewaysComponent;
+// Notification Components
+use App\Livewire\Doctor\DoctorNotificationComponent;
+use App\Livewire\Doctor\SupportsTickets\AllSupportTicketsComponent;
+use App\Livewire\Doctor\SupportsTickets\ChatSupportTicketComponent;
+use App\Livewire\Doctor\SupportsTickets\CreateSupportTicketComponent;
+use App\Livewire\Organization\OrganizationNotificationComponent;
+use App\Livewire\SuperAdmin\Certificate\AllCertificateComponent;
+use App\Livewire\SuperAdmin\Credentials\SuperAdminCredentialsComponent;
+use App\Livewire\SuperAdmin\License\SuperAdminViewAllLicenseComponent;
+use App\Livewire\SuperAdmin\SuperAdminNotificationComponent;
+use App\Livewire\SuperAdmin\Tasks\AllTaskComponent;
+use App\Livewire\SuperAdmin\TaskType\TaskDetailComponent;
+use App\Livewire\SuperAdmin\Tickets\AdminViewAllTicketsComponent;
+use App\Livewire\SuperAdmin\Transactions\AllInvoiceComponent;
+use App\Livewire\SuperAdmin\Tickets\TicketChatComponent;
+use App\Livewire\SuperAdmin\Transactions\AllTransactionComponent;
+use App\Livewire\SuperAdmin\User\AdminCreateUserComponent;
+use App\Livewire\SuperAdmin\User\AdminViewAllUsersComponent;
 
 Route::get('/', function () {
     return view('welcome');
@@ -68,12 +89,30 @@ Route::middleware(['auth:sanctum',
     Route::get('/states', StateIndex::class)->name('states.index');
     Route::get('/certificate-types', CertificateTypeIndex::class)->name('certificate-types.index');
     Route::get('/task-types', TaskTypeIndex::class)->name('task-types.index');
+    Route::get('/task-detail/{taskType}', TaskDetailComponent::class)->name('task-detail');
     Route::get('/license-types', LicenseTypeIndex::class)->name('license-types.index');
+    Route::get('/payers',PayerIndexComponent::class)->name('payers.index');
+    Route::get('/sub/users',AdminCreateUserComponent::class)->name('sub_users');
+    Route::get('users',AdminViewAllUsersComponent::class)->name('users');
+    Route::get("/support-tickets",AdminViewAllTicketsComponent::class)->name('support-tickets');
+    Route::get('/chat/{supportTicketId}',TicketChatComponent::class)->name('chat');
+    Route::get('/all-invoices',AllInvoicesComponent::class)->name('all_invoices');
+    Route::get('/payment-gateways',AllPayemntGatewaysComponent::class)->name('all_payment_gateways');
+    Route::get('notifications',SuperAdminNotificationComponent::class)->name('notifications');
+    Route::get('/all-license',SuperAdminViewAllLicenseComponent::class)->name('view_all_license');
+    Route::get('/all-credentials',SuperAdminCredentialsComponent::class)->name('view_all_credentials');
+    Route::get('/all-transactions',AllTransactionComponent::class)->name('all_transactions');
+    Route::get('/all-certificates',AllCertificateComponent::class)->name('all_certificates');
+    Route::get('/all-tasks',AllTaskComponent::class)->name('all_tasks');
 });
 
     Route::prefix('organization')->group(function () {
 
     });
+
+Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', 'middleware' => 'auth'],function () {
+    Route::get('/notifications',OrganizationNotificationComponent::class)->name('notifications');
+});
     // Route::prefix('organization-manager','as'=>'organization-manager.')->group(function () {
     // });
     // Route::prefix('organization-staff','as'=>'organization-staff.')->group(function () {
@@ -86,4 +125,8 @@ Route::group(['prefix' => 'doctor', 'as' => 'doctor.', 'middleware' => 'auth'],f
     Route::get('/licensing',ApplicationsComponent::class)->name('licensing');
     Route::get('/profile', DoctorProfileComponent::class)->name('profile');
     Route::get('/applications',PayerEnrollmentComponent::class)->name('applications');
+    Route::get('/notifications',DoctorNotificationComponent::class)->name('notifications');
+    Route::get('/support-tickets',AllSupportTicketsComponent::class)->name('all_support_tickets');
+    Route::get('create/support-ticket',CreateSupportTicketComponent::class)->name('create_support_ticket');
+    Route::get('chat/{supportTicketId}',ChatSupportTicketComponent::class)->name('chat_support_tickets');
 });

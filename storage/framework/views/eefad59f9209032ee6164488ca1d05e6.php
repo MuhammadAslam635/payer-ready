@@ -5,6 +5,15 @@
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            
+            <!-- Loading State -->
+            <div wire:loading wire:target="openRequestModal" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+                <div class="flex items-center space-x-2">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+                    <span class="text-sm text-gray-600">Loading...</span>
+                </div>
+            </div>
+            
             <form wire:submit.prevent="submitRequest">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
@@ -36,9 +45,13 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                             id="request_license_type"
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <option value="">Select License Type</option>
-                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $licenseTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($type->id); ?>"><?php echo e($type->name); ?> (<?php echo e($type->code); ?>)</option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if BLOCK]><![endif]--><?php if($licenseTypes && $licenseTypes->count() > 0): ?>
+                                            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $licenseTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($type->id); ?>"><?php echo e($type->name); ?> (<?php echo e($type->code); ?>)</option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                        <?php else: ?>
+                                            <option value="" disabled>No license types available</option>
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                     </select>
                                     <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['requestForm.license_type_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -56,9 +69,13 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                             id="request_state"
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <option value="">Select State</option>
-                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($state->id); ?>"><?php echo e($state->name); ?> (<?php echo e($state->code); ?>)</option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                        <!--[if BLOCK]><![endif]--><?php if($states && $states->count() > 0): ?>
+                                            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($state->id); ?>"><?php echo e($state->name); ?> (<?php echo e($state->code); ?>)</option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                                        <?php else: ?>
+                                            <option value="" disabled>No states available</option>
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                     </select>
                                     <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['requestForm.state_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');

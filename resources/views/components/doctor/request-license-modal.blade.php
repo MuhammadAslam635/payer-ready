@@ -38,9 +38,13 @@
                                             id="request_license_type"
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <option value="">Select License Type</option>
-                                        @foreach ($licenseTypes as $type)
-                                            <option value="{{ $type->id }}">{{ $type->name }} ({{ $type->code }})</option>
-                                        @endforeach
+                                        @if($licenseTypes && $licenseTypes->count() > 0)
+                                            @foreach ($licenseTypes as $type)
+                                                <option value="{{ $type->id }}">{{ $type->name }} ({{ $type->code }})</option>
+                                            @endforeach
+                                        @else
+                                            <option value="" disabled>No license types available</option>
+                                        @endif
                                     </select>
                                     @error('requestForm.license_type_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -51,9 +55,13 @@
                                             id="request_state"
                                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                         <option value="">Select State</option>
-                                        @foreach ($states as $state)
-                                            <option value="{{ $state->id }}">{{ $state->name }} ({{ $state->code }})</option>
-                                        @endforeach
+                                        @if($states && $states->count() > 0)
+                                            @foreach ($states as $state)
+                                                <option value="{{ $state->id }}">{{ $state->name }} ({{ $state->code }})</option>
+                                            @endforeach
+                                        @else
+                                            <option value="" disabled>No states available</option>
+                                        @endif
                                     </select>
                                     @error('requestForm.state_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
