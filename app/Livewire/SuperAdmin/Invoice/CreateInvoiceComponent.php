@@ -1,0 +1,284 @@
+<?php
+
+namespace App\Livewire\SuperAdmin\Invoice;
+
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
+use App\Models\User;
+use App\Models\DoctorCertificate;
+use App\Models\DoctorLicense;
+use App\Models\DoctorCredential;
+use App\Models\CertificateType;
+use App\Models\LicenseType;
+use App\Models\Payer;
+use App\Traits\HasToast;
+use Livewire\Component;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+#[Title('Create Invoice')]
+#[Layout('layouts.dashboard')]
+class CreateInvoiceComponent extends Component
+{
+    use HasToast;
+
+    // Form properties
+    public $selectedDoctor = '';
+    public $invoiceNotes = '';
+    public $dueDate = '';
+    public $discount = 0;
+    public $tax = 0;
+
+    // Item selection properties
+    public $selectedCertificates = [];
+    public $selectedLicenses = [];
+    public $selectedCredentials = [];
+
+    // Cart properties
+    public $cartInstance = 'invoice';
+    public $cartItems = [];
+    public $cartTotal = 0;
+    public $cartCount = 0;
+
+    // Modal properties
+    public $showItemModal = false;
+    public $itemType = '';
+    public $availableItems = [];
+
+    protected $listeners = [
+        'cart-updated' => 'refreshCart',
+        'item-added' => 'refreshCart',
+    ];
+
+    protected $rules = [
+        'selectedDoctor' => 'required|exists:users,id',
+        'dueDate' => 'required|date|after:today',
+        'discount' => 'nullable|numeric|min:0',
+        'tax' => 'nullable|numeric|min:0',
+        'invoiceNotes' => 'nullable|string|max:1000',
+    ];
+
+    public function mount()
+    {
+        Cart::instance($this->cartInstance)->destroy();
+        $this->dueDate = now()->addDays(30)->format('Y-m-d');
+        $this->refreshCart();
+    }
+
+    public function updatedSelectedDoctor()
+    {
+        // Clear cart when doctor changes
+        Cart::instance($this->cartInstance)->destroy();
+        $this->refreshCart();
+        $this->selectedCertificates = [];
+        $this->selectedLicenses = [];
+        $this->selectedCredentials = [];
+    }
+
+    public function openItemModal($type)
+    {
+        if (!$this->selectedDoctor) {
+            $this->toast('Please select a doctor first.', 'error');
+            return;
+        }
+
+        $this->itemType = $type;
+        $this->showItemModal = true;
+        $this->loadAvailableItems();
+    }
+
+    public function loadAvailableItems()
+    {
+        switch ($this->itemType) {
+            case 'certificates':
+                $this->availableItems = DoctorCertificate::with('certificateType')
+                    ->where('user_id', $this->selectedDoctor)
+                    ->get()
+                    ->map(function ($cert) {
+                        return [
+                            'id' => $cert->id,
+                            'name' => $cert->certificateType->name ?? 'Certificate',
+                            'description' => "Certificate: {$cert->certificate_number}",
+                            'price' => $cert->certificateType->default_amount  ?? 150, // Default price
+                            'type' => 'certificate'
+                        ];
+                    });
+                break;
+
+            case 'licenses':
+                $this->availableItems = DoctorLicense::with('licenseType', 'state')
+                    ->where('user_id', $this->selectedDoctor)
+                    ->get()
+                    ->map(function ($license) {
+                        return [
+                            'id' => $license->id,
+                            'name' => $license->licenseType->name ?? 'License',
+                            'description' => "License: {$license->license_number} ({$license->state->name})",
+                            'price' => 75.00, // Default price
+                            'type' => 'license'
+                        ];
+                    });
+                break;
+
+            case 'credentials':
+                $this->availableItems = DoctorCredential::with('payer')
+                    ->where('user_id', $this->selectedDoctor)
+                    ->get()
+                    ->map(function ($credential) {
+                        return [
+                            'id' => $credential->id,
+                            'name' => $credential->payer->name ?? 'Credential',
+                            'description' => "Credential: {$credential->credential_number}",
+                            'price' => 100.00, // Default price
+                            'type' => 'credential'
+                        ];
+                    });
+                break;
+        }
+    }
+
+    public function addToCart($itemId, $price = null)
+    {
+        $item = collect($this->availableItems)->firstWhere('id', $itemId);
+        
+        if (!$item) {
+            $this->toast('Item not found.', 'error');
+            return;
+        }
+
+        $cartId = $item['type'] . '_' . $item['id'];
+        $finalPrice = $price ?? $item['price'];
+
+        // Check if item already exists in cart
+        $existingItem = Cart::instance($this->cartInstance)->search(function ($cartItem) use ($cartId) {
+            return $cartItem->id === $cartId;
+        });
+
+        if ($existingItem->isNotEmpty()) {
+            $this->toast('Item already added to invoice.', 'warning');
+            return;
+        }
+
+        Cart::instance($this->cartInstance)->add([
+            'id' => $cartId,
+            'name' => $item['name'],
+            'qty' => 1,
+            'price' => $finalPrice,
+            'options' => [
+                'description' => $item['description'],
+                'type' => $item['type'],
+                'item_id' => $item['id'],
+            ]
+        ]);
+
+        $this->refreshCart();
+        $this->toast('Item added to invoice successfully!', 'success');
+        $this->dispatch('item-added');
+    }
+
+    public function removeFromCart($rowId)
+    {
+        Cart::instance($this->cartInstance)->remove($rowId);
+        $this->refreshCart();
+        $this->toast('Item removed from invoice.', 'success');
+        $this->dispatch('cart-updated');
+    }
+
+    public function updateCartItemPrice($rowId, $newPrice)
+    {
+        Cart::instance($this->cartInstance)->update($rowId, ['price' => $newPrice]);
+        $this->refreshCart();
+        $this->dispatch('cart-updated');
+    }
+
+    public function refreshCart()
+    {
+        $this->cartItems = Cart::instance($this->cartInstance)->content()->toArray();
+        $this->cartTotal = Cart::instance($this->cartInstance)->total();
+        $this->cartCount = Cart::instance($this->cartInstance)->count();
+    }
+
+    public function closeModal()
+    {
+        $this->showItemModal = false;
+        $this->itemType = '';
+        $this->availableItems = [];
+    }
+
+    public function createInvoice()
+    {
+        $this->validate();
+
+        if (Cart::instance($this->cartInstance)->count() === 0) {
+            $this->toast('Please add at least one item to the invoice.', 'error');
+            return;
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Create invoice
+            $invoice = Invoice::create([
+                'invoice_number' => Invoice::generateInvoiceNumber(),
+                'user_id' => $this->selectedDoctor,
+                'subtotal' => Cart::instance($this->cartInstance)->subtotal(),
+                'discount' => $this->discount,
+                'tax' => $this->tax,
+                'total' => Cart::instance($this->cartInstance)->total() - $this->discount + $this->tax,
+                'status' => 'pending',
+                'due_date' => $this->dueDate,
+                'notes' => $this->invoiceNotes,
+            ]);
+
+            // Create invoice items
+            foreach (Cart::instance($this->cartInstance)->content() as $cartItem) {
+                $itemableType = match($cartItem->options->type) {
+                    'certificate' => DoctorCertificate::class,
+                    'license' => DoctorLicense::class,
+                    'credential' => DoctorCredential::class,
+                    default => null,
+                };
+
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'description' => $cartItem->options->description,
+                    'quantity' => $cartItem->qty,
+                    'unit_price' => $cartItem->price,
+                    'amount' => $cartItem->total,
+                    'itemable_id' => $cartItem->options->item_id,
+                    'itemable_type' => $itemableType,
+                    'notes' => null,
+                ]);
+            }
+
+            // Clear cart
+            Cart::instance($this->cartInstance)->destroy();
+
+            DB::commit();
+
+            $this->toast('Invoice created successfully!', 'success');
+            $this->reset();
+            $this->refreshCart();
+
+            // Redirect to invoice view or list
+            return redirect()->route('super-admin.invoices.all');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->toast('Error creating invoice: ' . $e->getMessage(), 'error');
+        }
+    }
+
+    public function render()
+    {
+        $doctors = User::orderBy('name','asc')
+            ->get();
+
+        return view('livewire.super-admin.invoice.create-invoice-component', [
+            'doctors' => $doctors,
+        ]);
+    }
+}

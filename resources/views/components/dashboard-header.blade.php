@@ -55,6 +55,9 @@
             <!-- Notifications Dropdown -->
             @livewire("components.notifications")
 
+            <!-- Cart Notification (Super Admin Only) -->
+            @livewire("components.cart-notification-component")
+
             <!-- Profile Dropdown -->
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center space-x-1 sm:space-x-2">

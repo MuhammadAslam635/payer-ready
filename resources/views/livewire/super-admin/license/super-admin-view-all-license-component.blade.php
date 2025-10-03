@@ -1,18 +1,11 @@
-<div class="p-6">
+<div>
     <!-- Page Header -->
-    <div class="mb-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Doctor Licenses Management</h2>
-            <div class="text-sm text-gray-500">
-                Total: {{ $licenses->total() }} licenses
-            </div>
-        </div>
-    </div>
+    <x-breadcrumbs tagline="Overview of doctor license statistics and recent activity"  />
 
     <!-- Filters Section -->
-    <div class="bg-white shadow rounded-lg mb-6">
+    <div class="bg-white shadow rounded-lg my-6">
         <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- Search -->
                 <div class="lg:col-span-2">
                     <x-ui.label>Search</x-ui.label>
@@ -56,17 +49,17 @@
                         @endforeach
                     </x-ui.select>
                 </div>
-                <div class="col-span-1">
-                    <x-ui.label>Clear Filter</x-ui.label>
-                <x-ui.button  size="sm" variant="primary" class="mt-1 bg-primary-500 rounded-md" 
+                
+            </div>
+
+            <!-- Clear Filters -->
+            <div class="mt-4 flex justify-end">
+                <x-ui.button  size="sm" variant="primary" icon="arrow-path"
+                 class="bg-primary-500 rounded-md text-white" 
                         wire:click="clearFilters">
                     Clear Filters
                 </x-ui.button>
             </div>
-            </div>
-
-            <!-- Clear Filters -->
-            
         </div>
     </div>
 

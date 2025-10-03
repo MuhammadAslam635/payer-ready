@@ -28,6 +28,7 @@ use App\Livewire\Doctor\SupportsTickets\CreateSupportTicketComponent;
 use App\Livewire\Organization\OrganizationNotificationComponent;
 use App\Livewire\SuperAdmin\Certificate\AllCertificateComponent;
 use App\Livewire\SuperAdmin\Credentials\SuperAdminCredentialsComponent;
+use App\Livewire\SuperAdmin\Invoice\CreateInvoiceComponent;
 use App\Livewire\SuperAdmin\License\SuperAdminViewAllLicenseComponent;
 use App\Livewire\SuperAdmin\SuperAdminNotificationComponent;
 use App\Livewire\SuperAdmin\Tasks\AllTaskComponent;
@@ -97,6 +98,7 @@ Route::middleware(['auth:sanctum',
     Route::get("/support-tickets",AdminViewAllTicketsComponent::class)->name('support-tickets');
     Route::get('/chat/{supportTicketId}',TicketChatComponent::class)->name('chat');
     Route::get('/all-invoices',AllInvoicesComponent::class)->name('all_invoices');
+    Route::get('/create-invoice',CreateInvoiceComponent::class)->name('create_invoice');
     Route::get('/payment-gateways',AllPayemntGatewaysComponent::class)->name('all_payment_gateways');
     Route::get('notifications',SuperAdminNotificationComponent::class)->name('notifications');
     Route::get('/all-license',SuperAdminViewAllLicenseComponent::class)->name('view_all_license');

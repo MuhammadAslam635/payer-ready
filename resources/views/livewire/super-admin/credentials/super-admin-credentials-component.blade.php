@@ -1,16 +1,9 @@
-<div class="p-6">
+<div>
     <!-- Page Header -->
-    <div class="mb-8">
-        <div class="flex justify-between items-center">
-            <h2 class="text-3xl font-bold text-gray-900">Doctor Credentials Management</h2>
-            <div class="text-sm text-gray-500">
-                Total: {{ $credentials->total() }} credentials
-            </div>
-        </div>
-    </div>
+    <x-breadcrumbs tagline="Overview of doctor credentials statistics and recent activity" />
 
     <!-- Filters Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 my-6">
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                 <!-- Search -->
@@ -72,8 +65,9 @@
             </div>
 
             <!-- Clear Filters Button -->
-            <div class="mt-4">
-                <x-ui.button size="sm" variant="primary" class="bg-primary-500 rounded-md mt-1" wire:click="clearFilters">
+            <div class="mt-4 flex justify-end">
+                <x-ui.button icon="arrow-path" size="sm" variant="primary"
+                 class="bg-primary-500 rounded-md text-white" wire:click="clearFilters">
                   Clear Filters
                 </x-ui.button>
             </div>

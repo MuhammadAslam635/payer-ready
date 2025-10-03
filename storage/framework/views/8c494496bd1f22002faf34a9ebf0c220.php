@@ -1,16 +1,28 @@
-<div class="p-6">
+<div>
     <!-- Page Header -->
-    <div class="mb-8">
-        <div class="flex justify-between items-center">
-            <h2 class="text-3xl font-bold text-gray-900">Doctor Credentials Management</h2>
-            <div class="text-sm text-gray-500">
-                Total: <?php echo e($credentials->total()); ?> credentials
-            </div>
-        </div>
-    </div>
+    <?php if (isset($component)) { $__componentOriginal360d002b1b676b6f84d43220f22129e2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal360d002b1b676b6f84d43220f22129e2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.breadcrumbs','data' => ['tagline' => 'Overview of doctor credentials statistics and recent activity']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('breadcrumbs'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['tagline' => 'Overview of doctor credentials statistics and recent activity']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal360d002b1b676b6f84d43220f22129e2)): ?>
+<?php $attributes = $__attributesOriginal360d002b1b676b6f84d43220f22129e2; ?>
+<?php unset($__attributesOriginal360d002b1b676b6f84d43220f22129e2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal360d002b1b676b6f84d43220f22129e2)): ?>
+<?php $component = $__componentOriginal360d002b1b676b6f84d43220f22129e2; ?>
+<?php unset($__componentOriginal360d002b1b676b6f84d43220f22129e2); ?>
+<?php endif; ?>
 
     <!-- Filters Section -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 my-6">
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                 <!-- Search -->
@@ -409,17 +421,17 @@
             </div>
 
             <!-- Clear Filters Button -->
-            <div class="mt-4">
+            <div class="mt-4 flex justify-end">
                 <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['size' => 'sm','variant' => 'primary','class' => 'bg-primary-500 rounded-md mt-1','wire:click' => 'clearFilters']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['icon' => 'arrow-path','size' => 'sm','variant' => 'primary','class' => 'bg-primary-500 rounded-md text-white','wire:click' => 'clearFilters']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['size' => 'sm','variant' => 'primary','class' => 'bg-primary-500 rounded-md mt-1','wire:click' => 'clearFilters']); ?>
+<?php $component->withAttributes(['icon' => 'arrow-path','size' => 'sm','variant' => 'primary','class' => 'bg-primary-500 rounded-md text-white','wire:click' => 'clearFilters']); ?>
                   Clear Filters
                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

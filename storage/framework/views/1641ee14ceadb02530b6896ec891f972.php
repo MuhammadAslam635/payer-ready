@@ -1,18 +1,30 @@
-<div class="p-6">
+<div>
     <!-- Page Header -->
-    <div class="mb-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">Doctor Licenses Management</h2>
-            <div class="text-sm text-gray-500">
-                Total: <?php echo e($licenses->total()); ?> licenses
-            </div>
-        </div>
-    </div>
+    <?php if (isset($component)) { $__componentOriginal360d002b1b676b6f84d43220f22129e2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal360d002b1b676b6f84d43220f22129e2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.breadcrumbs','data' => ['tagline' => 'Overview of doctor license statistics and recent activity']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('breadcrumbs'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['tagline' => 'Overview of doctor license statistics and recent activity']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal360d002b1b676b6f84d43220f22129e2)): ?>
+<?php $attributes = $__attributesOriginal360d002b1b676b6f84d43220f22129e2; ?>
+<?php unset($__attributesOriginal360d002b1b676b6f84d43220f22129e2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal360d002b1b676b6f84d43220f22129e2)): ?>
+<?php $component = $__componentOriginal360d002b1b676b6f84d43220f22129e2; ?>
+<?php unset($__componentOriginal360d002b1b676b6f84d43220f22129e2); ?>
+<?php endif; ?>
 
     <!-- Filters Section -->
-    <div class="bg-white shadow rounded-lg mb-6">
+    <div class="bg-white shadow rounded-lg my-6">
         <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- Search -->
                 <div class="lg:col-span-2">
                     <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
@@ -304,36 +316,21 @@
 <?php unset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
 <?php endif; ?>
                 </div>
-                <div class="col-span-1">
-                    <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalb2c43a998f3174877f99993c62e16bb4 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.label','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('ui.label'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>Clear Filter <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalb2c43a998f3174877f99993c62e16bb4)): ?>
-<?php $attributes = $__attributesOriginalb2c43a998f3174877f99993c62e16bb4; ?>
-<?php unset($__attributesOriginalb2c43a998f3174877f99993c62e16bb4); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalb2c43a998f3174877f99993c62e16bb4)): ?>
-<?php $component = $__componentOriginalb2c43a998f3174877f99993c62e16bb4; ?>
-<?php unset($__componentOriginalb2c43a998f3174877f99993c62e16bb4); ?>
-<?php endif; ?>
+                
+            </div>
+
+            <!-- Clear Filters -->
+            <div class="mt-4 flex justify-end">
                 <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['size' => 'sm','variant' => 'primary','class' => 'mt-1 bg-primary-500 rounded-md','wire:click' => 'clearFilters']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['size' => 'sm','variant' => 'primary','icon' => 'arrow-path','class' => 'bg-primary-500 rounded-md text-white','wire:click' => 'clearFilters']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['size' => 'sm','variant' => 'primary','class' => 'mt-1 bg-primary-500 rounded-md','wire:click' => 'clearFilters']); ?>
+<?php $component->withAttributes(['size' => 'sm','variant' => 'primary','icon' => 'arrow-path','class' => 'bg-primary-500 rounded-md text-white','wire:click' => 'clearFilters']); ?>
                     Clear Filters
                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -346,10 +343,6 @@
 <?php unset($__componentOriginala8bb031a483a05f647cb99ed3a469847); ?>
 <?php endif; ?>
             </div>
-            </div>
-
-            <!-- Clear Filters -->
-            
         </div>
     </div>
 

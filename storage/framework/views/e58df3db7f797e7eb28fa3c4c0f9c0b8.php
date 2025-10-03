@@ -89,6 +89,24 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
 
+            <!-- Cart Notification (Super Admin Only) -->
+            <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split("components.cart-notification-component");
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-106312985-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
             <!-- Profile Dropdown -->
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center space-x-1 sm:space-x-2">
