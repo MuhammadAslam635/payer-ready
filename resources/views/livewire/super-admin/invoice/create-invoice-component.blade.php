@@ -1,7 +1,7 @@
 <div>
     <!-- Page Header -->
     <x-breadcrumbs tagline="Create New Invoice" />
-    
+
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="p-6">
@@ -12,14 +12,14 @@
                         <!-- Doctor Selection -->
                         <div>
                             <x-ui.label>
-                                Select Doctor 
+                                Select Doctor
                             </x-ui.label>
-                            <x-ui.select 
-                                class="w-full" 
-                                placeholder="Search and select doctor..." 
+                            <x-ui.select
+                                class="w-full"
+                                placeholder="Search and select doctor..."
                                 icon="user-circle"
                                 wire:model.live="selectedDoctor"
-                                searchable 
+                                searchable
                                 clearable
                             >
                                 @foreach($doctors as $doctor)
@@ -36,7 +36,7 @@
                             <div>
                                 <x-ui.label>Add Items to Invoice</x-ui.label>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                    <x-ui.button 
+                                    <x-ui.button
                                         wire:click="openItemModal('certificates')"
                                         class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
@@ -45,8 +45,8 @@
                                         </svg>
                                         Add Certificates
                                     </x-ui.button>
-                                    
-                                    <x-ui.button 
+
+                                    <x-ui.button
                                         wire:click="openItemModal('licenses')"
                                         class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
@@ -55,8 +55,8 @@
                                         </svg>
                                         Add Licenses
                                     </x-ui.button>
-                                    
-                                    <x-ui.button 
+
+                                    <x-ui.button
                                         wire:click="openItemModal('credentials')"
                                         class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
@@ -73,10 +73,10 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <x-ui.label>
-                                    Due Date 
+                                    Due Date
                                 </x-ui.label>
-                                <x-ui.input 
-                                    type="date" 
+                                <x-ui.input
+                                    type="date"
                                     wire:model="dueDate"
                                     class="mt-1 block w-full"
                                  />
@@ -87,7 +87,7 @@
                                 <x-ui.label>
                                     Discount ($)
                                 </x-ui.label>
-                                <x-ui.input 
+                                <x-ui.input
                                     type="number"
                                     wire:model.live="discount"
                                     step="0.1"
@@ -103,8 +103,8 @@
                             <x-ui.label>
                                 Tax ($)
                             </x-ui.label>
-                            <x-ui.input 
-                                type="number" 
+                            <x-ui.input
+                                type="number"
                                 id="tax"
                                 wire:model.live="tax"
                                 step="0.1"
@@ -119,15 +119,15 @@
                             <label for="invoiceNotes" class="block text-sm font-medium text-gray-700 mb-2">
                                 Notes
                             </label>
-                            <textarea 
+                            <textarea
                                 id="invoiceNotes"
                                 wire:model="invoiceNotes"
                                 rows="3"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 placeholder="Additional notes for this invoice..."
                             ></textarea>
-                            @error('invoiceNotes') 
-                                <span class="text-red-500 text-xs mt-1">{{ $message }}</span> 
+                            @error('invoiceNotes')
+                                <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -156,18 +156,18 @@
                                                     <h4 class="text-sm font-medium text-gray-900">{{ $item['name'] }}</h4>
                                                     <p class="text-xs text-gray-500 mt-1">{{ $item['options']['description'] }}</p>
                                                     <div class="mt-2">
-                                                        <input 
-                                                            type="number" 
+                                                        <x-ui.input
+                                                            type="number"
                                                             wire:change="updateCartItemPrice('{{ $item['rowId'] }}', $event.target.value)"
                                                             value="{{ $item['price'] }}"
                                                             step="0.01"
                                                             min="0"
                                                             class="w-20 text-xs border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
-                                                        >
+                                                        />
                                                         <span class="text-xs text-gray-500 ml-1">USD</span>
                                                     </div>
                                                 </div>
-                                                <button 
+                                                <button
                                                     type="button"
                                                     wire:click="removeFromCart('{{ $item['rowId'] }}')"
                                                     class="ml-2 text-red-400 hover:text-red-600"
@@ -219,14 +219,14 @@
 
                 <!-- Form Actions -->
                 <div class="mt-8 flex justify-end space-x-3 border-t border-gray-200 pt-6">
-                    <button 
+                    <button
                         type="button"
                         onclick="window.history.back()"
                         class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Cancel
                     </button>
-                    <button 
+                    <button
                         type="submit"
                         class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         @if(count($cartItems) === 0) disabled @endif
@@ -245,7 +245,7 @@
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                
+
                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
@@ -253,7 +253,7 @@
                                 <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">
                                     Add {{ ucfirst($itemType) }}
                                 </h3>
-                                
+
                                 @if(count($availableItems) > 0)
                                     <div class="space-y-3 max-h-96 overflow-y-auto">
                                         @foreach($availableItems as $item)
@@ -264,7 +264,7 @@
                                                         <p class="text-xs text-gray-500 mt-1">{{ $item['description'] }}</p>
                                                         <p class="text-sm font-medium text-green-600 mt-2">${{ number_format($item['price'], 2) }}</p>
                                                     </div>
-                                                    <button 
+                                                    <button
                                                         type="button"
                                                         wire:click="addToCart({{ $item['id'] }})"
                                                         class="ml-3 inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -288,7 +288,7 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button 
+                        <button
                             type="button"
                             wire:click="closeModal"
                             class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"

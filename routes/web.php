@@ -25,6 +25,7 @@ use App\Livewire\Doctor\DoctorNotificationComponent;
 use App\Livewire\Doctor\SupportsTickets\AllSupportTicketsComponent;
 use App\Livewire\Doctor\SupportsTickets\ChatSupportTicketComponent;
 use App\Livewire\Doctor\SupportsTickets\CreateSupportTicketComponent;
+use App\Livewire\Organization\ManageStaffComponent;
 use App\Livewire\Organization\OrganizationNotificationComponent;
 use App\Livewire\SuperAdmin\Certificate\AllCertificateComponent;
 use App\Livewire\SuperAdmin\Credentials\SuperAdminCredentialsComponent;
@@ -114,6 +115,7 @@ Route::middleware(['auth:sanctum',
 
 Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', 'middleware' => 'auth'],function () {
     Route::get('/notifications',OrganizationNotificationComponent::class)->name('notifications');
+    Route::get('/mage-staff',ManageStaffComponent::class)->name('manage_staff');
 });
     // Route::prefix('organization-manager','as'=>'organization-manager.')->group(function () {
     // });

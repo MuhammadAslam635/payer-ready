@@ -47,7 +47,7 @@ class Notifications extends Component
 
             case \App\Enums\UserType::ORGANIZATION_ADMIN:
                 // Organization Admin sees notifications for their organization's users
-                $organizationUserIds = \App\Models\User::where('organization_id', $user->organization_id)
+                $organizationUserIds = \App\Models\User::where('org_id', $user->organization_id)
                     ->pluck('id')
                     ->toArray();
 

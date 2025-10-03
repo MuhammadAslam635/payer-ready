@@ -2,28 +2,21 @@
     <!-- Page Header -->
     <x-breadcrumbs tagline="Overview of tasks statistics and recent activity" />
 
-    <!-- Flash Messages -->
-    @if (session()->has('message'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <span class="block sm:inline">{{ session('message') }}</span>
-        </div>
-    @endif
-
     <!-- Filters Section -->
     <div class="bg-white rounded-lg shadow p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <!-- Search -->
             <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                <input type="text" wire:model.live="search" id="search" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       placeholder="Search tasks...">
+                <x-ui.label>Search</x-ui.label>
+                <x-ui.input type="text" wire:model.live="search" id="search"
+                       class="w-full"
+                       placeholder="Search tasks..." />
             </div>
 
             <!-- Status Filter -->
             <div>
                 <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select wire:model.live="statusFilter" id="statusFilter" 
+                <select wire:model.live="statusFilter" id="statusFilter"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Statuses</option>
                     @foreach($taskStatuses as $status)
@@ -35,7 +28,7 @@
             <!-- Task Type Filter -->
             <div>
                 <label for="taskTypeFilter" class="block text-sm font-medium text-gray-700 mb-1">Task Type</label>
-                <select wire:model.live="taskTypeFilter" id="taskTypeFilter" 
+                <select wire:model.live="taskTypeFilter" id="taskTypeFilter"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Types</option>
                     @foreach($taskTypes as $type)
@@ -47,7 +40,7 @@
             <!-- User Filter -->
             <div>
                 <label for="userFilter" class="block text-sm font-medium text-gray-700 mb-1">User</label>
-                <select wire:model.live="userFilter" id="userFilter" 
+                <select wire:model.live="userFilter" id="userFilter"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Users</option>
                     @foreach($users as $user)
@@ -58,7 +51,7 @@
 
             <!-- Clear Filters -->
             <div class="flex items-end">
-                <button wire:click="clearFilters" 
+                <button wire:click="clearFilters"
                         class="w-full px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
                     Clear Filters
                 </button>
@@ -186,11 +179,11 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
-                                    <button wire:click="editTask({{ $task->id }})" 
+                                    <button wire:click="editTask({{ $task->id }})"
                                             class="text-indigo-600 hover:text-indigo-900">
                                         Edit
                                     </button>
-                                    <button wire:click="confirmDelete({{ $task->id }})" 
+                                    <button wire:click="confirmDelete({{ $task->id }})"
                                             class="text-red-600 hover:text-red-900">
                                         Delete
                                     </button>
@@ -220,11 +213,11 @@
             <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                 <div class="mt-3">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Task</h3>
-                    
+
                     <form wire:submit.prevent="updateTask">
                         <div class="mb-4">
                             <label for="editStatus" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select wire:model="editStatus" id="editStatus" 
+                            <select wire:model="editStatus" id="editStatus"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Select Status</option>
                                 @foreach($taskStatuses as $status)
@@ -236,14 +229,14 @@
 
                         <div class="mb-4">
                             <label for="editDueDate" class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                            <input type="date" wire:model="editDueDate" id="editDueDate" 
+                            <input type="date" wire:model="editDueDate" id="editDueDate"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             @error('editDueDate') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="editCompletedDate" class="block text-sm font-medium text-gray-700 mb-1">Completed Date</label>
-                            <input type="date" wire:model="editCompletedDate" id="editCompletedDate" 
+                            <input type="date" wire:model="editCompletedDate" id="editCompletedDate"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             @error('editCompletedDate') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
@@ -257,11 +250,11 @@
                         </div>
 
                         <div class="flex justify-end space-x-3">
-                            <button type="button" wire:click="closeModal" 
+                            <button type="button" wire:click="closeModal"
                                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
                                 Cancel
                             </button>
-                            <button type="submit" 
+                            <button type="submit"
                                     class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                                 Update Task
                             </button>
@@ -282,11 +275,11 @@
                         Are you sure you want to delete this task? This action cannot be undone.
                     </p>
                     <div class="flex justify-center space-x-3">
-                        <button wire:click="closeModal" 
+                        <button wire:click="closeModal"
                                 class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
                             Cancel
                         </button>
-                        <button wire:click="deleteTask" 
+                        <button wire:click="deleteTask"
                                 class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
                             Delete
                         </button>

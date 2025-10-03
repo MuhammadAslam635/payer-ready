@@ -40,45 +40,162 @@
         <div class="p-6">
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1">
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'magnifying-glass','class' => 'h-5 w-5 text-gray-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('ui.icon'); ?>
+                    <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb2c43a998f3174877f99993c62e16bb4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.label','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.label'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['name' => 'magnifying-glass','class' => 'h-5 w-5 text-gray-400']); ?>
+<?php $component->withAttributes([]); ?>Search <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb2c43a998f3174877f99993c62e16bb4)): ?>
+<?php $attributes = $__attributesOriginalb2c43a998f3174877f99993c62e16bb4; ?>
+<?php unset($__attributesOriginalb2c43a998f3174877f99993c62e16bb4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb2c43a998f3174877f99993c62e16bb4)): ?>
+<?php $component = $__componentOriginalb2c43a998f3174877f99993c62e16bb4; ?>
+<?php unset($__componentOriginalb2c43a998f3174877f99993c62e16bb4); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal65bd7e7dbd93cec773ad6501ce127e46 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal65bd7e7dbd93cec773ad6501ce127e46 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.input.index','data' => ['icon' => 'magnifying-glass','wire:model.live.debounce.300ms' => 'search','type' => 'text','placeholder' => 'Search certificate types...','class' => 'w-full']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.input'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'magnifying-glass','wire:model.live.debounce.300ms' => 'search','type' => 'text','placeholder' => 'Search certificate types...','class' => 'w-full']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
-<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
-<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php if (isset($__attributesOriginal65bd7e7dbd93cec773ad6501ce127e46)): ?>
+<?php $attributes = $__attributesOriginal65bd7e7dbd93cec773ad6501ce127e46; ?>
+<?php unset($__attributesOriginal65bd7e7dbd93cec773ad6501ce127e46); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
-<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
-<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
+<?php if (isset($__componentOriginal65bd7e7dbd93cec773ad6501ce127e46)): ?>
+<?php $component = $__componentOriginal65bd7e7dbd93cec773ad6501ce127e46; ?>
+<?php unset($__componentOriginal65bd7e7dbd93cec773ad6501ce127e46); ?>
 <?php endif; ?>
-                        </div>
-                        <input wire:model.live.debounce.300ms="search"
-                               type="text"
-                               placeholder="Search certificate types..."
-                               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                    </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <label for="perPage" class="text-sm font-medium text-gray-700">Show:</label>
-                    <select wire:model.live="perPage"
-                            id="perPage"
-                            class="block w-20 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
+                    <?php if (isset($component)) { $__componentOriginalb2c43a998f3174877f99993c62e16bb4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb2c43a998f3174877f99993c62e16bb4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.label','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.label'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>Show: <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb2c43a998f3174877f99993c62e16bb4)): ?>
+<?php $attributes = $__attributesOriginalb2c43a998f3174877f99993c62e16bb4; ?>
+<?php unset($__attributesOriginalb2c43a998f3174877f99993c62e16bb4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb2c43a998f3174877f99993c62e16bb4)): ?>
+<?php $component = $__componentOriginalb2c43a998f3174877f99993c62e16bb4; ?>
+<?php unset($__componentOriginalb2c43a998f3174877f99993c62e16bb4); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.index','data' => ['wire:model.live' => 'perPage','id' => 'perPage','class' => 'block w-20 ']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model.live' => 'perPage','id' => 'perPage','class' => 'block w-20 ']); ?>
+                        <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '10']); ?>10 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '25']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '25']); ?>25 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '50']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '50']); ?>50 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginalb178088b41690ba18d9960f87fd0bd48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb178088b41690ba18d9960f87fd0bd48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.select.option','data' => ['value' => '100']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.select.option'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['value' => '100']); ?>100 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
+<?php $component = $__componentOriginalb178088b41690ba18d9960f87fd0bd48; ?>
+<?php unset($__componentOriginalb178088b41690ba18d9960f87fd0bd48); ?>
+<?php endif; ?>
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862)): ?>
+<?php $attributes = $__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862; ?>
+<?php unset($__attributesOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862)): ?>
+<?php $component = $__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862; ?>
+<?php unset($__componentOriginal231e2c645bf8af0c5c05a5dc5a94c862); ?>
+<?php endif; ?>
                 </div>
             </div>
         </div>
