@@ -6,14 +6,18 @@ use App\Enums\UserType;
 use App\Models\DoctorTask;
 use App\Models\TaskType;
 use App\Models\User;
+use App\Notifications\TaskNotification;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
+use App\Traits\HasToast;
 
 #[Layout('layouts.dashboard')]
 class AllTaskComponent extends Component
 {
-    use WithPagination;
+    use WithPagination, HasToast;
 
     // Search and filter properties
     public $search = '';
@@ -28,7 +32,14 @@ class AllTaskComponent extends Component
     // Modal properties
     public $showEditModal = false;
     public $showDeleteModal = false;
+    public $showAssignTaskModal = false;
     public $selectedTask = null;
+    
+    // Assign Task properties
+    public $provider_id;
+    public $task_id;
+    public $assignTask;
+    public $notes;
 
     // Edit form properties
     public $editStatus = '';
@@ -146,13 +157,102 @@ class AllTaskComponent extends Component
         $this->reset(['editStatus', 'editDueDate', 'editCompletedDate', 'editNotes']);
     }
 
+    // Assign Task Modal Methods
+    public function openAssignModal()
+    {
+        $this->showAssignTaskModal = true;
+    }
+
+    public function closeAssignModal()
+    {
+        $this->showAssignTaskModal = false;
+        $this->reset(["provider_id", "task_id", "assignTask", "notes"]);
+    }
+
+    public function saveAssignTask()
+    {
+        $this->validate([
+            'provider_id' => "required|exists:users,id",
+            'task_id' => 'required|exists:task_types,id'
+        ]);
+
+        $this->assignTask = TaskType::find($this->task_id);
+        if (!$this->assignTask) {
+            $this->toastError("Selected task does not exist");
+            return;
+        }
+
+        try {
+            $provider = User::find($this->provider_id);
+            
+            // Create task for the selected provider
+            $doctorTask = DoctorTask::create([
+                'user_id' => $this->provider_id,
+                'task_type_id' => $this->task_id,
+                'created_by' => Auth::user()->id,
+                'due_date' => Carbon::today()->addDays($this->assignTask->estimated_days),
+                'notes' => $this->notes
+            ]);
+
+            // Send notification to the assigned user
+            $provider->notify(new TaskNotification($doctorTask, $this->assignTask, Auth::user(), 'assigned'));
+
+            // If provider is organization_admin, also assign to sub-users (doctors)
+            if ($provider->user_type === UserType::ORGANIZATION_ADMIN) {
+                $subUsers = User::where('org_id', $this->provider_id)
+                    ->where('user_type', UserType::DOCTOR)
+                    ->get();
+
+                foreach ($subUsers as $subUser) {
+                    $subDoctorTask = DoctorTask::create([
+                        'user_id' => $subUser->id,
+                        'task_type_id' => $this->task_id,
+                        'created_by' => Auth::user()->id,
+                        'due_date' => Carbon::today()->addDays($this->assignTask->estimated_days),
+                        'notes' => $this->notes
+                    ]);
+
+                    // Send notification to sub-user
+                    $subUser->notify(new TaskNotification($subDoctorTask, $this->assignTask, Auth::user(), 'assigned'));
+                }
+            }
+
+            // Emit event to refresh notifications
+            $this->dispatch('refresh-notifications');
+
+            $this->toastSuccess("Task has been assigned successfully");
+            $this->closeAssignModal();
+        } catch (\Exception $e) {
+            $this->toastError($e->getMessage());
+        }
+    }
+
+    /**
+     * Get providers (doctors and organization admins)
+     */
+    public function getProvidersProperty()
+    {
+        return User::whereIn('user_type', [UserType::DOCTOR, UserType::ORGANIZATION_ADMIN])
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
+     * Get active task types
+     */
+    public function getTasksProperty()
+    {
+        return TaskType::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+    }
+
     public function render()
     {
         $tasks = DoctorTask::with(['user', 'taskType', 'createdBy'])
             ->when($this->search, function ($query) {
                 $query->whereHas('user', function ($q) {
-                    $q->where('first_name', 'like', '%' . $this->search . '%')
-                      ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                    $q->where('name', 'like', '%' . $this->search . '%')
                       ->orWhere('email', 'like', '%' . $this->search . '%');
                 })->orWhereHas('taskType', function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%');
@@ -171,7 +271,7 @@ class AllTaskComponent extends Component
             ->paginate(10);
 
         $taskTypes = TaskType::where('is_active', true)->get();
-        $users = User::where('user_type', UserType::DOCTOR)->get();
+        $users = User::whereIn('user_type', [UserType::DOCTOR, UserType::ORGANIZATION_ADMIN])->orderBy('name')->get();
         $taskStatuses = ['pending', 'in_progress', 'completed', 'cancelled'];
 
         return view('livewire.super-admin.tasks.all-task-component', [

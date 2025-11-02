@@ -18,6 +18,30 @@
         </div>
     </div>
 
+    <!-- Information Section -->
+    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-indigo-800">Default Amount Explanation</h3>
+                <div class="mt-2 text-sm text-indigo-700">
+                    <p>The <strong>Default Amount</strong> represents the standard cost or fee associated with processing applications, credentialing, or other services for this specific payer.</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        <li><strong>Purpose:</strong> Used as a baseline cost for billing and financial planning</li>
+                        <li><strong>Application:</strong> Applied when creating invoices or calculating service fees for this payer</li>
+                        <li><strong>Flexibility:</strong> Can be overridden on a case-by-case basis for specific transactions</li>
+                        <li><strong>Billing:</strong> Helps standardize pricing across different payer types (Government vs Commercial)</li>
+                    </ul>
+                    <p class="mt-2"><strong>Note:</strong> This amount is used as a default starting point and can be adjusted based on specific requirements or negotiated rates.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Search and Filters -->
     <div class="bg-white shadow rounded-lg mb-6">
         <div class="p-6">

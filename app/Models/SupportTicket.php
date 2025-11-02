@@ -58,5 +58,13 @@ class SupportTicket extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    /**
+     * Get the admin who created this ticket (through the doctor's org_id)
+     */
+    public function getCreatedByAdminAttribute()
+    {
+        return $this->user->parentOrganization;
+    }
 }
 

@@ -151,10 +151,11 @@
                                     </h3>
                                     <div class="mt-4 space-y-4">
                                         <div>
-                                            <label for="code" class="block text-sm font-medium text-gray-700">Code</label>
+                                            <label for="code" class="block text-sm font-medium text-gray-700">Taxonomy Code</label>
                                             <input type="text"
                                                    wire:model="formData.code"
                                                    id="code"
+                                                   placeholder="e.g., 261QM0801X"
                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                             @error('formData.code') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>

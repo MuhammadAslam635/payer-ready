@@ -61,6 +61,8 @@ class PayerEnrollmentComponent extends Component
 
     public function openRequestModal()
     {
+        // Ensure selected provider is always the logged-in doctor
+        $this->selectedProvider = Auth::id();
         $this->showRequestModal = true;
     }
 
@@ -201,8 +203,8 @@ class PayerEnrollmentComponent extends Component
 
     private function loadProviders()
     {
-        // Load all users with doctor role or just current user for now
-        $this->providers = User::where('user_type',UserType::DOCTOR)->get();
+        // For doctor login, only show the logged-in doctor
+        $this->providers = User::where('id', Auth::id())->get();
     }
 
     public function render()

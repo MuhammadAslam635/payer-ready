@@ -64,25 +64,25 @@ class Sidebar extends Component
                     [
                         'name' => 'My Profile',
                         'icon' => 'user',
-                        'route' => 'dashboard',
+                        'route' => 'doctor.profile',
                         'permissions' => ['provider']
                     ],
                     [
                         'name' => 'Applications',
                         'icon' => 'document-text',
-                        'route' => 'dashboard',
+                        'route' => 'doctor.applications',
                         'permissions' => ['provider']
                     ],
                     [
                         'name' => 'Licenses',
                         'icon' => 'identification',
-                        'route' => 'dashboard',
+                        'route' => 'doctor.licensing',
                         'permissions' => ['provider']
                     ],
                     [
-                        'name' => 'Documents',
-                        'icon' => 'folder',
-                        'route' => 'dashboard',
+                        'name' => 'Expirables',
+                        'icon' => 'calendar-days',
+                        'route' => 'doctor.expirables',
                         'permissions' => ['provider']
                     ]
                 ]);

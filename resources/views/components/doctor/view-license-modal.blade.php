@@ -130,6 +130,36 @@
                                 <p class="text-sm text-gray-900">{{ $license->notes }}</p>
                             </div>
                             @endif
+
+                            @if($license->document)
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">License Document</label>
+                                <div class="mt-2 flex items-center space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">
+                                            {{ basename($license->document) }}
+                                        </p>
+                                        <p class="text-sm text-gray-500">License Document</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <a href="{{ asset('/' . $license->document) }}" target="_blank" 
+                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                            View Document
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">License Document</label>
+                                <p class="mt-1 text-sm text-gray-500">No document uploaded</p>
+                            </div>
+                            @endif
                         </div>
                         @endif
                     </div>
@@ -138,7 +168,7 @@
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
                 @if($license && $license->status->value !== 'pending')
                 <button type="button"
-                        wire:click="openEditModal({{ $license->id }})"
+                        wire:click="editLicense({{ $license->id }})"
                         class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
                     Edit License
                 </button>

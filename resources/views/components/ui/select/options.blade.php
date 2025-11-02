@@ -17,19 +17,19 @@
     x-on:click.away="close()"
     x-on:keydown.escape="close()"
     style="display: none;"
-    class="bg-white w-full dark:bg-neutral-800 z-50 rounded-(--round) border border-neutral-200 dark:border-neutral-700 max-h-60 overflow-y-auto"
+    class="bg-white w-full z-50 rounded-(--round) border border-neutral-200 max-h-60 overflow-y-auto"
 >
     @if ($searchable)
         <div
             @class([
                 'grid items-center justify-center grid-cols-[20px_1fr] px-2', // give the icon 20 px and leave the input take the rest
                 '[&>[data-slot=icon]+[data-slot=search-control]]:pl-6', // because there is an icon give it 6 padding   
-                'w-full border-b border-neutral-200 dark:border-neutral-700',
+                'w-full border-b border-neutral-200',
             ])    
         >
             <x-ui.icon 
                 name="magnifying-glass"
-                class="col-span-1 col-start-1 row-start-1 !text-neutral-500 dark:!text-neutral-400 !size-5"
+                class="col-span-1 col-start-1 row-start-1 !text-neutral-500 !size-5"
             />
 
             <input 
@@ -44,7 +44,7 @@
                 data-slot="search-control"
                 placeholder="search..."
                 @class([
-                    'bg-transparent placeholder:text-neutral-500 dark:placeholder:text-neutral-400 dark:text-neutral-50 text-neutral-900',
+                    'bg-transparent placeholder:text-neutral-500 text-neutral-900',
                     'ring-0 ring-offset-0 outline-none focus:ring-0 border-0',
                     'col-span-4 col-start-1 row-start-1',
                 ])

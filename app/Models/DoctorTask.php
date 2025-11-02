@@ -44,7 +44,7 @@ class DoctorTask extends Model
     /**
      * Get the user who created this task
      */
-    public function creator(): BelongsTo
+    public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }

@@ -1,3 +1,5 @@
+@props(['license', 'licenseTypes', 'states'])
+
 <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" wire:click="closeEditModal"></div>
@@ -91,6 +93,59 @@
                                           rows="3"
                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"></textarea>
                                 @error('editForm.notes') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Current Document Display -->
+                            <div class="mt-4">
+                                <x-ui.label>Current Document</x-ui.label>
+                                @if($license && $license->document)
+                                    <div class="mt-2 flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 truncate">
+                                                {{ basename($license->document) }}
+                                            </p>
+                                            <p class="text-sm text-gray-500">License Document</p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <a href="{{ asset('/' . $license->document) }}" target="_blank" 
+                                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                                View Document
+                                            </a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="mt-2 p-3 bg-gray-50 rounded-lg border">
+                                        <p class="text-sm text-gray-500">No document uploaded</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- New Document Upload -->
+                            <div class="mt-4">
+                                <x-ui.label>Upload New Document</x-ui.label>
+                                <x-ui.input type="file" wire:model="editForm.document" 
+                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
+                                    class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" />
+                                <p class="mt-1 text-xs text-gray-500">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF (Max: 10MB)</p>
+                                <x-ui.error name="editForm.document" />
+                                
+                                @if(isset($this->editForm['document']) && $this->editForm['document'])
+                                    <div class="mt-2 p-2 bg-blue-50 rounded-md border border-blue-200">
+                                        <p class="text-sm text-blue-700">
+                                            <strong>New file selected:</strong> {{ $this->editForm['document']->getClientOriginalName() }}
+                                        </p>
+                                        <p class="text-xs text-blue-600">This will replace the current document</p>
+                                    </div>
+                                @endif
                             </div>
 
                             <!-- Checkboxes -->

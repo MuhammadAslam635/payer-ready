@@ -12,6 +12,30 @@
         </button>
     </div>
 
+    <!-- Explanation Section -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Provider Credentials Management</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>This section manages your provider credentials with various payers and insurance companies. Here you can:</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        <li><strong>Request New Payer:</strong> Submit applications to new insurance companies or payers</li>
+                        <li><strong>Track Status:</strong> Monitor the progress of your credentialing applications</li>
+                        <li><strong>Manage Documents:</strong> Upload and manage required documentation for each payer</li>
+                        <li><strong>View History:</strong> Access your complete credentialing history and submission dates</li>
+                    </ul>
+                    <p class="mt-2"><strong>Note:</strong> Credentialing typically takes 30-90 days depending on the payer requirements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Tabs Section -->
     <div class="border-b border-gray-200">
         <nav class="-mb-px flex space-x-8">
@@ -70,13 +94,13 @@
                             REQUEST TYPE
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            SUBMISSION DATE
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             PROVIDER
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             STATUS
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            PAR STATUS
                         </th>
                     </tr>
                 </thead>
@@ -84,16 +108,16 @@
                     @forelse($enrollments as $enrollment)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                <div class="flex flex-col gap-1">
-                                    <p>{{ $enrollment->payer->name }} </p>
-                                    <p>$ {{ $enrollment->payer->default_amount }}</p>
-                                </div>
+                                {{ $enrollment->payer->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $enrollment->state->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ \App\Enums\CredentialRequest::from($enrollment->request_type)->label() }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $enrollment->submitted_at ? $enrollment->submitted_at->format('M d, Y') : 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $enrollment->user->name }}
@@ -110,9 +134,6 @@
                                                 : 'bg-gray-100 text-gray-800')) }}">
                                     {{ $enrollment['status'] }}
                                 </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $enrollment->status }}
                             </td>
                         </tr>
                     @empty
@@ -170,16 +191,18 @@
                                         1
                                     </div>
                                     <div>
-                                        <h4 class="text-sm font-medium text-gray-900">Select Provider</h4>
-                                        <p class="text-xs text-gray-500">Choose the provider for this enrollment request
+                                        <h4 class="text-sm font-medium text-gray-900">Provider</h4>
+                                        <p class="text-xs text-gray-500">Your provider information (automatically selected)
                                         </p>
                                     </div>
                                 </div>
-                                <select wire:model="selectedProvider"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                                    <option value="">Select a provider...</option>
+                                <!-- Hidden input to ensure value is submitted -->
+                                <input type="hidden" wire:model="selectedProvider" value="{{ Auth::id() }}">
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                                    disabled>
                                     @foreach ($providers as $provider)
-                                        <option value="{{ $provider->id }}">{{ $provider->name }}</option>
+                                        <option value="{{ $provider->id }}" selected>{{ $provider->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -206,18 +229,6 @@
                                     @endforeach
                                 </select>
 
-                                @if ($selectedPayer)
-                                    @php
-                                        $selectedPayerData = $payers->find($selectedPayer);
-                                    @endphp
-                                    @if ($selectedPayerData && $selectedPayerData->default_amount)
-                                        <div
-                                            class="mt-2 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
-                                            <strong>Default Amount:</strong>
-                                            ${{ number_format($selectedPayerData->default_amount, 2) }}
-                                        </div>
-                                    @endif
-                                @endif
                             </div>
 
                             <!-- Step 3: Select State -->

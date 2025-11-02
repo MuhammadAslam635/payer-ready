@@ -19,4 +19,5 @@
     display: none; /* WebKit */
 }
 
-@custom-variant dark (&:where(.dark, .dark *)); /* By Sheaf.dev */
+/* Dark mode disabled - variant removed */
+/* @custom-variant dark (&:where(.dark, .dark *)); */

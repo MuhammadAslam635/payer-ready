@@ -14,62 +14,52 @@ document.addEventListener('alpine:init', () => {
         storedTheme: null,
 
         init() {
-            // Check localStorage for stored theme preference
-            this.storedTheme = localStorage.getItem('theme') ?? 'system';
+            // Dark mode disabled - always use light theme
+            this.storedTheme = 'light';
+            this.currentTheme = 'light';
 
-            // Resolve the configured theme to be only [light, dark]
-            this.currentTheme = computeTheme(this.storedTheme);
+            // Ensure dark class is removed from DOM
+            applyTheme('light');
 
-            // Apply initial theme to DOM
-            applyTheme(this.currentTheme);
-
-            // Listen for system theme changes
-            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            mediaQuery.addEventListener('change', (event) => {
-                if (this.storedTheme === 'system') {
-                    this.currentTheme = event.matches ? 'dark' : 'light';
-                    applyTheme(this.currentTheme);
-                }
-            });
+            // Clear any dark mode preference from localStorage
+            localStorage.removeItem('theme');
         },
 
         /**
             * Set theme preference and persist to localStorage
+            * Dark mode disabled - always force light theme
             */
         setTheme(newTheme) {
-            this.storedTheme = newTheme;
-            localStorage.setItem('theme', newTheme);
-
-            this.currentTheme = computeTheme(newTheme);
-            applyTheme(this.currentTheme);
+            // Force light theme always
+            this.storedTheme = 'light';
+            this.currentTheme = 'light';
+            localStorage.setItem('theme', 'light');
+            applyTheme('light');
         },
 
         /**
-            * Theme setter methods
+            * Theme setter methods - Dark mode disabled, always use light
             */
         setLight() {
             this.setTheme('light');
         },
 
         setDark() {
-            this.setTheme('dark');
+            // Dark mode disabled - force light
+            this.setTheme('light');
         },
 
         setSystem() {
-            this.setTheme('system');
+            // Dark mode disabled - force light
+            this.setTheme('light');
         },
 
         /**
-            * Toggle between light and dark themes
+            * Toggle between light and dark themes - Dark mode disabled, always light
             */
         toggle() {
-            if (this.storedTheme === 'system') {
-                // If system, toggle to opposite of current computed theme
-                this.setTheme(this.currentTheme === 'dark' ? 'light' : 'dark');
-            } else {
-                // Toggle between light and dark
-                this.setTheme(this.storedTheme === 'dark' ? 'light' : 'dark');
-            }
+            // Dark mode disabled - always stay on light
+            this.setTheme('light');
         },
 
         /**
@@ -85,35 +75,30 @@ document.addEventListener('alpine:init', () => {
             };
         },
 
-        // Getter methods for easy template usage
+        // Getter methods for easy template usage - Dark mode disabled
         get isLight() {
-            return this.storedTheme === 'light';
+            return true; // Always light
         },
 
         get isDark() {
-            return this.storedTheme === 'dark';
+            return false; // Dark mode disabled
         },
 
         get isSystem() {
-            return this.storedTheme === 'system';
+            return false; // System mode disabled
         },
 
         /**
             * Sometimes we need to show only light or dark, not system mode.
             * These getters handle scenarios where we need the resolved theme state.
+            * Dark mode disabled - always return light
             */
         get isResolvedToLight() {
-            if (this.isSystem) {
-                return getSystemTheme() === 'light';
-            }
-            return this.isLight;
+            return true; // Always light
         },
 
         get isResolvedToDark() {
-            if (this.isSystem) {
-                return getSystemTheme() === 'dark';
-            }
-            return this.isDark;
+            return false; // Dark mode disabled
         }
     });
     }

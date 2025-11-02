@@ -4,6 +4,9 @@ namespace App\Livewire\Organization;
 
 use App\Enums\UserType;
 use App\Models\User;
+use App\Models\State;
+use App\Models\Specialty;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\Admin\CrudTrait;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -13,6 +16,12 @@ use Livewire\Attributes\Layout as AttributesLayout;
 class ManageStaffComponent extends Component
 {
     use CrudTrait;
+    public $states = [];
+    public $specialties = [];
+    public $sortBy = 'created_at';
+    public $sortDirection = 'desc';
+    public $perPage = 10;
+    public $search = '';
 
     protected function getModelClass(): string
     {
@@ -26,6 +35,9 @@ class ManageStaffComponent extends Component
             'email' => 'Email',
             'user_type' => 'User Type',
             'password' => 'Password',
+            'taxnomy_code' => 'Taxonomy Code',
+            'speciality_id' => 'Primary Specialty',
+            'state_id' => 'Primary State',
         ];
     }
 
@@ -50,6 +62,9 @@ class ManageStaffComponent extends Component
             'formData.name' => 'required|string|max:255',
             'formData.email' => 'required|email|max:255|unique:users,email',
             'formData.user_type' => 'required|in:' . implode(',', $this->getAllowedUserTypes()),
+            'formData.taxnomy_code' => 'nullable|string|max:255',
+            'formData.speciality_id' => 'nullable|exists:specialties,id',
+            'formData.state_id' => 'nullable|exists:states,id',
         ];
 
         // Password is required only when creating new user
@@ -82,6 +97,8 @@ class ManageStaffComponent extends Component
     public function mount()
     {
         $this->resetForm();
+        $this->states = State::orderBy('name')->get(['id','name']);
+        $this->specialties = Specialty::orderBy('name')->get(['id','name']);
     }
 
     public function resetForm()
@@ -113,6 +130,9 @@ class ManageStaffComponent extends Component
                 'name' => $this->formData['name'],
                 'email' => $this->formData['email'],
                 'user_type' => $this->formData['user_type'],
+                'taxnomy_code' => $this->formData['taxnomy_code'] ?? null,
+                'speciality_id' => $this->formData['speciality_id'] ?? null,
+                'state_id' => $this->formData['state_id'] ?? null,
             ];
 
             // Only update password if provided
@@ -130,6 +150,11 @@ class ManageStaffComponent extends Component
                 'password' => Hash::make($this->formData['password']),
                 'is_active' => true,
                 'email_verified_at' => now(),
+                'is_org' => false,
+                'taxnomy_code' => $this->formData['taxnomy_code'] ?? null,
+                'speciality_id' => $this->formData['speciality_id'] ?? null,
+                'state_id' => $this->formData['state_id'] ?? null,
+                'org_id' => Auth::id(),
             ]);
             $this->toastSuccess('Staff member created successfully.');
         }
@@ -187,6 +212,9 @@ class ManageStaffComponent extends Component
     {
         $query = $this->getModelClass()::query();
 
+        // Limit to staff created by the authenticated organization admin
+        $query->where('org_id', Auth::id());
+
         // Filter by allowed user types
         $query->whereIn('user_type', $this->getAllowedUserTypes());
 
@@ -201,8 +229,8 @@ class ManageStaffComponent extends Component
         }
 
         // Apply sorting
-        if ($this->sortBy) {
-            $query->orderBy($this->sortBy, $this->sortDirection);
+        if ($this->sortField) {
+            $query->orderBy($this->sortField, $this->sortDirection);
         }
 
         return $query->paginate($this->perPage);

@@ -38,7 +38,7 @@
         data-slot="select-control"
         @disabled($disabled)
         {{ $attributes->class([
-            'border bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 truncate border-black/10 dark:bg-neutral-900 dark:border-white/10 border-gray-300 dark:text-gray-300 rounded-lg px-2 py-2 text-start ',
+            'border bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 truncate border-black/10 border-gray-300 text-neutral-800 rounded-lg px-2 py-2 text-start ',
             'col-span-4 col-start-1 row-start-1 justify-self-stretch',
                 // make button span all available grid columns
             'disabled:opacity-60 flex disabled:cursor-auto cursor-pointer',

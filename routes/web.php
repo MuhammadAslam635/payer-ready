@@ -17,6 +17,21 @@ use App\Livewire\Doctor\MyTasksComponent;
 use App\Livewire\Doctor\InviteProvidersComponent;
 use App\Livewire\Doctor\ApplicationsComponent;
 use App\Livewire\Doctor\DoctorProfileComponent;
+use App\Livewire\Doctor\ExpirablesComponent;
+use App\Livewire\Doctor\ReportsComponent;
+use App\Livewire\Doctor\InvoicePaymentsComponent;
+use App\Livewire\Coordinator\InvoicePaymentsComponent as CoordInvoicePaymentsComponent;
+use App\Livewire\Coordinator\ExpirablesComponent as CoordExpirablesComponent;
+use App\Livewire\Coordinator\ReportsComponent as CoordReportsComponent;
+use App\Livewire\Coordinator\TasksComponent as CoordTasksComponent;
+use App\Livewire\Coordinator\ApplicationsComponent as CoordApplicationsComponent;
+use App\Livewire\Coordinator\LicensingComponent as CoordLicensingComponent;
+use App\Livewire\Organization\DoctorTasksComponent;
+use App\Livewire\Organization\DoctorApplicationsComponent;
+use App\Livewire\Organization\DoctorPayerEnrollmentComponent;
+use App\Livewire\Organization\DoctorExpirablesComponent as OrgDoctorExpirablesComponent;
+use App\Livewire\Organization\DoctorReportsComponent as OrgDoctorReportsComponent;
+use App\Livewire\Organization\DoctorInvoicePaymentsComponent as OrgDoctorInvoicePaymentsComponent;
 use App\Livewire\Doctor\Application\PayerEnrollmentComponent;
 use App\Livewire\SuperAdmin\Invoice\AllInvoicesComponent;
 use App\Livewire\SuperAdmin\PaymentGateway\AllPayemntGatewaysComponent;
@@ -25,6 +40,9 @@ use App\Livewire\Doctor\DoctorNotificationComponent;
 use App\Livewire\Doctor\SupportsTickets\AllSupportTicketsComponent;
 use App\Livewire\Doctor\SupportsTickets\ChatSupportTicketComponent;
 use App\Livewire\Doctor\SupportsTickets\CreateSupportTicketComponent;
+use App\Livewire\OrganizationAdmin\SupportTickets\AllSupportTicketsComponent as OrgAdminAllSupportTicketsComponent;
+use App\Livewire\OrganizationAdmin\SupportTickets\ChatSupportTicketComponent as OrgAdminChatSupportTicketComponent;
+use App\Livewire\OrganizationAdmin\SupportTickets\CreateSupportTicketComponent as OrgAdminCreateSupportTicketComponent;
 use App\Livewire\Organization\ManageStaffComponent;
 use App\Livewire\Organization\OrganizationNotificationComponent;
 use App\Livewire\SuperAdmin\Certificate\AllCertificateComponent;
@@ -65,6 +83,8 @@ Route::middleware([
                 return redirect()->route('super_admin.dashboard');
             case \App\Enums\UserType::ORGANIZATION_ADMIN:
                 return redirect()->route('organization_admin.dashboard');
+            case \App\Enums\UserType::ORGANIZATION_COORDINATOR:
+                return redirect()->route('coordinator.dashboard');
             // case \App\Enums\UserType::ORGANIZATION_STAFF:
             //     return redirect()->route('organization_staff.dashboard');
             case \App\Enums\UserType::COORDINATOR:
@@ -115,7 +135,18 @@ Route::middleware(['auth:sanctum',
 
 Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', 'middleware' => 'auth'],function () {
     Route::get('/notifications',OrganizationNotificationComponent::class)->name('notifications');
-    Route::get('/mage-staff',ManageStaffComponent::class)->name('manage_staff');
+    Route::get('/manage-staff',ManageStaffComponent::class)->name('manage_staff');
+    Route::get('/doctor-tasks',DoctorTasksComponent::class)->name('doctor_tasks');
+    Route::get('/doctor-licenses',DoctorApplicationsComponent::class)->name('doctor_licenses');
+    Route::get('/doctor-applications',DoctorPayerEnrollmentComponent::class)->name('doctor_applications');
+    Route::get('/doctor-expirables',OrgDoctorExpirablesComponent::class)->name('doctor_expirables');
+    Route::get('/doctor-reports',OrgDoctorReportsComponent::class)->name('doctor_reports');
+    Route::get('/doctor-invoice-payments',OrgDoctorInvoicePaymentsComponent::class)->name('doctor_invoice_payments');
+    Route::get('/doctor-documents', \App\Livewire\Organization\DoctorDocumentsComponent::class)->name('doctor_documents');
+    // Support Tickets
+    Route::get('/support-tickets', OrgAdminAllSupportTicketsComponent::class)->name('all_support_tickets');
+    Route::get('/create/support-ticket', OrgAdminCreateSupportTicketComponent::class)->name('create_support_ticket');
+    Route::get('/chat/{supportTicketId}', OrgAdminChatSupportTicketComponent::class)->name('chat_support_tickets');
 });
     // Route::prefix('organization-manager','as'=>'organization-manager.')->group(function () {
     // });
@@ -129,8 +160,22 @@ Route::group(['prefix' => 'doctor', 'as' => 'doctor.', 'middleware' => 'auth'],f
     Route::get('/licensing',ApplicationsComponent::class)->name('licensing');
     Route::get('/profile', DoctorProfileComponent::class)->name('profile');
     Route::get('/applications',PayerEnrollmentComponent::class)->name('applications');
+    Route::get('/certifications', \App\Livewire\Doctor\CertificationComponent::class)->name('certifications');
+    Route::get('/reports', ReportsComponent::class)->name('reports');
+    Route::get('/expirables', ExpirablesComponent::class)->name('expirables');
+    Route::get('/invoice-payments', InvoicePaymentsComponent::class)->name('invoice-payments');
+    Route::get('/documents', \App\Livewire\Doctor\DocumentsComponent::class)->name('documents');
     Route::get('/notifications',DoctorNotificationComponent::class)->name('notifications');
     Route::get('/support-tickets',AllSupportTicketsComponent::class)->name('all_support_tickets');
     Route::get('create/support-ticket',CreateSupportTicketComponent::class)->name('create_support_ticket');
     Route::get('chat/{supportTicketId}',ChatSupportTicketComponent::class)->name('chat_support_tickets');
 });
+Route::group(['prefix' => 'coordinator', 'as' => 'coordinator.', 'middleware' => 'auth'],function () {
+    Route::get('/tasks', CoordTasksComponent::class)->name('tasks');
+    Route::get('/applications', CoordApplicationsComponent::class)->name('applications');
+    Route::get('/licensing', CoordLicensingComponent::class)->name('licensing');
+    Route::get('/invoice-payments', CoordInvoicePaymentsComponent::class)->name('invoice-payments');
+    Route::get('/expirables', CoordExpirablesComponent::class)->name('expirables');
+    Route::get('/reports', CoordReportsComponent::class)->name('reports');
+});
+ 

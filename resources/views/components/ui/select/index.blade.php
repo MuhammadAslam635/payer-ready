@@ -200,8 +200,8 @@
     }"
     {{ $attributes->class([
             'relative [--round:--spacing(2)] [--padding:--spacing(1)]',
-            'dark:border-red-400! dark:shadow-red-400 text-red-400! placeholder:text-red-400!' => $invalid,
-        ]),
+            'border-red-400! shadow-red-400 text-red-400! placeholder:text-red-400!' => $invalid,
+        ])
      }}
 >
 

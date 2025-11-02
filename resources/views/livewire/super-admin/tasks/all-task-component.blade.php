@@ -1,6 +1,40 @@
 <div class="space-y-6">
     <!-- Page Header -->
-    <x-breadcrumbs tagline="Overview of tasks statistics and recent activity" />
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <x-breadcrumbs tagline="Overview of tasks statistics and recent activity" />
+        <div class="mt-4 sm:mt-0">
+            <button wire:click="openAssignModal"
+                    class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Assign Task
+            </button>
+        </div>
+    </div>
+
+    <!-- Information Section -->
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-green-800">Provider Tasks Information</h3>
+                <div class="mt-2 text-sm text-green-700">
+                    <p>This section manages all provider tasks including credentialing applications, license renewals, and compliance requirements. Tasks help track and manage the provider onboarding and maintenance process.</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        <li><strong>Task Types:</strong> Different categories of tasks (Credentialing, License Renewal, Compliance, etc.)</li>
+                        <li><strong>Status:</strong> Current status of the task (Pending, In Progress, Completed, Cancelled)</li>
+                        <li><strong>Due Date:</strong> When the task should be completed</li>
+                        <li><strong>Assigned User:</strong> The provider or staff member responsible for the task</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Filters Section -->
     <div class="bg-white rounded-lg shadow p-6">
@@ -44,7 +78,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Users</option>
                     @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -141,7 +175,7 @@
                                 {{ $task->id }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $task->user->first_name }} {{ $task->user->last_name }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $task->user->name }}</div>
                                 <div class="text-sm text-gray-500">{{ $task->user->email }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -284,6 +318,73 @@
                             Delete
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Assign Task Modal -->
+    @if ($showAssignTaskModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+            aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" wire:click="closeAssignModal"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <form wire:submit.prevent="saveAssignTask">
+                        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                            <div class="sm:flex sm:items-start">
+                                <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                        Assign Task to Provider
+                                    </h3>
+                                    <div class="mt-4 space-y-4">
+                                        <div>
+                                            <x-ui.label>Select Provider</x-ui.label>
+                                            <x-ui.select wire:model="provider_id">
+                                                <x-ui.select.option value="">Select Provider</x-ui.select.option>
+                                                @foreach ($this->providers as $provider)
+                                                    <x-ui.select.option
+                                                        value="{{ $provider->id }}">{{ $provider->name }} ({{ ucfirst(str_replace('_', ' ', $provider->user_type->value)) }})</x-ui.select.option>
+                                                @endforeach
+                                            </x-ui.select>
+                                            <x-ui.error name="provider_id" />
+                                        </div>
+
+                                        <div>
+                                            <x-ui.label>Select Task</x-ui.label>
+                                            <x-ui.select wire:model="task_id">
+                                                <x-ui.select.option value="">Select Task</x-ui.select.option>
+                                                @foreach ($this->tasks as $task)
+                                                    <x-ui.select.option
+                                                        value="{{ $task->id }}">{{ $task->name }} ({{ $task->estimated_days }} days)</x-ui.select.option>
+                                                @endforeach
+                                            </x-ui.select>
+                                            <x-ui.error name="task_id" />
+                                        </div>
+                                        
+                                        <div>
+                                            <x-ui.label>Notes (Optional)</x-ui.label>
+                                            <x-ui.textarea wire:model="notes" placeholder="Add any additional notes for this task assignment..." />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                            <button type="submit"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                Assign Task
+                            </button>
+                            <button type="button" wire:click="closeAssignModal"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -11,7 +11,7 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                Back to Tickets
+                Back to Tickets 
             </a>
         </div>
     </div>
@@ -25,7 +25,7 @@
                 <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Subject <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
+                <input type="text"
                        id="subject"
                        wire:model="subject"
                        placeholder="Brief description of your issue"
@@ -42,7 +42,7 @@
                     <label for="priority" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Priority <span class="text-red-500">*</span>
                     </label>
-                    <select id="priority" 
+                    <select id="priority"
                             wire:model="priority"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('priority') border-red-500 @enderror">
                         <option value="low">Low - General inquiry</option>
@@ -60,7 +60,7 @@
                     <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Category <span class="text-red-500">*</span>
                     </label>
-                    <select id="category" 
+                    <select id="category"
                             wire:model="category"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white @error('category') border-red-500 @enderror">
                         <option value="general">General Support</option>
@@ -83,7 +83,7 @@
                 <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Description <span class="text-red-500">*</span>
                 </label>
-                <textarea id="description" 
+                <textarea id="description"
                           wire:model="description"
                           rows="6"
                           placeholder="Please provide detailed information about your issue, including steps to reproduce if applicable..."
@@ -100,7 +100,7 @@
                     Attachments (Optional)
                 </label>
                 <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
-                    <input type="file" 
+                    <input type="file"
                            wire:model="attachments"
                            multiple
                            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt"
@@ -130,7 +130,7 @@
                                     <span class="text-sm text-gray-700 dark:text-gray-300">{{ $attachment->getClientOriginalName() }}</span>
                                     <span class="text-xs text-gray-500 ml-2">({{ number_format($attachment->getSize() / 1024, 1) }} KB)</span>
                                 </div>
-                                <button type="button" 
+                                <button type="button"
                                         wire:click="removeAttachment({{ $index }})"
                                         class="text-red-600 hover:text-red-800">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -149,7 +149,7 @@
 
             <!-- Form Actions -->
             <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 justify-end">
-                <button type="submit" 
+                <button type="submit"
                         wire:loading.attr="disabled"
                         wire:target="submit"
                         class="flex-1 sm:flex-none inline-flex justify-center items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors">
@@ -162,8 +162,8 @@
                         Creating...
                     </span>
                 </button>
-                
-                <button type="button" 
+
+                <button type="button"
                         wire:click="resetForm"
                         class="flex-1 sm:flex-none inline-flex justify-center items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors">
                     Reset Form

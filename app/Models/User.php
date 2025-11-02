@@ -32,11 +32,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'middle_name',
         'email',
         'email_verified_at',
         'password',
-        'taxnomy_code',
+        'taxonomy_code',
         'user_type',
         'is_admin',
         'is_active',
@@ -49,8 +48,10 @@ class User extends Authenticatable
         'caqh_password',
         'pecos_login',
         'pecos_password',
-        'dea_number',
-        'dea_expiration_date',
+        'nppes_login',
+        'nppes_password',
+        'availity_login',
+        'availity_password',
         'current_team_id',
         'profile_photo_path',
         'specialty_id',
@@ -60,6 +61,8 @@ class User extends Authenticatable
         'business_name',
         'is_org',
         'org_id',
+        'provider_type',
+        'fax_number',
     ];
 
     /**
@@ -271,7 +274,23 @@ class User extends Authenticatable
     }
 
     /**
-        * Get the doctor's primary organization
+     * Get all practice locations for this user
+     */
+    public function practiceLocations(): HasMany
+    {
+        return $this->hasMany(PracticeLocation::class);
+    }
+
+    /**
+     * Get the primary practice location
+     */
+    public function primaryPracticeLocation(): HasOne
+    {
+        return $this->hasOne(PracticeLocation::class)->where('is_primary', true);
+    }
+
+    /**
+     * Get the doctor's primary organization
      */
     // public function getPrimaryOrganizationAttribute()
     // {

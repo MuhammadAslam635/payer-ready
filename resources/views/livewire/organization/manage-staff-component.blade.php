@@ -90,12 +90,10 @@
                                 <div class="text-sm text-gray-900">{{ $user->email }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-teal-600 text-white">
                                      @php
                                          $userType = $user->user_type;
-                                         $cssClasses = \App\Enums\UserType::cssClass();
-                                         echo $cssClasses[$userType->value] ?? 'bg-gray-100 text-gray-800';
-                                     @endphp">
+                                     @endphp
                                      {{ \App\Enums\UserType::label($userType) }}
                                  </span>
                              </td>
@@ -189,6 +187,42 @@
                                             @error('formData.user_type') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
+                                        <!-- Taxonomy Code -->
+                                        <div>
+                                            <label for="taxnomy_code" class="block text-sm font-medium text-gray-700">Taxonomy Code</label>
+                                            <input type="text" wire:model="formData.taxnomy_code" id="taxnomy_code"
+                                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm" placeholder="Enter taxonomy code">
+                                            @error('formData.taxnomy_code') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <!-- Primary Specialty -->
+                                            <div>
+                                                <label for="speciality_id" class="block text-sm font-medium text-gray-700">Primary Specialty</label>
+                                                <select wire:model="formData.speciality_id" id="speciality_id"
+                                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                                    <option value="">Select a specialty</option>
+                                                    @foreach($specialties as $specialty)
+                                                        <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('formData.speciality_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                            </div>
+
+                                            <!-- Primary State -->
+                                            <div>
+                                                <label for="state_id" class="block text-sm font-medium text-gray-700">Primary State</label>
+                                                <select wire:model="formData.state_id" id="state_id"
+                                                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                                    <option value="">Select a state</option>
+                                                    @foreach($states as $state)
+                                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('formData.state_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                            </div>
+                                        </div>
+
                                         <!-- Password -->
                                         <div>
                                             <label for="password" class="block text-sm font-medium text-gray-700">
@@ -203,9 +237,16 @@
                             </div>
                         </div>
                         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                            <button type="submit"
-                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                {{ $editing ? 'Update' : 'Create' }}
+                            <button type="submit" wire:target="save" wire:loading.attr="disabled"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-70 disabled:cursor-not-allowed sm:ml-3 sm:w-auto sm:text-sm">
+                                <span wire:loading.remove wire:target="save">{{ $editing ? 'Update' : 'Create' }}</span>
+                                <span wire:loading wire:target="save" class="flex items-center">
+                                    <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Processing...
+                                </span>
                             </button>
                             <button type="button" wire:click="resetForm"
                                     class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">

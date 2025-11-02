@@ -32,7 +32,7 @@ class SpecialtyIndex extends Component
     protected function getTableColumns(): array
     {
         return [
-            'code' => 'Code',
+            'code' => 'Taxonomy Code',
             'name' => 'Name',
             'description' => 'Description',
             'is_active' => 'Status',

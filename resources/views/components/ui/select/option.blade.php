@@ -30,17 +30,17 @@
     x-on:click="select(@js($value))"
     
     x-bind:class="{
-        'bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-100 hover:dark:bg-neutral-700': isFocused(@js($value)),
+        'bg-neutral-300 hover:bg-neutral-100': isFocused(@js($value)),
         '[&>[data-slot=icon]]:opacity-100': isSelected(@js($value)),
     }"
     role="option"
     data-slot="option"
-    class="cursor-pointer focus:bg-neutral-100 focus:dark:bg-neutral-700 px-3 py-0.5 rounded-[calc(var(--round)-var(--padding))] col-span-full grid grid-cols-subgrid items-center w-full self-center gap-x-2 text-[1rem]"
+    class="cursor-pointer focus:bg-neutral-100 px-3 py-0.5 rounded-[calc(var(--round)-var(--padding))] col-span-full grid grid-cols-subgrid items-center w-full self-center gap-x-2 text-[1rem]"
 >
     <x-ui.icon 
         :name="$checkIcon"
         @class([
-            'text-black dark:text-white z-10 place-self-center opacity-0 size-[1.15rem]',
+            'text-black z-10 place-self-center opacity-0 size-[1.15rem]',
             $checkIconClass,
         ])
     />
@@ -48,10 +48,10 @@
         <x-ui.icon 
             :name="$icon"
             @class([
-                'text-black dark:text-white z-10 pl-1.5',
+                'text-black z-10 pl-1.5',
                 $iconClass
             ]) 
         />
     @endif
-    <span class="col-start-3 text-start text-black dark:text-white">{{ $slot  }}</span>
+    <span class="col-start-3 text-start text-black">{{ $slot  }}</span>
 </li>

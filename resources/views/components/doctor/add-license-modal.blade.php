@@ -94,6 +94,15 @@
                                         <x-ui.error name="addForm.notes" />
                                     </div>
 
+                                <div>
+                                    <x-ui.label>License Document</x-ui.label>
+                                    <x-ui.input type="file" wire:model="addForm.document" 
+                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
+                                        class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100" />
+                                    <p class="mt-1 text-xs text-gray-500">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG, GIF (Max: 10MB)</p>
+                                    <x-ui.error name="addForm.document" />
+                                </div>
+
                                 <div class="mt-4">
                                     <label class="flex items-start gap-3 cursor-pointer">
                                         <input type="checkbox" wire:model="addForm.is_verified"

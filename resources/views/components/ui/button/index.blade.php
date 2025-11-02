@@ -102,8 +102,8 @@ $variantClasses = match($variant){
         $colors => filled($color), // Ensure variables are set
     ],
     'ghost' => [
-        'bg-transparent hover:bg-neutral-800/5 dark:hover:bg-white/15', // Background colors
-        'text-neutral-800 dark:text-white' // Text colors
+        'bg-transparent hover:bg-neutral-800/5', // Background colors
+        'text-neutral-800' // Text colors
     ],
     'danger' =>[
         ' dark:shadow-none', // Shadow styling

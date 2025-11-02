@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use PharIo\Manifest\License;
 
@@ -22,7 +23,7 @@ use PharIo\Manifest\License;
 #[Layout('layouts.dashboard')]
 class ApplicationsComponent extends Component
 {
-    use WithPagination, HasToast;
+    use WithPagination, HasToast, WithFileUploads;
 
     public $activeTab     = 'all';
     public $licenses      = [];
@@ -60,6 +61,7 @@ class ApplicationsComponent extends Component
         'issuing_authority' => '',
         'notes'             => '',
         'is_verified'       => false,
+        'document'          => null,
     ];
 
     // Individual fields for backward compatibility
@@ -92,6 +94,7 @@ class ApplicationsComponent extends Component
         'notes'             => '',
         'is_verified'       => false,
         'urgent'            => false,
+        'document'          => null,
     ];
 
     public function mount()
@@ -216,6 +219,7 @@ class ApplicationsComponent extends Component
             'issuing_authority' => '',
             'notes'             => '',
             'is_verified'       => false,
+            'document'          => null,
         ];
         // Reset individual fields for backward compatibility
         $this->selectedLicenseType = '';
@@ -261,6 +265,7 @@ class ApplicationsComponent extends Component
             'addForm.license_number'  => 'required|string|max:255',
             'addForm.issue_date'      => 'required|date',
             'addForm.expiration_date' => 'required|date|after:addForm.issue_date',
+            'addForm.document'        => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
         ]);
 
         try {
@@ -275,7 +280,14 @@ class ApplicationsComponent extends Component
                 'notes'             => $this->addForm['notes'] ?? null,
                 'status'            => LicenseStatus::ACTIVE,
                 'is_verified'       => $this->addForm['is_verified'] ?? false,
+                'has_document'      => $this->addForm['document'] ? true : false,
             ]);
+
+            // Handle document upload first to get the file path
+            $documentPath = null;
+            if ($this->addForm['document']) {
+                $documentPath = $this->handleDocumentUpload('add');
+            }
 
             $license = DoctorLicense::create([
                 'user_id'           => Auth::id(),
@@ -288,6 +300,7 @@ class ApplicationsComponent extends Component
                 'notes'             => $this->addForm['notes'] ?? null,
                 'status'            => LicenseStatus::ACTIVE,
                 'is_verified'       => $this->addForm['is_verified'] ?? false,
+                'document'           => $documentPath,
             ]);
 
             // Log successful creation
@@ -339,6 +352,41 @@ class ApplicationsComponent extends Component
             $this->toastError('Error submitting request: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Handle document upload for license
+     */
+    private function handleDocumentUpload($formType = 'add')
+    {
+        try {
+            $file = $formType === 'add' ? $this->addForm['document'] : $this->editForm['document'];
+            
+            // Generate unique filename
+            $originalName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'license_' . time() . '_' . uniqid() . '.' . $extension;
+            
+            // Store file in doctor-documents directory
+            $path = $file->storeAs('doctor-documents', $filename, 'public');
+            
+            Log::info('Document uploaded successfully', [
+                'original_name' => $originalName,
+                'stored_path' => $path,
+                'file_size' => $file->getSize(),
+                'form_type' => $formType,
+            ]);
+            
+            return $path;
+            
+        } catch (\Exception $e) {
+            Log::error('Error uploading document: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'form_type' => $formType,
+            ]);
+            throw $e;
+        }
+    }
+    
 
     /**
      * Notify admins about license actions
@@ -438,6 +486,7 @@ class ApplicationsComponent extends Component
             'notes'             => '',
             'is_verified'       => false,
             'urgent'            => false,
+            'document'          => null,
         ];
     }
 
@@ -454,7 +503,20 @@ class ApplicationsComponent extends Component
                 'editForm.notes'             => 'nullable|string',
                 'editForm.is_verified'       => 'boolean',
                 'editForm.urgent'            => 'boolean',
+                'editForm.document'          => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
             ]);
+
+            // Handle document upload if provided
+            $documentPath = $this->selectedLicense->document; // Keep current document by default
+            if ($this->editForm['document']) {
+                // Delete old document if it exists
+                if ($this->selectedLicense->document && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->selectedLicense->document)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($this->selectedLicense->document);
+                }
+                
+                // Upload new document
+                $documentPath = $this->handleDocumentUpload('edit');
+            }
 
             $this->selectedLicense->update([
                 'license_type_id'   => $this->editForm['license_type_id'],
@@ -466,6 +528,7 @@ class ApplicationsComponent extends Component
                 'notes'             => $this->editForm['notes'],
                 'is_verified'       => $this->editForm['is_verified'],
                 'urgent'            => $this->editForm['urgent'],
+                'document'          => $documentPath,
             ]);
 
             $this->toastSuccess('License updated successfully!');

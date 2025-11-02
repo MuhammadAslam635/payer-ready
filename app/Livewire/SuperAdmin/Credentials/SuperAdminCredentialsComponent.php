@@ -24,6 +24,8 @@ class SuperAdminCredentialsComponent extends Component
     public $stateFilter = '';
     public $payerFilter = '';
     public $verificationFilter = '';
+    public $startDate = '';
+    public $endDate = '';
 
     // Sorting Properties
     public $sortBy = 'created_at';
@@ -89,6 +91,16 @@ class SuperAdminCredentialsComponent extends Component
         $this->resetPage();
     }
 
+    public function updatingStartDate()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingEndDate()
+    {
+        $this->resetPage();
+    }
+
     public function sortBy($field)
     {
         if ($this->sortBy === $field) {
@@ -107,6 +119,8 @@ class SuperAdminCredentialsComponent extends Component
         $this->stateFilter = '';
         $this->payerFilter = '';
         $this->verificationFilter = '';
+        $this->startDate = '';
+        $this->endDate = '';
         $this->resetPage();
     }
 
@@ -226,6 +240,12 @@ class SuperAdminCredentialsComponent extends Component
                 } else {
                     $query->where('is_verified', false);
                 }
+            })
+            ->when($this->startDate, function (Builder $query) {
+                $query->whereDate('created_at', '>=', $this->startDate);
+            })
+            ->when($this->endDate, function (Builder $query) {
+                $query->whereDate('created_at', '<=', $this->endDate);
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate(15);

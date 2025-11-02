@@ -26,6 +26,30 @@
         </div>
     </div>
 
+    <!-- Information Section -->
+    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-orange-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-orange-800">Task Types Relationship with Payer Applications and Licensure</h3>
+                <div class="mt-2 text-sm text-orange-700">
+                    <p>Task types are used to manage various provider-related processes including payer applications and licensure requirements. They help track and organize different types of work that need to be completed.</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        <li><strong>Payer Applications:</strong> Tasks related to provider enrollment with insurance companies and payers</li>
+                        <li><strong>Licensure:</strong> Tasks related to license applications, renewals, and compliance requirements</li>
+                        <li><strong>Credentialing:</strong> Tasks for credential verification and provider qualification processes</li>
+                        <li><strong>Compliance:</strong> Tasks for maintaining regulatory compliance and meeting healthcare standards</li>
+                    </ul>
+                    <p class="mt-2"><strong>Note:</strong> Task types are the same as Payer Applications and Licensure processes - they represent the different categories of work that need to be tracked and managed for providers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Search and Filters -->
     <div class="bg-white shadow rounded-lg mb-6">
         <div class="p-6">

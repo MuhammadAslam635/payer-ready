@@ -7,7 +7,7 @@
 @php
     $classes = [
         'text-sm [:where(&)]:text-start font-medium select-none',
-        '[:where(&)]:text-neutral-800 [:where(&)]:dark:text-white',
+        '[:where(&)]:text-neutral-800',
     ];
 @endphp
 

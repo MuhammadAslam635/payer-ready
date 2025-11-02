@@ -2,6 +2,29 @@
     <!-- Page Header -->
     <x-breadcrumbs tagline="Overview of doctor credentials statistics and recent activity" />
 
+    <!-- Information Section -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">Provider Credentials Information</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                    <p>This section displays all provider credentials including professional certifications, licenses, and qualifications. Credentials are essential for provider verification and compliance with healthcare regulations.</p>
+                    <ul class="mt-2 list-disc list-inside space-y-1">
+                        <li><strong>Credential Name:</strong> The official name of the credential or certification</li>
+                        <li><strong>Issuing Organization:</strong> The authority that issued the credential</li>
+                        <li><strong>Status:</strong> Current status of the credential (Active, Pending, Expired, etc.)</li>
+                        <li><strong>Verification:</strong> Whether the credential has been verified by administrators</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Filters Section -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 my-6">
         <div class="p-6">
@@ -52,15 +75,38 @@
                 </div>
 
                 <!-- Verification Filter -->
-                <div class="flex items-end">
-                    <div class="w-full">
-                        <x-ui.label for="verificationFilter" class="block text-sm font-medium text-gray-700 mb-2">Verification</x-ui.label>
-                        <x-ui.select class="w-full" wire:model.live="verificationFilter" id="verificationFilter">
-                            <x-ui.select.option value="">All</x-ui.select.option>
-                            <x-ui.select.option value="1">Verified</x-ui.select.option>
-                            <x-ui.select.option value="0">Unverified</x-ui.select.option>
-                        </x-ui.select>
-                    </div>
+                <div>
+                    <x-ui.label for="verificationFilter" class="block text-sm font-medium text-gray-700 mb-2">Verification</x-ui.label>
+                    <x-ui.select class="w-full" wire:model.live="verificationFilter" id="verificationFilter">
+                        <x-ui.select.option value="">All</x-ui.select.option>
+                        <x-ui.select.option value="1">Verified</x-ui.select.option>
+                        <x-ui.select.option value="0">Unverified</x-ui.select.option>
+                    </x-ui.select>
+                </div>
+            </div>
+
+            <!-- Date Range Filter -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-200">
+                <!-- Start Date -->
+                <div>
+                    <x-ui.label for="startDate" class="block text-sm font-medium text-gray-700 mb-2">Start Date</x-ui.label>
+                    <x-ui.input 
+                        type="date" 
+                        id="startDate"
+                        class="w-full" 
+                        wire:model.live="startDate"
+                    />
+                </div>
+
+                <!-- End Date -->
+                <div>
+                    <x-ui.label for="endDate" class="block text-sm font-medium text-gray-700 mb-2">End Date</x-ui.label>
+                    <x-ui.input 
+                        type="date" 
+                        id="endDate"
+                        class="w-full" 
+                        wire:model.live="endDate"
+                    />
                 </div>
             </div>
 
@@ -127,7 +173,7 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $credential->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $credential->credential_name }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $credential->credential_name ?: 'N/A' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $credential->user->name }}</div>

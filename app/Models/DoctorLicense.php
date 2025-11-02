@@ -25,6 +25,7 @@ class DoctorLicense extends Model
         'verification_notes',
         'issuing_authority',
         'notes',
+        'document',
     ];
 
     protected $casts = [

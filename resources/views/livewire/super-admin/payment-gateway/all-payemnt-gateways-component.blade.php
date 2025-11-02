@@ -174,18 +174,38 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('modalOpened', () => {
+                document.body.style.overflow = 'hidden';
+            });
+            Livewire.on('modalClosed', () => {
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+
     <!-- Create/Edit Modal -->
     @if ($showCreateModal || $showEditModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-            aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" wire:click="closeModals">
+        <div class="fixed inset-0 z-50 overflow-y-auto" 
+            aria-labelledby="modal-title" 
+            role="dialog"
+            aria-modal="true"
+            style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;"
+            x-data
+            x-init="document.body.style.overflow = 'hidden'"
+            x-on:remove="document.body.style.overflow = ''">
+            <div class="flex items-center justify-center min-h-screen px-4 py-4 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+                    wire:click="closeModals" 
+                    style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
                 </div>
 
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
                 <div
-                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+                    class="relative inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-6xl sm:w-full" 
+                    style="position: relative; margin: 1.5rem auto; max-height: calc(100vh - 3rem); display: inline-block;">
                     <form wire:submit.prevent="{{ $showCreateModal ? 'create' : 'update' }}">
                         <div class="bg-teal-600 text-white px-6 py-4 flex items-center justify-between">
                             <h3 class="text-xl font-bold flex items-center" id="modal-title">
@@ -437,11 +457,20 @@
     @endif
 
     <!-- Delete Confirmation Modal -->
-    <div class="fixed inset-0 z-50 overflow-y-auto @if ($showDeleteModal) block @else hidden @endif">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" wire:click="closeModals"></div>
+    @if ($showDeleteModal)
+    <div class="fixed inset-0 z-50 overflow-y-auto" 
+        style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;"
+        x-data
+        x-init="document.body.style.overflow = 'hidden'"
+        x-on:remove="document.body.style.overflow = ''">
+        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" 
+                wire:click="closeModals" 
+                style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div
-                class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                class="relative inline-block w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl" 
+                style="position: relative; margin: 1.5rem auto; display: inline-block;">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-bold text-red-600 flex items-center">
                         <i class="fas fa-exclamation-triangle mr-2"></i>Confirm Deletion
@@ -486,9 +515,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal Backdrop -->
-    @if ($showCreateModal || $showEditModal || $showDeleteModal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
     @endif
 </div>

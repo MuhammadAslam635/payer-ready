@@ -65,6 +65,32 @@ class MyTasksComponent extends Component
         $this->tasks = $query->orderBy($this->sortField, $this->sortDirection)->get();
     }
 
+    public function updateTaskStatus($taskId, $status)
+    {
+        try {
+            $task = DoctorTask::where('id', $taskId)
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if (!$task) {
+                session()->flash('error', 'Task not found or you do not have permission to update it.');
+                return;
+            }
+
+            $task->update([
+                'status' => $status,
+                'completed_date' => $status === 'completed' ? now() : null,
+            ]);
+
+            // Reload tasks to reflect the change
+            $this->loadTasks();
+
+            session()->flash('success', 'Task status updated successfully.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to update task status: ' . $e->getMessage());
+        }
+    }
+
     public function render()
     {
         $taskCounts = $this->getTaskCounts();

@@ -162,7 +162,7 @@ class TaskDetailComponent extends Component
 
     public function getAssignmentsProperty()
     {
-        $query = DoctorTask::with(['user', 'creator'])
+        $query = DoctorTask::with(['user', 'createdBy'])
             ->where('task_type_id', $this->taskType->id);
 
         if ($this->search) {

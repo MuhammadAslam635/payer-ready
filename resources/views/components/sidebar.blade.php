@@ -122,11 +122,11 @@
                     <x-ui.icon name="banknotes" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">All Payment Gateways</span>
                 </a>
-                <a href="{{ route('super-admin.all_invoices') }}" wire:navigate
+                <!-- <a href="{{ route('super-admin.all_invoices') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('super-admin.all_invoices') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
                     <x-ui.icon name="newspaper" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">Inoices</span>
-                </a>
+                </a> -->
 
                 <a href="{{ route('super-admin.all_transactions') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('super-admin.all_transactions') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
@@ -155,15 +155,92 @@
                     <x-ui.icon name="users" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">Manage Staff</span>
                 </a>
+                <a href="{{ route('organization-admin.doctor_tasks') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_tasks') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="clipboard-document-list" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Provider Tasks</span>
+                </a>
+                <a href="{{ route('organization-admin.doctor_licenses') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_licenses') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="identification" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Provider Licenses</span>
+                </a>
+                <a href="{{ route('organization-admin.doctor_applications') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_applications') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="document-text" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Provider Applications</span>
+                </a>
+                <a href="{{ route('organization-admin.doctor_expirables') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_expirables') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="calendar-days" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Provider Expirables</span>
+                </a>
+                <a href="{{ route('organization-admin.doctor_reports') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_reports') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="chart-bar" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Provider Reports</span>
+                </a>
+                <a href="{{ route('organization-admin.doctor_invoice_payments') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_invoice_payments') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="banknotes" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Invoice Payments</span>
+                </a>
+                <a href="{{ route('organization-admin.doctor_documents') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_documents') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="document" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Provider Documents</span>
+                </a>
+                <a href="{{ route('organization-admin.all_support_tickets') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.all_support_tickets') || request()->routeIs('organization-admin.create_support_ticket') || request()->routeIs('organization-admin.chat_support_tickets') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="chat-bubble-left-right" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Support Tickets</span>
+                </a>
 
             </div>
         @endif
-        @if (Auth::user()->user_type === \App\Enums\UserType::COORDINATOR)
+        @if (Auth::user()->user_type === \App\Enums\UserType::COORDINATOR || Auth::user()->user_type === \App\Enums\UserType::ORGANIZATION_COORDINATOR)
             <!-- Coordinator Management Section -->
             <div class="pt-4">
                 <div class="px-4 mb-2">
                     <h3 class="text-xs font-semibold text-primary-300 uppercase tracking-wider">Management</h3>
                 </div>
+            </div>
+            <div class="px-4 mb-2">
+                <a href="{{ route('coordinator.dashboard') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.dashboard') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="squares-2x2" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Overview</span>
+                </a>
+                <a href="{{ route('coordinator.tasks') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.tasks') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="clipboard-document-list" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Tasks</span>
+                </a>
+                <a href="{{ route('coordinator.applications') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.applications') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="document-text" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Applications</span>
+                </a>
+                <a href="{{ route('coordinator.licensing') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.licensing') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="identification" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Licensing</span>
+                </a>
+                <a href="{{ route('coordinator.expirables') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.expirables') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="calendar-days" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Expirables</span>
+                </a>
+                <a href="{{ route('coordinator.reports') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.reports') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="chart-bar" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Reports</span>
+                </a>
+                <a href="{{ route('coordinator.invoice-payments') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('coordinator.invoice-payments') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="banknotes" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Invoice Payments</span>
+                </a>
             </div>
         @endif
         @if (Auth::user()->user_type === \App\Enums\UserType::DOCTOR)
@@ -203,6 +280,31 @@
                         class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">Licensing</span>
                 </a>
+                <a href="{{ route('doctor.expirables') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('doctor.expirables') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="calendar-days" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Expirables</span>
+                </a>
+                <a href="{{ route('doctor.reports') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('doctor.reports') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="chart-bar" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Reports</span>
+                </a>
+				<a href="{{ route('doctor.invoice-payments') }}" wire:navigate
+					class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('doctor.invoice-payments') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+					<x-ui.icon name="banknotes" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+					<span class="truncate">Invoice Payments</span>
+				</a>
+                <a href="{{ route('doctor.documents') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('doctor.documents') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="document" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Documents</span>
+                </a>
+                <!-- <a href="{{ route('doctor.certifications') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('doctor.certifications') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="academic-cap" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Certifications</span>
+                </a> -->
                 <a href="{{ route('doctor.all_support_tickets') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('doctor.all_support_tickets') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
                     <x-ui.icon name="ticket" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
