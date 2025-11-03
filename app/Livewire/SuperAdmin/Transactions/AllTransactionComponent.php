@@ -166,8 +166,7 @@ class AllTransactionComponent extends Component
                       ->orWhere('gateway_transaction_id', 'like', '%' . $this->search . '%')
                       ->orWhere('description', 'like', '%' . $this->search . '%')
                       ->orWhereHas('user', function ($q) {
-                          $q->where('first_name', 'like', '%' . $this->search . '%')
-                            ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                          $q->where('name', 'like', '%' . $this->search . '%')
                             ->orWhere('email', 'like', '%' . $this->search . '%');
                       });
             })

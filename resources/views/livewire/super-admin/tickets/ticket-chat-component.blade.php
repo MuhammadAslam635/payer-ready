@@ -1,4 +1,15 @@
 <div class="max-w-7xl mx-auto p-6">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="{{ route('super-admin.support-tickets') }}" wire:navigate 
+           class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span class="font-medium">Back to Tickets</span>
+        </a>
+    </div>
+
     <!-- Ticket Header -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
         <div class="p-6">

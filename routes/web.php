@@ -116,6 +116,7 @@ Route::middleware(['auth:sanctum',
     Route::get('/payers',PayerIndexComponent::class)->name('payers.index');
     Route::get('/sub/users',AdminCreateUserComponent::class)->name('sub_users');
     Route::get('users',AdminViewAllUsersComponent::class)->name('users');
+    Route::get('/users/{userId}/profile', \App\Livewire\SuperAdmin\User\ViewUserProfileComponent::class)->name('user-profile');
     Route::get("/support-tickets",AdminViewAllTicketsComponent::class)->name('support-tickets');
     Route::get('/chat/{supportTicketId}',TicketChatComponent::class)->name('chat');
     Route::get('/all-invoices',AllInvoicesComponent::class)->name('all_invoices');

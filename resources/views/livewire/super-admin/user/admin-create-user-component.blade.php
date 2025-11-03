@@ -39,7 +39,7 @@
                     <label for="perPage" class="text-sm font-medium text-gray-700">Show:</label>
                     <select wire:model.live="perPage"
                             id="perPage"
-                            class="block w-20 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
+                            class="block w-20 pl-3 pr-10 py-2 text-base border border-gray-300 text-gray-900 bg-white focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
@@ -184,7 +184,7 @@
                                         <div>
                                             <label for="user_type" class="block text-sm font-medium text-gray-700">User Type</label>
                                             <select wire:model="formData.user_type" id="user_type"
-                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm text-gray-900 bg-white focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
                                                 <option value="">Select User Type</option>
                                                 @foreach($this->getUserTypeOptions() as $value => $label)
                                                     <option value="{{ $value }}">{{ $label }}</option>

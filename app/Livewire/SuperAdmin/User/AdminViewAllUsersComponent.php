@@ -51,6 +51,11 @@ class AdminViewAllUsersComponent extends Component
         session()->flash('message', "User {$user->name} has been {$status} successfully.");
     }
 
+    public function viewProfile($userId)
+    {
+        $this->redirect(route('super-admin.user-profile', $userId));
+    }
+
     public function getUsers()
     {
         return User::query()

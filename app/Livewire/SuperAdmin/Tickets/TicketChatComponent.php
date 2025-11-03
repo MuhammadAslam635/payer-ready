@@ -7,9 +7,11 @@ use App\Models\Message;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Layout as AttributesLayout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+#[AttributesLayout('layouts.dashboard')]
 class TicketChatComponent extends Component
 {
     use WithFileUploads;
@@ -21,12 +23,15 @@ class TicketChatComponent extends Component
     public $attachments = [];
     public $isLoading = false;
 
-    protected $rules = [
-        'newMessage' => 'required|string|max:1000',
-        'attachments.*' => 'file|max:10240', // 10MB max per file
-    ];
+    protected function rules(): array
+    {
+        return [
+            'newMessage' => 'required|string|max:1000',
+            'attachments.*' => 'file|max:10240', // 10MB max per file
+        ];
+    }
 
-    protected function getValidationMessages()
+    protected function messages(): array
     {
         return [
             'newMessage.required' => 'Please enter a message.',
@@ -35,9 +40,9 @@ class TicketChatComponent extends Component
         ];
     }
 
-    public function mount($ticketId)
+    public function mount($supportTicketId)
     {
-        $this->ticketId = $ticketId;
+        $this->ticketId = $supportTicketId;
         $this->loadTicket();
         $this->loadMessages();
     }

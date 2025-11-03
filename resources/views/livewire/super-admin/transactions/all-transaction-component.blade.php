@@ -24,7 +24,7 @@
             <div>
                 <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select wire:model.live="statusFilter" id="statusFilter" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Statuses</option>
                     @foreach($transactionStatuses as $status)
                         <option value="{{ $status }}">{{ ucfirst($status) }}</option>
@@ -36,7 +36,7 @@
             <div>
                 <label for="typeFilter" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select wire:model.live="typeFilter" id="typeFilter" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Types</option>
                     @foreach($transactionTypes as $type)
                         <option value="{{ $type }}">{{ ucfirst($type) }}</option>
@@ -48,10 +48,10 @@
             <div>
                 <label for="userFilter" class="block text-sm font-medium text-gray-700 mb-1">User</label>
                 <select wire:model.live="userFilter" id="userFilter" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Users</option>
                     @foreach($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -60,7 +60,7 @@
             <div>
                 <label for="paymentMethodFilter" class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
                 <select wire:model.live="paymentMethodFilter" id="paymentMethodFilter" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">All Methods</option>
                     @foreach($paymentMethods as $method)
                         <option value="{{ $method }}">{{ ucfirst($method) }}</option>
@@ -180,7 +180,7 @@
                                 {{ $transaction->transaction_id }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $transaction->user->first_name ?? 'N/A' }} {{ $transaction->user->last_name ?? '' }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $transaction->user->name ?? 'N/A' }}</div>
                                 <div class="text-sm text-gray-500">{{ $transaction->user->email ?? 'N/A' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

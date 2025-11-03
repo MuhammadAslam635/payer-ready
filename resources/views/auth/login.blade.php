@@ -112,7 +112,7 @@
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Signing in...
+                                Signing in...   
                             </span>
                         </x-ui.button>
                     </div>
@@ -120,12 +120,12 @@
 
                 <!-- Sign Up Link -->
                 <div class="mt-6 text-center">
-                    <p class="text-sm text-text-secondary">
+                    <p class="text-sm text-text-secondary mb-3">
                         Don't have an account?
-                        <a href="{{ route('register') }}" class="font-medium text-primary-600 hover:text-primary-700 transition-colors">
-                            Sign up for free
-                        </a>
                     </p>
+                    <x-ui.button as="a" href="{{ route('register') }}" wire:navigate color="teal" class="w-full justify-center">
+                        Sign up for free
+                    </x-ui.button>
                 </div>
             </div>
 

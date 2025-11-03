@@ -5,6 +5,7 @@ namespace App\Livewire\Doctor;
 use App\Models\PaymentGateway;
 use App\Models\UserGatewayPayment;
 use App\Models\User;
+use App\Models\Transaction;
 use App\Notifications\UserPaymentNotification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
@@ -74,9 +75,32 @@ class InvoicePaymentsComponent extends Component
             'screenshot_path' => $screenshotPath,
         ]);
 
-        // Notify current doctor and first super admin
+        // Also create a Transaction record for super admin to see
         $doctor = Auth::user();
         $gateway = PaymentGateway::find($this->selectedGatewayId);
+        
+        // Generate unique transaction ID
+        $uniqueTransactionId = 'TXN-' . strtoupper(uniqid());
+        
+        Transaction::create([
+            'transaction_id' => $uniqueTransactionId,
+            'user_id' => Auth::id(),
+            'invoice_id' => null, // Will be linked when invoice is available
+            'type' => 'payment',
+            'status' => 'pending',
+            'amount' => 0.00, // Can be updated later when invoice is linked
+            'currency' => 'USD',
+            'payment_method' => 'gateway_payment',
+            'payment_gateway' => $gateway?->name,
+            'gateway_transaction_id' => $this->transactionId,
+            'description' => "Payment submitted via {$gateway?->name}",
+            'metadata' => [
+                'user_gateway_payment_id' => $payment->id,
+                'screenshot_path' => $screenshotPath,
+            ],
+        ]);
+
+        // Notify current doctor and first super admin
         $message = "Payment submitted via {$gateway?->name} (Txn: {$this->transactionId}).";
 
         $data = [

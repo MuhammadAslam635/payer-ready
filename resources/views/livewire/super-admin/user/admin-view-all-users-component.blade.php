@@ -92,12 +92,16 @@
                     </div>
 
                     <!-- Status Toggle -->
-                    <div class="flex justify-center">
+                    <div class="flex justify-center gap-2">
                         <button wire:click="toggleUserStatus({{ $user->id }})"
                                 class="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 {{ $user->is_active 
                                     ? 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-800 dark:text-green-100 dark:hover:bg-green-700' 
                                     : 'bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-800 dark:text-red-100 dark:hover:bg-red-700' }}">
                             {{ $user->is_active ? 'Active' : 'Inactive' }}
+                        </button>
+                        <button wire:click="viewProfile({{ $user->id }})"
+                                class="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-800 dark:text-blue-100 dark:hover:bg-blue-700">
+                            Profile
                         </button>
                     </div>
 
