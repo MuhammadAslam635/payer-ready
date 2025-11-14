@@ -159,15 +159,33 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center space-x-2">
-                                    <button wire:click="viewCertificate({{ $certificate->id }})" class="text-teal-600 hover:text-teal-900" title="View Certificate Details">
-                                        <x-ui.icon name="eye" class="w-4 h-4" />
-                                    </button>
-                                    <button wire:click="editCertificate({{ $certificate->id }})" class="text-blue-600 hover:text-blue-900" title="Edit Certificate">
-                                        <x-ui.icon name="pencil" class="w-4 h-4" />
-                                    </button>
-                                    <button wire:click="delete({{ $certificate->id }})" class="text-red-600 hover:text-red-900" title="Delete Certificate">
-                                        <x-ui.icon name="trash" class="w-4 h-4" />
-                                    </button>
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="eye"
+                                        class="text-teal-600 hover:text-teal-900"
+                                        wire:click="viewCertificate({{ $certificate->id }})"
+                                        title="View Certificate Details" />
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="pencil"
+                                        class="text-blue-600 hover:text-blue-900"
+                                        wire:click="editCertificate({{ $certificate->id }})"
+                                        title="Edit Certificate" />
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="trash"
+                                        class="text-red-600 hover:text-red-900"
+                                        wire:click="delete({{ $certificate->id }})"
+                                        title="Delete Certificate" />
                                 </div>
                             </td>
                         </tr>
@@ -199,9 +217,14 @@
         <div class="p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-semibold text-slate-900">Add New Certificate</h3>
-                <button wire:click="closeAddModal" class="text-slate-400 hover:text-slate-600">
-                    <x-ui.icon name="x-mark" class="w-6 h-6" />
-                </button>
+                <x-ui.button
+                    type="button"
+                    variant="ghost"
+                    squared
+                    size="sm"
+                    icon="x-mark"
+                    class="text-slate-400 hover:text-slate-600"
+                    wire:click="closeAddModal" />
             </div>
 
             <form wire:submit="saveCertificate" class="space-y-6">
@@ -285,9 +308,14 @@
         <div class="p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-semibold text-slate-900">Edit Certificate</h3>
-                <button wire:click="closeEditModal" class="text-slate-400 hover:text-slate-600">
-                    <x-ui.icon name="x-mark" class="w-6 h-6" />
-                </button>
+                <x-ui.button
+                    type="button"
+                    variant="ghost"
+                    squared
+                    size="sm"
+                    icon="x-mark"
+                    class="text-slate-400 hover:text-slate-600"
+                    wire:click="closeEditModal" />
             </div>
 
             <form wire:submit="updateCertificate" class="space-y-6">
@@ -371,9 +399,14 @@
         <div class="p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-semibold text-slate-900">Certificate Details</h3>
-                <button wire:click="closeViewModal" class="text-slate-400 hover:text-slate-600">
-                    <x-ui.icon name="x-mark" class="w-6 h-6" />
-                </button>
+                <x-ui.button
+                    type="button"
+                    variant="ghost"
+                    squared
+                    size="sm"
+                    icon="x-mark"
+                    class="text-slate-400 hover:text-slate-600"
+                    wire:click="closeViewModal" />
             </div>
 
             @if($selectedCertificate)

@@ -82,7 +82,7 @@ unset($__defined_vars, $__key, $__value); ?>
 
 <div <?php echo e($attributes->class(Arr::toCssClasses([...$classes]))); ?>>
     
-    <?php if(filled($prefix) || filled($prefixIcon)): ?>
+    <!--[if BLOCK]><![endif]--><?php if(filled($prefix) || filled($prefixIcon)): ?>
         <?php if (isset($component)) { $__componentOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.input.extra-slot','data' => ['dataSlot' => 'input-prefix']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -93,7 +93,7 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['data-slot' => 'input-prefix']); ?>
-            <?php if($prefix instanceof \Illuminate\View\ComponentSlot): ?>
+            <!--[if BLOCK]><![endif]--><?php if($prefix instanceof \Illuminate\View\ComponentSlot): ?>
                 <?php echo e($prefix); ?>
 
             <?php elseif($prefixIcon): ?>
@@ -117,7 +117,7 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-            <?php endif; ?>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d)): ?>
@@ -128,7 +128,7 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $component = $__componentOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d; ?>
 <?php unset($__componentOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d); ?>
 <?php endif; ?>
-    <?php endif; ?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
     <div
         x-data 
@@ -174,7 +174,7 @@ unset($__defined_vars, $__key, $__value); ?>
             <?php if($invalid): ?> invalid <?php endif; ?>
         />
         <div class="flex items-center h-[92%] mr-1" data-slot="input-actions">
-            <?php if($copyable): ?>   <?php if (isset($component)) { $__componentOriginal7884b7e159fd38269c134cd47f2a73b7 = $component; } ?>
+            <!--[if BLOCK]><![endif]--><?php if($copyable): ?>   <?php if (isset($component)) { $__componentOriginal7884b7e159fd38269c134cd47f2a73b7 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7884b7e159fd38269c134cd47f2a73b7 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.input.options.copyable','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.input.options.copyable'); ?>
@@ -193,8 +193,8 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php if (isset($__componentOriginal7884b7e159fd38269c134cd47f2a73b7)): ?>
 <?php $component = $__componentOriginal7884b7e159fd38269c134cd47f2a73b7; ?>
 <?php unset($__componentOriginal7884b7e159fd38269c134cd47f2a73b7); ?>
-<?php endif; ?>   <?php endif; ?>
-            <?php if($clearable): ?>  <?php if (isset($component)) { $__componentOriginal4179bd0ad0a651a165cb6c5eb4408060 = $component; } ?>
+<?php endif; ?>   <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            <!--[if BLOCK]><![endif]--><?php if($clearable): ?>  <?php if (isset($component)) { $__componentOriginal4179bd0ad0a651a165cb6c5eb4408060 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal4179bd0ad0a651a165cb6c5eb4408060 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.input.options.clearable','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.input.options.clearable'); ?>
@@ -213,8 +213,8 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php if (isset($__componentOriginal4179bd0ad0a651a165cb6c5eb4408060)): ?>
 <?php $component = $__componentOriginal4179bd0ad0a651a165cb6c5eb4408060; ?>
 <?php unset($__componentOriginal4179bd0ad0a651a165cb6c5eb4408060); ?>
-<?php endif; ?>  <?php endif; ?>
-            <?php if($revealable): ?> <?php if (isset($component)) { $__componentOriginal1693c1e3c4a3c7f159619e59d8b77ef1 = $component; } ?>
+<?php endif; ?>  <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            <!--[if BLOCK]><![endif]--><?php if($revealable): ?> <?php if (isset($component)) { $__componentOriginal1693c1e3c4a3c7f159619e59d8b77ef1 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal1693c1e3c4a3c7f159619e59d8b77ef1 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.input.options.revealable','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.input.options.revealable'); ?>
@@ -233,12 +233,12 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php if (isset($__componentOriginal1693c1e3c4a3c7f159619e59d8b77ef1)): ?>
 <?php $component = $__componentOriginal1693c1e3c4a3c7f159619e59d8b77ef1; ?>
 <?php unset($__componentOriginal1693c1e3c4a3c7f159619e59d8b77ef1); ?>
-<?php endif; ?> <?php endif; ?>
+<?php endif; ?> <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
 
     
-    <?php if(filled($suffix) || filled($suffixIcon)): ?>
+    <!--[if BLOCK]><![endif]--><?php if(filled($suffix) || filled($suffixIcon)): ?>
         <?php if (isset($component)) { $__componentOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.input.extra-slot','data' => ['dataSlot' => 'input-suffix']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -249,7 +249,7 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['data-slot' => 'input-suffix']); ?>
-            <?php if($suffix instanceof \Illuminate\View\ComponentSlot): ?>
+            <!--[if BLOCK]><![endif]--><?php if($suffix instanceof \Illuminate\View\ComponentSlot): ?>
                 <div class="px-3">
                     <?php echo e($suffix); ?>
 
@@ -275,7 +275,7 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-            <?php endif; ?>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d)): ?>
@@ -286,6 +286,6 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php $component = $__componentOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d; ?>
 <?php unset($__componentOriginal8c1b8d5cd5e64c67c430bb664f2ddf2d); ?>
 <?php endif; ?>
-    <?php endif; ?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 </div>
 <?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/components/ui/input/index.blade.php ENDPATH**/ ?>

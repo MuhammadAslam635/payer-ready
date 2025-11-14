@@ -48,6 +48,26 @@ class Transaction extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+    /**
+     * Get the organization for this transaction
+     */
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'organization_id');
+    }
+
+    /**
+     * Get the user gateway payment for this transaction
+     */
+    public function userGatewayPayment()
+    {
+        $paymentId = $this->metadata['user_gateway_payment_id'] ?? null;
+        if ($paymentId) {
+            return \App\Models\UserGatewayPayment::find($paymentId);
+        }
+        return null;
+    }
 }
 
 

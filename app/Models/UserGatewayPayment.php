@@ -26,6 +26,14 @@ class UserGatewayPayment extends Model
     {
         return $this->belongsTo(PaymentGateway::class);
     }
+
+    /**
+     * Get the transaction for this payment
+     */
+    public function transaction()
+    {
+        return Transaction::where('metadata->user_gateway_payment_id', $this->id)->first();
+    }
 }
 
 

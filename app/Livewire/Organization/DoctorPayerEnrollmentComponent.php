@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Notifications\InsuranceNotification;
 use App\Traits\HasToast;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -94,6 +95,8 @@ class DoctorPayerEnrollmentComponent extends Component
         }
 
         try {
+            DB::beginTransaction();
+
             $provider = User::find($this->selectedProvider);
             $payer = Payer::find($this->selectedPayer);
             $state = State::find($this->selectedState);
@@ -129,6 +132,8 @@ class DoctorPayerEnrollmentComponent extends Component
                 'type' => 'payer_enrollment_confirmation'
             ])));
 
+            DB::commit();
+
             $this->dispatch('notification-added', [
                 'title' => 'New Payer Enrollment Request',
                 'message' => "Org Admin requested payer {$payer->name} for {$provider->name}",
@@ -140,7 +145,8 @@ class DoctorPayerEnrollmentComponent extends Component
             $this->loadEnrollments();
             $this->calculateStats();
         } catch (\Throwable $e) {
-            $this->toastError('Failed to submit request.', $e->getMessage());
+            DB::rollBack();
+            $this->toastError('Failed to submit request: ' . $e->getMessage());
         }
     }
 

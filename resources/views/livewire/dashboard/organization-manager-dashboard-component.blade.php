@@ -159,31 +159,31 @@
         </div>
     </div>
 
-    <!-- Latest Transactions -->
+    <!-- Application Status -->
     <div class="bg-white rounded-lg shadow-sm border border-slate-200">
         <div class="px-6 py-4 border-b border-slate-200">
-            <h3 class="text-lg font-semibold text-slate-900">Latest Transactions</h3>
+            <h3 class="text-lg font-semibold text-slate-900">Application Status</h3>
         </div>
         <div class="p-6">
-            @if($stats['latestTransactions']->count() > 0)
+            @if($stats['latestApplications']->count() > 0)
                 <div class="space-y-4">
-                    @foreach($stats['latestTransactions'] as $transaction)
+                    @foreach($stats['latestApplications'] as $application)
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
-                                <p class="text-sm font-medium text-slate-900">{{ $transaction['description'] }}</p>
-                                <p class="text-sm text-slate-500">{{ $transaction['staff_name'] }}</p>
+                                <p class="text-sm font-medium text-slate-900">{{ $application['payer_name'] }}</p>
+                                <p class="text-sm text-slate-500">{{ $application['provider_name'] }} • {{ $application['state_name'] }}</p>
                             </div>
                             <div class="flex items-center space-x-4">
-                                <span class="text-sm font-medium text-slate-900">${{ number_format($transaction['amount'], 2) }}</span>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $transaction['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ ucfirst($transaction['status']) }}
+                                <span class="text-sm text-slate-500">{{ $application['request_type'] }}</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $application['status'] === 'Completed' ? 'bg-green-100 text-green-800' : ($application['status'] === 'Working' ? 'bg-yellow-100 text-yellow-800' : ($application['status'] === 'Requested' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800')) }}">
+                                    {{ $application['status'] }}
                                 </span>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @else
-                <p class="text-slate-500 text-center py-4">No transactions found</p>
+                <p class="text-slate-500 text-center py-4">No applications found</p>
             @endif
         </div>
     </div>

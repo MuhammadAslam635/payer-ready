@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-labelledby="title desc">
+<title id="title">NPPES Integration Badge</title>
+<desc id="desc">Professional badge illustrating National Plan &amp; Provider Enumeration System connectivity for PayerReady</desc>
+<defs>
+    <linearGradient id="badgeNppesBase" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0A3A54"/>
+        <stop offset="100%" stop-color="#3AA8E2"/>
+    </linearGradient>
+    <linearGradient id="badgeNppesWave" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.45)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,0.05)"/>
+    </linearGradient>
+</defs>
+<rect x="1" y="1" width="158" height="46" rx="12" fill="#062336" stroke="#3AA8E2" stroke-width="2"/>
+<rect x="4" y="4" width="152" height="40" rx="10" fill="url(#badgeNppesBase)"/>
+<path d="M18 34c12-7.5 22-11 30-11s18 3.5 30 11H18Z" fill="url(#badgeNppesWave)" opacity="0.6"/>
+<g transform="translate(26 11)">
+    <rect x="0" y="0" width="26" height="26" rx="13" fill="rgba(255,255,255,0.18)"/>
+    <path d="M13 4.5c4.694 0 8.5 3.806 8.5 8.5s-3.806 8.5-8.5 8.5-8.5-3.806-8.5-8.5 3.806-8.5 8.5-8.5Z" fill="rgba(255,255,255,0.35)"/>
+    <path d="M9.75 9.5c0-1.794 1.456-3.25 3.25-3.25s3.25 1.456 3.25 3.25-1.456 3.25-3.25 3.25-3.25-1.456-3.25-3.25Zm-3.25 10c0-2.071 1.679-3.75 3.75-3.75h4.5c2.071 0 3.75 1.679 3.75 3.75V22H6.5v-2.5Z" fill="#FFFFFF"/>
+</g>
+<g fill="#F2FAFF" font-family="Inter, 'Segoe UI', sans-serif" text-anchor="middle">
+    <text x="80" y="25" font-size="16" font-weight="600" textLength="104" lengthAdjust="spacingAndGlyphs">NPPES</text>
+    <text x="80" y="36" font-size="9" fill="rgba(242,250,255,0.75)" textLength="120" lengthAdjust="spacingAndGlyphs">NATIONAL PROVIDER ENUMERATION</text>
+</g>
+</svg>
+

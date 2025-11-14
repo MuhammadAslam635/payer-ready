@@ -5,12 +5,15 @@
             <h1 class="text-2xl font-bold text-slate-900">Document Management</h1>
             <p class="text-slate-600 mt-1">Upload and manage your professional documents</p>
         </div>
-        <button wire:click="openUploadModal" class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
+        <x-ui.button
+            type="button"
+            color="teal"
+            variant="primary"
+            icon="cloud-arrow-up"
+            class="!px-5 uppercase tracking-wide text-xs"
+            wire:click="openUploadModal">
             Upload Document
-        </button>
+        </x-ui.button>
     </div>
 
     <!-- Documents Table -->
@@ -72,25 +75,31 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
-                                        <button wire:click="downloadDocument({{ $document->id }})" 
-                                            class="inline-flex items-center px-2 py-1 border border-slate-300 rounded text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </button>
-                                        <button wire:click="openEditModal({{ $document->id }})" 
-                                            class="inline-flex items-center px-2 py-1 border border-slate-300 rounded text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-                                        <button wire:click="deleteDocument({{ $document->id }})" 
-                                            class="inline-flex items-center px-2 py-1 border border-slate-300 rounded text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                                            onclick="return confirm('Are you sure you want to delete this document?')">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
+                                        <x-ui.button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            squared
+                                            icon="arrow-down-tray"
+                                            class="border border-slate-300 text-slate-700 hover:text-slate-900"
+                                            wire:click="downloadDocument({{ $document->id }})" />
+                                        <x-ui.button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            squared
+                                            icon="pencil-square"
+                                            class="border border-slate-300 text-slate-700 hover:text-slate-900"
+                                            wire:click="openEditModal({{ $document->id }})" />
+                                        <x-ui.button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            squared
+                                            icon="trash"
+                                            class="border border-slate-300 text-slate-700 hover:text-red-700"
+                                            onclick="return confirm('Are you sure you want to delete this document?')"
+                                            wire:click="deleteDocument({{ $document->id }})" />
                                     </div>
                                 </td>
                             </tr>
@@ -105,12 +114,15 @@
                 </svg>
                 <h3 class="text-lg font-medium text-slate-900 mb-2">No documents uploaded</h3>
                 <p class="text-slate-500 mb-4">Upload your first document to get started.</p>
-                <button wire:click="openUploadModal" class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
+                <x-ui.button
+                    type="button"
+                    color="teal"
+                    variant="primary"
+                    icon="cloud-arrow-up"
+                    class="!px-5 uppercase tracking-wide text-xs"
+                    wire:click="openUploadModal">
                     Upload Document
-                </button>
+                </x-ui.button>
             </div>
         @endif
     </div>
@@ -125,11 +137,14 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-slate-900">Upload Document</h3>
-                            <button wire:click="closeUploadModal" class="text-slate-400 hover:text-slate-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                            <x-ui.button
+                                type="button"
+                                variant="ghost"
+                                squared
+                                size="sm"
+                                icon="x-mark"
+                                class="text-slate-400 hover:text-slate-600"
+                                wire:click="closeUploadModal" />
                         </div>
 
                         <form wire:submit.prevent="uploadDocument">
@@ -180,17 +195,20 @@
                             </div>
 
                             <div class="flex justify-end space-x-3 mt-6">
-                                <button wire:click="closeUploadModal" type="button"
-                                    class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                <x-ui.button
+                                    type="button"
+                                    variant="outline"
+                                    color="slate"
+                                    wire:click="closeUploadModal">
                                     Cancel
-                                </button>
-                                <button type="submit"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
+                                </x-ui.button>
+                                <x-ui.button
+                                    type="submit"
+                                    color="teal"
+                                    variant="primary"
+                                    icon="cloud-arrow-up">
                                     Upload Document
-                                </button>
+                                </x-ui.button>
                             </div>
                         </form>
                     </div>
@@ -209,11 +227,14 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-slate-900">Edit Document</h3>
-                            <button wire:click="closeEditModal" class="text-slate-400 hover:text-slate-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                            <x-ui.button
+                                type="button"
+                                variant="ghost"
+                                squared
+                                size="sm"
+                                icon="x-mark"
+                                class="text-slate-400 hover:text-slate-600"
+                                wire:click="closeEditModal" />
                         </div>
 
                         @if($editingDocument)
@@ -260,17 +281,20 @@
                                 </div>
 
                                 <div class="flex justify-end space-x-3 mt-6">
-                                    <button wire:click="closeEditModal" type="button"
-                                        class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                    <x-ui.button
+                                        type="button"
+                                        variant="outline"
+                                        color="slate"
+                                        wire:click="closeEditModal">
                                         Cancel
-                                    </button>
-                                    <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
+                                    </x-ui.button>
+                                    <x-ui.button
+                                        type="submit"
+                                        color="teal"
+                                        variant="primary"
+                                        icon="check">
                                         Update Document
-                                    </button>
+                                    </x-ui.button>
                                 </div>
                             </form>
                         @endif

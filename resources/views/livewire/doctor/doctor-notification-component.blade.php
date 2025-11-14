@@ -5,10 +5,14 @@
             <div class="flex items-center justify-between">
                 <h1 class="text-2xl font-semibold text-slate-800">My Notifications</h1>
                 @if($notifications->where('read_at', null)->count() > 0)
-                    <button wire:click="markAllAsRead" 
-                            class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                    <x-ui.button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        class="!text-primary-600 hover:!text-primary-700"
+                        wire:click="markAllAsRead">
                         Mark all as read
-                    </button>
+                    </x-ui.button>
                 @endif
             </div>
         </div>
@@ -56,20 +60,28 @@
                     <div class="flex items-center gap-2">
                         <span class="text-sm font-medium text-slate-700">Sort by:</span>
                         <div class="flex gap-1">
-                            <button wire:click="sortBy('created_at')" 
-                                    class="px-3 py-1 text-xs font-medium rounded-md {{ $sortBy === 'created_at' ? 'bg-primary-100 text-primary-700' : 'bg-white text-slate-600 hover:bg-slate-50' }} border border-slate-300">
+                            <x-ui.button
+                                type="button"
+                                size="xs"
+                                variant="outline"
+                                wire:click="sortBy('created_at')"
+                                class="{{ $sortBy === 'created_at' ? '!bg-primary-100 !text-primary-700 !border-primary-200' : '!bg-white !text-slate-600 hover:!bg-slate-50' }}">
                                 Date
                                 @if($sortBy === 'created_at')
                                     <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
-                            </button>
-                            <button wire:click="sortBy('read_at')" 
-                                    class="px-3 py-1 text-xs font-medium rounded-md {{ $sortBy === 'read_at' ? 'bg-primary-100 text-primary-700' : 'bg-white text-slate-600 hover:bg-slate-50' }} border border-slate-300">
+                            </x-ui.button>
+                            <x-ui.button
+                                type="button"
+                                size="xs"
+                                variant="outline"
+                                wire:click="sortBy('read_at')"
+                                class="{{ $sortBy === 'read_at' ? '!bg-primary-100 !text-primary-700 !border-primary-200' : '!bg-white !text-slate-600 hover:!bg-slate-50' }}">
                                 Status
                                 @if($sortBy === 'read_at')
                                     <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
-                            </button>
+                            </x-ui.button>
                         </div>
                     </div>
                 </div>
@@ -123,10 +135,14 @@
                                 </div>
                                 
                                 @if(!$notification->read_at)
-                                    <button wire:click="markAsRead('{{ $notification->id }}')" 
-                                            class="text-xs text-blue-600 hover:text-blue-800 font-medium ml-4">
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="xs"
+                                        class="ml-4 !text-blue-600 hover:!text-blue-800"
+                                        wire:click="markAsRead('{{ $notification->id }}')">
                                         Mark as read
-                                    </button>
+                                    </x-ui.button>
                                 @endif
                             </div>
                         </div>
@@ -140,10 +156,14 @@
                     <h3 class="mt-2 text-sm font-medium text-slate-900">No notifications found</h3>
                     @if($search)
                         <p class="mt-1 text-sm text-slate-500">No notifications match your search criteria.</p>
-                        <button wire:click="clearSearch" 
-                                class="mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium">
+                        <x-ui.button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            class="mt-3 !text-primary-600 hover:!text-primary-700"
+                            wire:click="clearSearch">
                             Clear search
-                        </button>
+                        </x-ui.button>
                     @else
                         <p class="mt-1 text-sm text-slate-500">You have no notifications at this time.</p>
                     @endif
@@ -170,10 +190,14 @@
                         @endif
                     </p>
                     @if($search)
-                        <button wire:click="clearSearch" 
-                                class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                        <x-ui.button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            class="!text-primary-600 hover:!text-primary-700"
+                            wire:click="clearSearch">
                             Clear search
-                        </button>
+                        </x-ui.button>
                     @endif
                 </div>
             </div>

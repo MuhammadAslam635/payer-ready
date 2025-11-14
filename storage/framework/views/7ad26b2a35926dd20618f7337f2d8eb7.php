@@ -59,7 +59,7 @@ unset($__defined_vars, $__key, $__value); ?>
     ];
 ?>
 
-<?php if($hasErrors): ?>
+<!--[if BLOCK]><![endif]--><?php if($hasErrors): ?>
     <div 
         aria-live="polite"
         role="alert"
@@ -87,15 +87,15 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
         <div class="flex-1">
-            <?php if(count($errorMessages) === 1): ?>
+            <!--[if BLOCK]><![endif]--><?php if(count($errorMessages) === 1): ?>
                 <span><?php echo e($errorMessages[0]); ?></span>
             <?php else: ?>
                 <ul class="list-disc list-inside space-y-1">
-                    <?php $__currentLoopData = $errorMessages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $errorMessages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <li><?php echo e($message); ?></li>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                 </ul>
-            <?php endif; ?>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
-<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/components/ui/error.blade.php ENDPATH**/ ?>
+<?php endif; ?><!--[if ENDBLOCK]><![endif]--><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/components/ui/error.blade.php ENDPATH**/ ?>

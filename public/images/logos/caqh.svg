@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" role="img" aria-labelledby="title desc">
+<title id="title">CAQH Integration Badge</title>
+<desc id="desc">Minimal badge representing CAQH connectivity for the PayerReady platform</desc>
+<defs>
+    <linearGradient id="badgeCa" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#2D2B7A"/>
+        <stop offset="100%" stop-color="#5E63FF"/>
+    </linearGradient>
+    <linearGradient id="badgeCaAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#7F8CFF" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.15"/>
+    </linearGradient>
+</defs>
+<rect x="1" y="1" width="158" height="46" rx="12" fill="#1C1A4C" stroke="#5E63FF" stroke-width="2" />
+<rect x="4" y="4" width="152" height="40" rx="10" fill="url(#badgeCa)" />
+<path d="M18 34c14-8 26-12 35-12s21 4 35 12H18Z" fill="url(#badgeCaAccent)" opacity="0.6"/>
+<g transform="translate(24 12)">
+    <circle cx="12" cy="12" r="12" fill="rgba(255,255,255,0.18)"/>
+    <path d="M12 3c4.971 0 9 4.029 9 9s-4.029 9-9 9-9-4.029-9-9 4.029-9 9-9Z" fill="rgba(255,255,255,0.35)"/>
+    <path d="M7 12c0-2.761 2.239-5 5-5 1.93 0 3.612 1.088 4.453 2.7l-2.24.94c-.437-.873-1.349-1.64-2.213-1.64-1.657 0-2.75 1.343-2.75 3s1.093 3 2.75 3c.864 0 1.776-.767 2.213-1.64l2.24.94C15.612 15.912 13.93 17 12 17c-2.761 0-5-2.239-5-5Z" fill="#FFFFFF"/>
+</g>
+<g fill="#F9FBFF" font-family="Inter, 'Segoe UI', sans-serif" text-anchor="middle">
+    <text x="80" y="25" font-size="16" font-weight="600" textLength="96" lengthAdjust="spacingAndGlyphs">CAQH</text>
+    <text x="80" y="36" font-size="9" fill="rgba(249,251,255,0.75)" textLength="120" lengthAdjust="spacingAndGlyphs">CREDENTIALING ALLIANCE</text>
+</g>
+</svg>
+

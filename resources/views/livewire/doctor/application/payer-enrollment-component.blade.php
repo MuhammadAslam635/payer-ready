@@ -3,13 +3,15 @@
     <!-- Header Section -->
     <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-900">Payer Enrollments</h1>
-        <button wire:click="openRequestModal"
-            class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            <span>Request New Payer</span>
-        </button>
+        <x-ui.button
+            type="button"
+            color="teal"
+            variant="primary"
+            icon="plus"
+            class="!px-5"
+            wire:click="openRequestModal">
+            Request New Payer
+        </x-ui.button>
     </div>
 
     <!-- Explanation Section -->
@@ -175,12 +177,14 @@
                             <h3 class="text-lg font-medium text-gray-900" id="modal-title">
                                 Request New Payer Enrollment
                             </h3>
-                            <button wire:click="closeRequestModal" class="text-gray-400 hover:text-gray-600">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
+                            <x-ui.button
+                                type="button"
+                                variant="ghost"
+                                squared
+                                size="sm"
+                                icon="x-mark"
+                                class="text-gray-400 hover:text-gray-600"
+                                wire:click="closeRequestModal" />
                         </div>
                         <form wire:submit="submitRequest">
                             <!-- Step 1: Select Provider -->

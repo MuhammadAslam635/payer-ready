@@ -1,13 +1,13 @@
-<div class="p-6">
+<div class="p-6 bg-gray-50 min-h-screen">
     <!-- Header -->
     <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">My Support Tickets</h1>
-        <p class="text-gray-600 dark:text-gray-400 mt-1">View and manage your support requests</p>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-900">My Support Tickets</h1>
+        <p class="text-gray-600 dark:text-gray-600 mt-1">View and manage your support requests</p>
     </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 p-4">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -17,13 +17,13 @@
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Tickets</p>
-                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $stats['total'] }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-600">Total Tickets</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-gray-900">{{ $stats['total'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 p-4">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -33,13 +33,13 @@
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Open</p>
-                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $stats['open'] }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-600">Open</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-gray-900">{{ $stats['open'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 p-4">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -49,13 +49,13 @@
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">In Progress</p>
-                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $stats['in_progress'] }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-600">In Progress</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-gray-900">{{ $stats['in_progress'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 p-4">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
@@ -65,13 +65,13 @@
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Resolved</p>
-                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $stats['resolved'] }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-600">Resolved</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-gray-900">{{ $stats['resolved'] }}</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+        <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 p-4">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -81,25 +81,25 @@
                     </div>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Closed</p>
-                    <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ $stats['closed'] }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-600">Closed</p>
+                    <p class="text-lg font-semibold text-gray-900 dark:text-gray-900">{{ $stats['closed'] }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Filters and Actions -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+    <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 p-6 mb-6">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <!-- Search and Filters -->
             <div class="flex flex-col sm:flex-row gap-4 flex-1">
                 <!-- Search -->
                 <div class="flex-1">
-                    <div class="relative">
+                    <div class="relative text-gray-900">
                         <input type="text" 
                                wire:model.live.debounce.300ms="search"
                                placeholder="Search tickets..."
-                               class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:text-gray-900">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -111,7 +111,7 @@
                 <!-- Status Filter -->
                 <div class="w-full sm:w-48">
                     <select wire:model.live="statusFilter" 
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:text-gray-900">
                         <option value="">All Status</option>
                         <option value="open">Open</option>
                         <option value="in_progress">In Progress</option>
@@ -123,7 +123,7 @@
                 <!-- Priority Filter -->
                 <div class="w-full sm:w-48">
                     <select wire:model.live="priorityFilter" 
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:text-gray-900">
                         <option value="">All Priority</option>
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
@@ -135,24 +135,27 @@
 
             <!-- Create New Ticket Button -->
             <div>
-                <a href="{{ route('doctor.create_support_ticket') }}"  wire:navigate
-                   class="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
+                <x-ui.button
+                    as="a"
+                    href="{{ route('doctor.create_support_ticket') }}"
+                    wire:navigate
+                    icon="plus"
+                    color="teal"
+                    variant="primary"
+                    class="!px-5">
                     New Ticket
-                </a>
+                </x-ui.button>
             </div>
         </div>
     </div>
 
     <!-- Tickets Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div class="bg-white dark:bg-white rounded-lg shadow-sm border border-gray-200 dark:border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-50 dark:bg-gray-700">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-200">
+                <thead class="bg-gray-50 dark:bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" 
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-100" 
                             wire:click="sortBy('ticket_number')">
                             <div class="flex items-center space-x-1">
                                 <span>Ticket #</span>
@@ -167,7 +170,7 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" 
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-100" 
                             wire:click="sortBy('subject')">
                             <div class="flex items-center space-x-1">
                                 <span>Subject</span>
@@ -182,10 +185,10 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Priority</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Assigned To</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" 
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider">Priority</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider">Assigned To</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-100" 
                             wire:click="sortBy('created_at')">
                             <div class="flex items-center space-x-1">
                                 <span>Created</span>
@@ -200,16 +203,16 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="bg-white dark:bg-white divide-y divide-gray-200 dark:divide-gray-200">
                     @forelse($tickets as $ticket)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-100">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-900">
                                 #{{ $ticket->ticket_number }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-900 dark:text-white">
+                            <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-900">
                                 <div class="max-w-xs truncate">{{ $ticket->subject }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -222,32 +225,44 @@
                                     {{ ucfirst($ticket->priority) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-900">
                                 {{ $ticket->assignedUser ? $ticket->assignedUser->name : 'Unassigned' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-600">
                                 {{ $ticket->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('doctor.chat_support_tickets', $ticket->id) }}" wire:navigate
-                                   class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                                <x-ui.button
+                                    as="a"
+                                    href="{{ route('doctor.chat_support_tickets', $ticket->id) }}"
+                                    wire:navigate
+                                    size="sm"
+                                    variant="outline"
+                                    color="teal"
+                                    icon="chat-bubble-left-right">
                                     View Chat
-                                </a>
+                                </x-ui.button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-600">
                                 <div class="flex flex-col items-center">
                                     <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
                                     <p class="text-lg font-medium">No support tickets found</p>
                                     <p class="text-sm">Create your first support ticket to get help from our team.</p>
-                                    <a href="{{ route('doctor.create_support_ticket') }}"  wire:navigate
-                                       class="mt-4 inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors">
+                                    <x-ui.button
+                                        as="a"
+                                        href="{{ route('doctor.create_support_ticket') }}"
+                                        wire:navigate
+                                        icon="plus"
+                                        color="teal"
+                                        variant="primary"
+                                        class="mt-4">
                                         Create New Ticket
-                                    </a>
+                                    </x-ui.button>
                                 </div>
                             </td>
                         </tr>
@@ -258,7 +273,7 @@
 
         <!-- Pagination -->
         @if($tickets->hasPages())
-            <div class="px-6 py-3 border-t border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-3 border-t border-gray-200 dark:border-gray-200">
                 {{ $tickets->links() }}
             </div>
         @endif

@@ -118,10 +118,20 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                    <x-ui.button type="submit" class="bg-teal-500 text-white text-xs hover:bg-teal-700 rounded-md" wire:loading.attr="disabled">
+                    <x-ui.button
+                        type="submit"
+                        color="teal"
+                        variant="primary"
+                        size="sm"
+                        wire:loading.attr="disabled">
                         Add License
                     </x-ui.button>
-                    <x-ui.button type="button" class="bg-red-500 text-white text-xs hover:bg-red-700 rounded-md" wire:click="closeAddModal">
+                    <x-ui.button
+                        type="button"
+                        variant="outline"
+                        color="slate"
+                        size="sm"
+                        wire:click="closeAddModal">
                         Cancel
                     </x-ui.button>
                 </div>

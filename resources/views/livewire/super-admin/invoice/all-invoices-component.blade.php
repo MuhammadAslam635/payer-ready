@@ -3,8 +3,8 @@
     <div class="mb-6 bg-white p-5 rounded-md">
         <div class="flex flex-col lg:flex-row justify-between gap-2">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Transaction Management</h1>
-                <p class="text-gray-600 mt-2">Manage all transactions, invoices, and payment records</p>
+                <h1 class="text-3xl font-bold text-gray-900">Invoice Management</h1>
+                <p class="text-gray-600 mt-2">Manage all invoices and billing records</p>
             </div>
             <div>
                 <a href="{{ route('super-admin.create_invoice') }}" wire:navigate
@@ -27,8 +27,8 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Total Transactions</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ number_format($stats['total_transactions']) }}
+                    <p class="text-sm font-medium text-gray-600">Total Invoices</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ number_format($stats['total_invoices']) }}
                     </p>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Pending</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ number_format($stats['pending_transactions']) }}
+                    <p class="text-2xl font-semibold text-gray-900">{{ number_format($stats['pending_invoices']) }}
                     </p>
                 </div>
             </div>
@@ -76,8 +76,8 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Failed</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ number_format($stats['failed_transactions']) }}
+                    <p class="text-sm font-medium text-gray-600">Overdue</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ number_format($stats['overdue_invoices']) }}
                     </p>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                 <!-- Search -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                    <input type="text" wire:model.live="search" placeholder="Transaction ID, Description, User..."
+                    <input type="text" wire:model.live="search" placeholder="Invoice Number, Notes, User..."
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
@@ -109,17 +109,6 @@
                     </select>
                 </div>
 
-                <!-- Type Filter -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                    <select wire:model.live="typeFilter"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Types</option>
-                        @foreach ($typeOptions as $value => $label)
-                            <option value="{{ $value }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
 
                 <!-- User Filter -->
                 <div>
@@ -135,30 +124,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <!-- Payment Method Filter -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
-                    <select wire:model.live="paymentMethodFilter"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Methods</option>
-                        @foreach ($paymentMethodOptions as $value => $label)
-                            <option value="{{ $value }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Payment Gateway Filter -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Gateway</label>
-                    <select wire:model.live="paymentGatewayFilter"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Gateways</option>
-                        @foreach ($paymentGatewayOptions as $value => $label)
-                            <option value="{{ $value }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
                 <!-- Date From -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
@@ -180,7 +145,7 @@
                     Clear Filters
                 </button>
 
-                <button wire:click="downloadAllTransactions"
+                <button wire:click="downloadAllInvoices"
                     class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -193,26 +158,28 @@
         </div>
     </div>
 
-    <!-- Transactions Table -->
+    <!-- Invoices Table -->
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Transaction</th>
+                            Invoice Number</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Organization</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Amount</th>
+                            Subtotal</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Payment</th>
+                            Discount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tax</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Due Date</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -220,100 +187,88 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($transactions as $transaction)
+                    @forelse($invoices as $invoice)
                         <tr class="hover:bg-gray-50">
-                            <!-- Transaction Info -->
+                            <!-- Invoice Number -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $transaction->transaction_id }}
+                                <div class="text-sm font-medium text-gray-900">{{ $invoice->invoice_number }}
                                 </div>
-                                @if ($transaction->gateway_transaction_id)
-                                    <div class="text-sm text-gray-500">Gateway:
-                                        {{ $transaction->gateway_transaction_id }}</div>
-                                @endif
-                                @if ($transaction->description)
+                                @if ($invoice->notes)
                                     <div class="text-sm text-gray-500 truncate max-w-xs"
-                                        title="{{ $transaction->description }}">
-                                        {{ Str::limit($transaction->description, 50) }}
+                                        title="{{ $invoice->notes }}">
+                                        {{ Str::limit($invoice->notes, 50) }}
                                     </div>
                                 @endif
                             </td>
 
                             <!-- User Info -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($transaction->user)
-                                    <div class="text-sm font-medium text-gray-900">{{ $transaction->user->name }}
+                                @if ($invoice->user)
+                                    <div class="text-sm font-medium text-gray-900">{{ $invoice->user->name }}
                                     </div>
-                                    <div class="text-sm text-gray-500">{{ $transaction->user->email }}</div>
+                                    <div class="text-sm text-gray-500">{{ $invoice->user->email }}</div>
                                 @else
                                     <span class="text-sm text-gray-400">N/A</span>
                                 @endif
-                            </td>
-
-                            <!-- Organization -->
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($transaction->organization)
-                                    <div class="text-sm text-gray-900">{{ $transaction->organization->business_name }}
-                                    </div>
-                                @else
-                                    <span class="text-sm text-gray-400">N/A</span>
-                                @endif
-                            </td>
-
-                            <!-- Type -->
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $this->getTypeColor($transaction->type) }}">
-                                    {{ ucfirst($transaction->type) }}
-                                </span>
                             </td>
 
                             <!-- Status -->
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
-                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $this->getStatusColor($transaction->status) }}">
-                                    {{ ucfirst($transaction->status) }}
+                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $this->getStatusColor($invoice->status) }}">
+                                    {{ ucfirst($invoice->status) }}
                                 </span>
                             </td>
 
-                            <!-- Amount -->
+                            <!-- Subtotal -->
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">
-                                    ${{ number_format($transaction->amount, 2) }}
+                                    ${{ number_format($invoice->subtotal, 2) }}
                                 </div>
-                                <div class="text-sm text-gray-500">{{ $transaction->currency }}</div>
                             </td>
 
-                            <!-- Payment Info -->
+                            <!-- Discount -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if ($transaction->payment_method)
-                                    <div class="text-sm text-gray-900">
-                                        {{ ucfirst(str_replace('_', ' ', $transaction->payment_method)) }}</div>
-                                @endif
-                                @if ($transaction->payment_gateway)
-                                    <div class="text-sm text-gray-500">{{ ucfirst($transaction->payment_gateway) }}
-                                    </div>
-                                @endif
+                                <div class="text-sm text-gray-900">
+                                    ${{ number_format($invoice->discount, 2) }}
+                                </div>
+                            </td>
+
+                            <!-- Tax -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">
+                                    ${{ number_format($invoice->tax, 2) }}
+                                </div>
+                            </td>
+
+                            <!-- Total -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">
+                                    ${{ number_format($invoice->total, 2) }}
+                                </div>
+                            </td>
+
+                            <!-- Due Date -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ $invoice->due_date ? $invoice->due_date->format('M d, Y') : 'N/A' }}
+                                </div>
                             </td>
 
                             <!-- Date -->
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $transaction->created_at->format('M d, Y') }}
+                                <div class="text-sm text-gray-900">{{ $invoice->created_at->format('M d, Y') }}
                                 </div>
-                                <div class="text-sm text-gray-500">{{ $transaction->created_at->format('H:i:s') }}
+                                <div class="text-sm text-gray-500">{{ $invoice->created_at->format('H:i:s') }}
                                 </div>
-                                @if ($transaction->processed_at)
-                                    <div class="text-xs text-green-600">Processed:
-                                        {{ $transaction->processed_at->format('M d, H:i') }}</div>
-                                @endif
                             </td>
 
                             <!-- Actions -->
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
                                     <!-- Download Button -->
-                                    <button wire:click="downloadTransaction({{ $transaction->id }})"
+                                    <button wire:click="downloadInvoice({{ $invoice->id }})"
                                         class="text-blue-600 hover:text-blue-900 p-1 rounded"
-                                        title="Download Transaction">
+                                        title="Download Invoice">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -339,9 +294,9 @@
                                             class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="py-1">
                                                 @foreach ($statusOptions as $status => $label)
-                                                    @if ($status !== $transaction->status)
+                                                    @if ($status !== $invoice->status)
                                                         <button
-                                                            wire:click="updateStatus({{ $transaction->id }}, '{{ $status }}')"
+                                                            wire:click="updateStatus({{ $invoice->id }}, '{{ $status }}')"
                                                             @click="open = false"
                                                             class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                                             Change to {{ $label }}
@@ -352,10 +307,20 @@
                                         </div>
                                     </div>
 
+                                    @if($invoice->status === 'pending')
+                                        <!-- Link Payment Button -->
+                                        <button wire:click="openLinkPaymentModal({{ $invoice->id }})"
+                                                class="text-teal-600 hover:text-teal-900 p-1 rounded" 
+                                                title="Link Payment">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                            </svg>
+                                        </button>
+                                    @endif
                                     <!-- View Details Button -->
                                     <button class="text-gray-600 hover:text-gray-900 p-1 rounded" title="View Details"
                                         x-data=""
-                                        @click="$dispatch('open-modal', 'transaction-{{ $transaction->id }}')">
+                                        @click="$dispatch('open-modal', 'invoice-{{ $invoice->id }}')">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -369,16 +334,16 @@
                             </td>
                         </tr>
 
-                        <!-- Transaction Details Modal -->
+                        <!-- Invoice Details Modal -->
                         <div x-data="{ show: false }"
-                            @open-modal.window="show = ($event.detail === 'transaction-{{ $transaction->id }}')"
+                            @open-modal.window="show = ($event.detail === 'invoice-{{ $invoice->id }}')"
                             @close-modal.window="show = false" x-show="show"
                             class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
                             <div class="flex items-center justify-center min-h-screen px-4">
                                 <div class="fixed inset-0 bg-black opacity-50" @click="show = false"></div>
                                 <div class="relative bg-white rounded-lg max-w-2xl w-full p-6">
                                     <div class="flex justify-between items-center mb-4">
-                                        <h3 class="text-lg font-semibold">Transaction Details</h3>
+                                        <h3 class="text-lg font-semibold">Invoice Details</h3>
                                         <button @click="show = false" class="text-gray-400 hover:text-gray-600">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -389,51 +354,40 @@
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-4 text-sm">
-                                        <div><strong>Transaction ID:</strong> {{ $transaction->transaction_id }}</div>
+                                        <div><strong>Invoice Number:</strong> {{ $invoice->invoice_number }}</div>
                                         <div><strong>Status:</strong> <span
-                                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $this->getStatusColor($transaction->status) }}">{{ ucfirst($transaction->status) }}</span>
+                                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $this->getStatusColor($invoice->status) }}">{{ ucfirst($invoice->status) }}</span>
                                         </div>
-                                        <div><strong>Type:</strong> <span
-                                                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $this->getTypeColor($transaction->type) }}">{{ ucfirst($transaction->type) }}</span>
-                                        </div>
-                                        <div><strong>Amount:</strong> ${{ number_format($transaction->amount, 2) }}
-                                            {{ $transaction->currency }}</div>
+                                        <div><strong>Subtotal:</strong> ${{ number_format($invoice->subtotal, 2) }}</div>
+                                        <div><strong>Discount:</strong> ${{ number_format($invoice->discount, 2) }}</div>
+                                        <div><strong>Tax:</strong> ${{ number_format($invoice->tax, 2) }}</div>
+                                        <div><strong>Total:</strong> ${{ number_format($invoice->total, 2) }}</div>
                                         <div><strong>User:</strong>
-                                            {{ $transaction->user ? $transaction->user->name : 'N/A' }}</div>
+                                            {{ $invoice->user ? $invoice->user->name : 'N/A' }}</div>
                                         <div><strong>Email:</strong>
-                                            {{ $transaction->user ? $transaction->user->email : 'N/A' }}</div>
-                                        <div><strong>Organization:</strong>
-                                            {{ $transaction->organization ? $transaction->organization->business_name : 'N/A' }}
-                                        </div>
-                                        <div><strong>Payment Method:</strong>
-                                            {{ $transaction->payment_method ? ucfirst(str_replace('_', ' ', $transaction->payment_method)) : 'N/A' }}
-                                        </div>
-                                        <div><strong>Payment Gateway:</strong>
-                                            {{ $transaction->payment_gateway ? ucfirst($transaction->payment_gateway) : 'N/A' }}
-                                        </div>
-                                        <div><strong>Gateway Transaction ID:</strong>
-                                            {{ $transaction->gateway_transaction_id ?: 'N/A' }}</div>
+                                            {{ $invoice->user ? $invoice->user->email : 'N/A' }}</div>
+                                        <div><strong>Due Date:</strong>
+                                            {{ $invoice->due_date ? $invoice->due_date->format('Y-m-d') : 'N/A' }}</div>
                                         <div><strong>Created:</strong>
-                                            {{ $transaction->created_at->format('M d, Y H:i:s') }}</div>
-                                        <div><strong>Processed:</strong>
-                                            {{ $transaction->processed_at ? $transaction->processed_at->format('M d, Y H:i:s') : 'N/A' }}
-                                        </div>
+                                            {{ $invoice->created_at->format('M d, Y H:i:s') }}</div>
                                     </div>
 
-                                    @if ($transaction->description)
+                                    @if ($invoice->notes)
                                         <div class="mt-4">
-                                            <strong>Description:</strong>
-                                            <p class="mt-1 text-gray-700">{{ $transaction->description }}</p>
+                                            <strong>Notes:</strong>
+                                            <p class="mt-1 text-gray-700">{{ $invoice->notes }}</p>
                                         </div>
                                     @endif
 
-                                    @if ($transaction->metadata)
+                                    @if ($invoice->invoiceItems && $invoice->invoiceItems->count() > 0)
                                         <div class="mt-4">
-                                            <strong>Metadata:</strong>
-                                            <div class="mt-1 bg-gray-50 p-3 rounded text-sm">
-                                                @foreach ($transaction->metadata as $key => $value)
-                                                    <div><strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong>
-                                                        {{ $value }}</div>
+                                            <strong>Invoice Items:</strong>
+                                            <div class="mt-2 space-y-2">
+                                                @foreach ($invoice->invoiceItems as $item)
+                                                    <div class="bg-gray-50 p-3 rounded text-sm">
+                                                        <div><strong>{{ $item->description }}</strong></div>
+                                                        <div>Quantity: {{ $item->quantity }} × ${{ number_format($item->unit_price, 2) }} = ${{ number_format($item->amount, 2) }}</div>
+                                                    </div>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -443,14 +397,14 @@
                         </div>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="10" class="px-6 py-12 text-center text-gray-500">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                     </path>
                                 </svg>
-                                <h3 class="mt-2 text-sm font-medium text-gray-900">No transactions found</h3>
+                                <h3 class="mt-2 text-sm font-medium text-gray-900">No invoices found</h3>
                                 <p class="mt-1 text-sm text-gray-500">Try adjusting your search criteria or filters.
                                 </p>
                             </td>
@@ -461,12 +415,101 @@
         </div>
 
         <!-- Pagination -->
-        @if ($transactions->hasPages())
+        @if ($invoices->hasPages())
             <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                {{ $transactions->links() }}
+                {{ $invoices->links() }}
             </div>
         @endif
     </div>
+
+    <!-- Link Payment Modal -->
+    @if($showLinkPaymentModal && $selectedInvoiceForLink)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="link-payment-modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" wire:click="closeLinkPaymentModal"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                    <div class="bg-white px-6 py-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900" id="link-payment-modal-title">Link Payment to Invoice</h3>
+                            <button wire:click="closeLinkPaymentModal" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Invoice Info -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-500">Invoice Number</p>
+                                <p class="text-lg font-semibold text-gray-900">{{ $selectedInvoiceForLink->invoice_number }}</p>
+                                <p class="text-sm text-gray-500 mt-1">Amount: <span class="font-semibold text-teal-600">${{ number_format($selectedInvoiceForLink->total, 2) }}</span></p>
+                                <p class="text-sm text-gray-500">User: {{ $selectedInvoiceForLink->user->name ?? 'N/A' }}</p>
+                            </div>
+
+                            <!-- Payment Selection -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Select Payment</label>
+                                @php
+                                    $availablePayments = $this->getAvailablePayments();
+                                @endphp
+                                
+                                @if($availablePayments->count() > 0)
+                                    <select wire:model="selectedTransactionId" class="w-full border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
+                                        <option value="">Select a payment...</option>
+                                        @foreach($availablePayments as $payment)
+                                            @php
+                                                $userPayment = $payment->userGatewayPayment();
+                                            @endphp
+                                            <option value="{{ $payment->id }}">
+                                                {{ $payment->payment_gateway ?? 'N/A' }} - 
+                                                Txn ID: {{ $payment->gateway_transaction_id ?? 'N/A' }} - 
+                                                ${{ number_format($payment->amount, 2) }} - 
+                                                {{ $payment->created_at->format('M d, Y') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('selectedTransactionId') 
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p> 
+                                    @enderror
+                                @else
+                                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                        <p class="text-sm text-yellow-800">No available payments found for this user.</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="bg-gray-50 px-6 py-4 sm:flex sm:flex-row-reverse gap-3">
+                        @if($availablePayments->count() > 0)
+                            <button wire:click="linkPayment"
+                                    wire:target="linkPayment"
+                                    wire:loading.attr="disabled"
+                                    class="w-full inline-flex justify-center items-center px-4 py-2 bg-teal-600 text-base font-medium text-white rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 sm:ml-3 sm:w-auto sm:text-sm">
+                                <span wire:loading.remove wire:target="linkPayment">Link Payment</span>
+                                <span wire:loading wire:target="linkPayment" class="flex items-center">
+                                    <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Linking...
+                                </span>
+                            </button>
+                        @endif
+                        <button wire:click="closeLinkPaymentModal"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Loading Indicator -->
     <div wire:loading class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

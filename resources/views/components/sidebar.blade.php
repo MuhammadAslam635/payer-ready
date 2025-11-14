@@ -122,11 +122,11 @@
                     <x-ui.icon name="banknotes" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">All Payment Gateways</span>
                 </a>
-                <!-- <a href="{{ route('super-admin.all_invoices') }}" wire:navigate
+                <a href="{{ route('super-admin.all_invoices') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('super-admin.all_invoices') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
                     <x-ui.icon name="newspaper" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">Inoices</span>
-                </a> -->
+                </a>
 
                 <a href="{{ route('super-admin.all_transactions') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('super-admin.all_transactions') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">

@@ -12,6 +12,8 @@ use App\Models\CertificateType;
 use App\Models\LicenseType;
 use App\Models\Payer;
 use App\Traits\HasToast;
+use App\Notifications\InvoiceNotification;
+use App\Enums\UserType;
 use Livewire\Component;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
@@ -257,6 +259,26 @@ class CreateInvoiceComponent extends Component
             // Clear cart
             Cart::instance($this->cartInstance)->destroy();
 
+            // Send notifications
+            $selectedUser = User::find($this->selectedDoctor);
+            if ($selectedUser) {
+                // Notify the selected doctor/organization
+                try {
+                    $selectedUser->notify(new InvoiceNotification($invoice, 'created'));
+                    
+                    // If doctor has an organization (org_id), also notify the organization
+                    if ($selectedUser->org_id) {
+                        $organization = User::find($selectedUser->org_id);
+                        if ($organization) {
+                            $organization->notify(new InvoiceNotification($invoice, 'created'));
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Log error but don't block invoice creation
+                    \Log::error('Failed to send invoice notification: ' . $e->getMessage());
+                }
+            }
+
             DB::commit();
 
             $this->toast('Invoice created successfully!', 'success');
@@ -264,7 +286,7 @@ class CreateInvoiceComponent extends Component
             $this->refreshCart();
 
             // Redirect to invoice view or list
-            return redirect()->route('super-admin.invoices.all');
+            return redirect()->route('super-admin.all_invoices');
 
         } catch (\Exception $e) {
             DB::rollBack();

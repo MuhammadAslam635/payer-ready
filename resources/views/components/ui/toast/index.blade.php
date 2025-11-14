@@ -27,25 +27,25 @@
 
        typeConfig: {
             info: {
-                textColor: 'text-gray-600 dark:text-gray-400', // we're using color-mix for making variants color solid and not transparent
+                textColor: '!text-gray-600 dark:!text-gray-400', // we're using color-mix for making variants color solid and not transparent
                 background: 'dark:bg-[color-mix(in_oklab,_var(--color-gray-600)_10%,_var(--color-neutral-900)_90%)] bg-[color-mix(in_oklab,_var(--color-gray-500)_20%,_var(--color-white)_80%)]',
                 borderColor: 'border-gray-500/55',
                 ariaLabel: 'Information',
             },
             success: {
-                textColor: 'text-green-600 dark:text-green-400',
+                textColor: '!text-green-600 dark:!text-green-400',
                 background: 'dark:bg-[color-mix(in_oklab,_var(--color-green-600)_10%,_var(--color-neutral-900)_90%)] bg-[color-mix(in_oklab,_var(--color-green-500)_20%,_var(--color-white)_80%)]',
                 borderColor: 'border-green-500/55',
                 ariaLabel: 'Success',
             },
             error: {
-                textColor: 'text-red-600 dark:text-red-400',
+                textColor: '!text-red-600 dark:!text-red-400',
                 background: 'dark:bg-[color-mix(in_oklab,_var(--color-red-600)_10%,_var(--color-neutral-900)_90%)] bg-[color-mix(in_oklab,_var(--color-red-500)_25%,_var(--color-white)_75%)]',
                 borderColor: 'border-red-500/55',
                 ariaLabel: 'Error',
             },
             warning: {
-                textColor: 'text-yellow-600 dark:text-yellow-400',
+                textColor: '!text-yellow-600 dark:!text-yellow-400',
                 background: 'dark:bg-[color-mix(in_oklab,_var(--color-yellow-600)_10%,_var(--color-neutral-900)_90%)] bg-[color-mix(in_oklab,_var(--color-yellow-500)_25%,_var(--color-white)_75%)]',
                 borderColor: 'border-yellow-500/55',
                 ariaLabel: 'Warning',

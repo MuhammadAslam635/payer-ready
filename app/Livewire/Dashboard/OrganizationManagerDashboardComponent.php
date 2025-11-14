@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use App\Models\User;
+use App\Models\DoctorCredential;
 use App\Enums\UserType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,7 @@ class OrganizationManagerDashboardComponent extends Component
                 'recentDoctors' => 0,
                 'latestStaff' => collect(),
                 'latestDoctors' => collect(),
-                'latestTransactions' => collect(),
+                'latestApplications' => collect(),
             ];
         }
 
@@ -103,8 +104,8 @@ class OrganizationManagerDashboardComponent extends Component
                 ];
             });
 
-        // Latest transactions (mock data for now)
-        $latestTransactions = $this->getLatestTransactions();
+        // Latest applications (payer enrollments)
+        $latestApplications = $this->getLatestApplications();
 
         return [
             'organization' => $user, // The user is now the organization
@@ -116,38 +117,38 @@ class OrganizationManagerDashboardComponent extends Component
             'recentDoctors' => $recentDoctors,
             'latestStaff' => $latestStaff,
             'latestDoctors' => $latestDoctors,
-            'latestTransactions' => $latestTransactions,
+            'latestApplications' => $latestApplications,
         ];
     }
 
-    private function getLatestTransactions()
+    private function getLatestApplications()
     {
-        // Mock data for organization transactions
-        return collect([
-            [
-                'id' => 1,
-                'description' => 'Staff Credentialing Fee',
-                'amount' => 199.99,
-                'status' => 'completed',
-                'staff_name' => 'Dr. John Smith',
-                'created_at' => now()->subHours(2),
-            ],
-            [
-                'id' => 2,
-                'description' => 'License Verification',
-                'amount' => 150.00,
-                'status' => 'pending',
-                'staff_name' => 'Dr. Jane Doe',
-                'created_at' => now()->subHours(5),
-            ],
-            [
-                'id' => 3,
-                'description' => 'Background Check',
-                'amount' => 89.99,
-                'status' => 'completed',
-                'staff_name' => 'Dr. Mike Johnson',
-                'created_at' => now()->subDays(1),
-            ],
-        ])->take(5);
+        $user = Auth::user();
+        
+        // Get doctors associated with this organization
+        $organizationDoctorIds = User::where('org_id', $user->id)
+            ->where('user_type', UserType::DOCTOR)
+            ->pluck('id');
+
+        if ($organizationDoctorIds->isEmpty()) {
+            return collect();
+        }
+
+        return DoctorCredential::with(['payer', 'state', 'user'])
+            ->whereIn('user_id', $organizationDoctorIds)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($credential) {
+                return [
+                    'id' => $credential->id,
+                    'payer_name' => $credential->payer?->name ?? 'N/A',
+                    'provider_name' => $credential->user?->name ?? 'N/A',
+                    'state_name' => $credential->state?->name ?? 'N/A',
+                    'request_type' => $credential->request_type ?? 'N/A',
+                    'status' => $credential->status ?? 'N/A',
+                    'created_at' => $credential->created_at,
+                ];
+            });
     }
 }

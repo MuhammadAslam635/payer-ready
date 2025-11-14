@@ -52,14 +52,27 @@
             <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $notifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="block px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-b border-slate-50 <?php echo e(!$notification['read'] ? 'bg-blue-50' : ''); ?>">
                     <div class="flex items-start space-x-3">
-                        <div class="flex-shrink-0">
-                            <div class="w-2 h-2 <?php echo e($notification['read'] ? 'bg-slate-300' : 'bg-blue-500'); ?> rounded-full mt-2"></div>
+                        <div class="flex-shrink-0 mt-1">
+                            <!--[if BLOCK]><![endif]--><?php if(isset($notification['icon']) && $notification['icon'] === 'shopping-cart'): ?>
+                                <!-- Cart Icon for Invoice Notifications -->
+                                <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z"></path>
+                                </svg>
+                            <?php else: ?>
+                                <div class="w-2 h-2 <?php echo e($notification['read'] ? 'bg-slate-300' : 'bg-blue-500'); ?> rounded-full mt-2"></div>
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1">
                                     <p class="font-medium text-slate-800"><?php echo e($notification['title']); ?></p>
                                     <p class="text-xs text-slate-500 mt-1"><?php echo e($notification['message']); ?></p>
+                                    <!--[if BLOCK]><![endif]--><?php if(isset($notification['invoice_number'])): ?>
+                                        <p class="text-xs text-teal-600 mt-1 font-medium">Invoice: <?php echo e($notification['invoice_number']); ?></p>
+                                        <!--[if BLOCK]><![endif]--><?php if(isset($notification['amount'])): ?>
+                                            <p class="text-xs text-slate-600 mt-0.5">Amount: $<?php echo e(number_format($notification['amount'], 2)); ?></p>
+                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                     <p class="text-xs text-slate-400 mt-1"><?php echo e($notification['created_at']); ?></p>
                                 </div>
                                 <div class="flex items-center space-x-2 ml-2">
@@ -69,7 +82,17 @@
                                             Mark read
                                         </button>
                                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                    <!--[if BLOCK]><![endif]--><?php if($notification['url'] && $notification['url'] !== '#'): ?>
+                                    <!--[if BLOCK]><![endif]--><?php if(isset($notification['invoice_id']) && $notification['invoice_id']): ?>
+                                        <!-- Cart Icon Link to Invoice Details -->
+                                        <button onclick="window.dispatchEvent(new CustomEvent('open-invoice-modal', { detail: { invoiceId: <?php echo e($notification['invoice_id']); ?> } }))"
+                                                class="text-xs text-teal-600 hover:text-teal-700 font-medium inline-flex items-center"
+                                                title="View Invoice Details">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6m0 0h15M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z"></path>
+                                            </svg>
+                                            View
+                                        </button>
+                                    <?php elseif($notification['url'] && $notification['url'] !== '#'): ?>
                                         <a href="<?php echo e($notification['url']); ?>"
                                            class="text-xs text-slate-500 hover:text-slate-700 font-medium">
                                             View →

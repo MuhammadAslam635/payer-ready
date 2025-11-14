@@ -182,17 +182,35 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center space-x-2">
-                                    <button wire:click="viewLicense({{ $license->id }})" class="text-teal-600 hover:text-teal-900" title="View License Details">
-                                        <x-ui.icon name="eye" class="w-4 h-4" />
-                                    </button>
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="eye"
+                                        class="text-teal-600 hover:text-teal-900"
+                                        wire:click="viewLicense({{ $license->id }})"
+                                        title="View License Details" />
                                     @if($license->status->value !== 'requested')
-                                    <button wire:click="editLicense({{ $license->id }})" class="text-blue-600 hover:text-blue-900" title="Edit License">
-                                        <x-ui.icon name="pencil" class="w-4 h-4" />
-                                    </button>
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="pencil"
+                                        class="text-blue-600 hover:text-blue-900"
+                                        wire:click="editLicense({{ $license->id }})"
+                                        title="Edit License" />
                                     @endif
-                                    <button wire:click="delete({{ $license->id }})" class="text-red-600 hover:text-red-900" title="Delete License">
-                                        <x-ui.icon name="trash" class="w-4 h-4" />
-                                    </button>
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="trash"
+                                        class="text-red-600 hover:text-red-900"
+                                        wire:click="delete({{ $license->id }})"
+                                        title="Delete License" />
                                 </div>
                             </td>
                         </tr>
@@ -261,14 +279,22 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                        <button wire:click="confirmDelete"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        <x-ui.button
+                            type="button"
+                            color="red"
+                            variant="primary"
+                            class="w-full sm:w-auto sm:ml-3"
+                            wire:click="confirmDelete">
                             Delete
-                        </button>
-                        <button wire:click="cancelDelete"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        </x-ui.button>
+                        <x-ui.button
+                            type="button"
+                            variant="outline"
+                            color="slate"
+                            class="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto"
+                            wire:click="cancelDelete">
                             Cancel
-                        </button>
+                        </x-ui.button>
                     </div>
                 </div>
             </div>

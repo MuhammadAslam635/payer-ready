@@ -7,13 +7,15 @@
                     <p class="mt-1 text-sm text-slate-600">Filter by created date range, then download as PDF/CSV.</p>
                 </div>
                 <div class="mt-4 sm:mt-0">
-                    <button wire:click="downloadReport"
-                            class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                        </svg>
+                    <x-ui.button
+                        type="button"
+                        color="teal"
+                        variant="primary"
+                        icon="arrow-down-tray"
+                        class="!px-5 uppercase tracking-wide text-xs"
+                        wire:click="downloadReport">
                         Download
-                    </button>
+                    </x-ui.button>
                 </div>
             </div>
         </div>

@@ -23,11 +23,11 @@
             <!-- Partner Logos -->
             <div class="border-t border-gray-200 pt-12">
                 <p class="text-text-secondary mb-8 font-medium">Integrated with top payers and platforms across the U.S.</p>
-                <div class="flex items-center justify-center space-x-12 opacity-60">
-                    <img src="/images/logos/caqh.png" alt="CAQH" class="h-8 grayscale">
-                    <img src="/images/logos/cms.png" alt="CMS" class="h-8 grayscale">
-                    <img src="/images/logos/nppes.png" alt="NPPES" class="h-8 grayscale">
-                    <img src="/images/logos/epic.png" alt="Epic" class="h-8 grayscale">
+                <div class="flex items-center justify-center space-x-12 opacity-80">
+                    <img src="/images/logos/caqh.svg" alt="CAQH Integration Badge" class="h-12">
+                    <img src="/images/logos/cms.svg" alt="CMS Integration Badge" class="h-12">
+                    <img src="/images/logos/nppes.svg" alt="NPPES Integration Badge" class="h-12">
+                    <img src="/images/logos/epic.svg" alt="Epic Integration Badge" class="h-12">
                 </div>
             </div>
         </div>

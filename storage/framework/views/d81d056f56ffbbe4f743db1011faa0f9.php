@@ -142,7 +142,7 @@
 
         <!-- Content -->
         <div class="ml-3 flex-1 w-0">
-            <p x-text="toast.content" class="text-sm font-medium leading-5 text-gray-900 dark:text-white break-words"></p>
+            <p x-text="toast.content" :class="['text-sm', 'font-medium', 'leading-5', 'break-words', getIconColor(toast.type)]"></p>
         </div>
 
         <!-- Close Button -->

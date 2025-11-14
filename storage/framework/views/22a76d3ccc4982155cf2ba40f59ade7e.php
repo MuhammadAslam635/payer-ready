@@ -423,7 +423,7 @@
 <?php endif; ?>
                     <span class="truncate">All Payment Gateways</span>
                 </a>
-                <!-- <a href="<?php echo e(route('super-admin.all_invoices')); ?>" wire:navigate
+                <a href="<?php echo e(route('super-admin.all_invoices')); ?>" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_invoices') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">
                     <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
@@ -446,7 +446,7 @@
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
                     <span class="truncate">Inoices</span>
-                </a> -->
+                </a>
 
                 <a href="<?php echo e(route('super-admin.all_transactions')); ?>" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors <?php echo e(request()->routeIs('super-admin.all_transactions') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white'); ?>">

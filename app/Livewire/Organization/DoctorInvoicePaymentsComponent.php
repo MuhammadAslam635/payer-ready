@@ -6,6 +6,7 @@ use App\Models\PaymentGateway;
 use App\Models\UserGatewayPayment;
 use App\Models\User;
 use App\Models\Transaction;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\UserPaymentNotification;
 use Livewire\Attributes\Layout;
@@ -21,8 +22,12 @@ class DoctorInvoicePaymentsComponent extends Component
     use WithPagination, WithFileUploads;
 
     public $search = '';
+    public $invoiceSearch = '';
     public $perPage = 10;
     public $showAddModal = false;
+    public $showInvoiceModal = false;
+    public $selectedInvoice = null;
+    public $selectedInvoiceId = '';
     public $selectedGatewayId = '';
     public $selectedDoctorId = '';
     public $transactionId = '';
@@ -30,19 +35,42 @@ class DoctorInvoicePaymentsComponent extends Component
 
     protected $queryString = ['search'];
 
+    protected $listeners = [
+        'open-invoice-modal' => 'openInvoiceModal',
+    ];
+
     protected function rules(): array
     {
         return [
             'selectedGatewayId' => 'required|exists:payment_gateways,id',
             'selectedDoctorId' => 'required|exists:users,id',
+            'selectedInvoiceId' => 'nullable|exists:invoices,id',
             'transactionId' => 'required|string|max:255',
             'screenshot' => 'nullable|image|max:4096',
         ];
     }
 
-    public function openAddModal(): void
+    public function openAddModal($invoiceId = null): void
     {
-        $this->resetForm();
+        if ($invoiceId) {
+            $adminId = Auth::id();
+            $doctorIds = User::query()
+                ->where('org_id', $adminId)
+                ->where('user_type', \App\Enums\UserType::DOCTOR)
+                ->pluck('id');
+
+            $invoice = Invoice::where('id', $invoiceId)
+                ->whereIn('user_id', $doctorIds)
+                ->first();
+            if ($invoice) {
+                $this->selectedDoctorId = $invoice->user_id;
+                $this->selectedInvoiceId = $invoice->id;
+            }
+        }
+        // Don't reset form if invoice is pre-selected
+        if (!$invoiceId) {
+            $this->resetForm();
+        }
         $this->showAddModal = true;
     }
 
@@ -52,13 +80,94 @@ class DoctorInvoicePaymentsComponent extends Component
         $this->resetForm();
     }
 
+    public function openInvoiceModal($invoiceId): void
+    {
+        $adminId = Auth::id();
+        $doctorIds = User::query()
+            ->where('org_id', $adminId)
+            ->where('user_type', \App\Enums\UserType::DOCTOR)
+            ->pluck('id');
+
+        $this->selectedInvoice = Invoice::with(['invoiceItems', 'user'])
+            ->where('id', $invoiceId)
+            ->whereIn('user_id', $doctorIds)
+            ->first();
+        
+        if ($this->selectedInvoice) {
+            $this->showInvoiceModal = true;
+        }
+    }
+
+    public function closeInvoiceModal(): void
+    {
+        $this->showInvoiceModal = false;
+        $this->selectedInvoice = null;
+    }
+
+    public function openPayoutFromInvoice($invoiceId = null): void
+    {
+        $this->closeInvoiceModal();
+        
+        if ($invoiceId) {
+            $adminId = Auth::id();
+            $doctorIds = User::query()
+                ->where('org_id', $adminId)
+                ->where('user_type', \App\Enums\UserType::DOCTOR)
+                ->pluck('id');
+
+            $invoice = Invoice::where('id', $invoiceId)
+                ->whereIn('user_id', $doctorIds)
+                ->first();
+            if ($invoice) {
+                $this->selectedDoctorId = $invoice->user_id;
+                $this->selectedInvoiceId = $invoice->id;
+                $this->openAddModal($invoiceId);
+                return;
+            }
+        } elseif ($this->selectedInvoice && $this->selectedInvoice->user) {
+            $this->selectedDoctorId = $this->selectedInvoice->user_id;
+            $this->selectedInvoiceId = $this->selectedInvoice->id;
+            $this->openAddModal($this->selectedInvoice->id);
+            return;
+        }
+        
+        $this->openAddModal();
+    }
+
     private function resetForm(): void
     {
         $this->selectedGatewayId = '';
         $this->selectedDoctorId = '';
+        $this->selectedInvoiceId = '';
         $this->transactionId = '';
         $this->screenshot = null;
         $this->resetValidation();
+    }
+
+    public function getPendingInvoices()
+    {
+        if (!$this->selectedDoctorId) {
+            return collect();
+        }
+
+        $adminId = Auth::id();
+        $doctorIds = User::query()
+            ->where('org_id', $adminId)
+            ->where('user_type', \App\Enums\UserType::DOCTOR)
+            ->pluck('id');
+
+        if (!in_array((int)$this->selectedDoctorId, $doctorIds->toArray())) {
+            return collect();
+        }
+
+        return Invoice::with(['invoiceItems'])
+            ->where('user_id', $this->selectedDoctorId)
+            ->where('status', 'pending')
+            ->when($this->invoiceSearch, function ($query) {
+                $query->where('invoice_number', 'like', '%' . $this->invoiceSearch . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function getPayments()
@@ -111,8 +220,13 @@ class DoctorInvoicePaymentsComponent extends Component
 
         $screenshotPath = null;
         if ($this->screenshot) {
-            $filename = 'gateway_payment_' . time() . '_' . uniqid() . '.' . $this->screenshot->getClientOriginalExtension();
-            $screenshotPath = $this->screenshot->storeAs('doctor-documents', $filename, 'public');
+            try {
+                $filename = 'gateway_payment_' . time() . '_' . uniqid() . '.' . $this->screenshot->getClientOriginalExtension();
+                $screenshotPath = $this->screenshot->storeAs('doctor-documents', $filename, 'public');
+            } catch (\Exception $e) {
+                $this->addError('screenshot', 'Failed to upload screenshot: ' . $e->getMessage());
+                return;
+            }
         }
 
         $payment = UserGatewayPayment::create([
@@ -128,28 +242,56 @@ class DoctorInvoicePaymentsComponent extends Component
         // Also create a Transaction record for super admin to see
         $uniqueTransactionId = 'TXN-' . strtoupper(uniqid());
         
-        Transaction::create([
+        $invoice = null;
+        $invoiceAmount = 0.00;
+        
+        if ($this->selectedInvoiceId) {
+            $invoice = Invoice::find($this->selectedInvoiceId);
+            if ($invoice && $invoice->user_id == (int)$this->selectedDoctorId) {
+                $invoiceAmount = $invoice->total;
+            } else {
+                $invoice = null;
+            }
+        }
+
+        $transaction = Transaction::create([
             'transaction_id' => $uniqueTransactionId,
             'user_id' => (int)$this->selectedDoctorId,
-            'invoice_id' => null, // Will be linked when invoice is available
+            'invoice_id' => $invoice?->id,
             'type' => 'payment',
-            'status' => 'pending',
-            'amount' => 0.00, // Can be updated later when invoice is linked
+            'status' => $invoice ? 'completed' : 'pending',
+            'amount' => $invoiceAmount,
             'currency' => 'USD',
             'payment_method' => 'gateway_payment',
             'payment_gateway' => $gateway?->name,
             'gateway_transaction_id' => $this->transactionId,
-            'description' => "Payment submitted via {$gateway?->name}",
+            'description' => $invoice 
+                ? "Payment for invoice {$invoice->invoice_number} via {$gateway?->name}"
+                : "Payment submitted via {$gateway?->name}",
             'metadata' => [
                 'user_gateway_payment_id' => $payment->id,
                 'screenshot_path' => $screenshotPath,
             ],
         ]);
+
+        // If invoice is linked, update invoice status to paid
+        if ($invoice) {
+            $invoice->update(['status' => 'paid']);
+            
+            // Send notifications
+            try {
+                \App\Notifications\InvoiceNotification::sendPaidNotifications($invoice);
+            } catch (\Exception $e) {
+                \Log::error('Failed to send invoice paid notifications: ' . $e->getMessage());
+            }
+        }
         
-        $message = "Payment submitted via {$gateway?->name} (Txn: {$this->transactionId}).";
+        $message = $invoice 
+            ? "Payment for invoice {$invoice->invoice_number} submitted via {$gateway?->name} (Txn: {$this->transactionId})."
+            : "Payment submitted via {$gateway?->name} (Txn: {$this->transactionId}).";
 
         $data = [
-            'title' => 'Payment Submitted',
+            'title' => $invoice ? 'Payment Submitted for Invoice' : 'Payment Submitted',
             'message' => $message,
             'type' => 'success',
             'url' => route('organization-admin.doctor_invoice_payments'),
@@ -157,12 +299,21 @@ class DoctorInvoicePaymentsComponent extends Component
             'doctor_id' => $doctor?->id,
             'gateway_name' => $gateway?->name,
             'transaction_id' => $this->transactionId,
+            'invoice_id' => $invoice?->id,
+            'invoice_number' => $invoice?->invoice_number,
         ];
 
         try {
             if ($doctor) {
                 $doctor->notify(new UserPaymentNotification($data));
             }
+            
+            // Notify organization admin
+            $orgAdmin = Auth::user();
+            if ($orgAdmin) {
+                $orgAdmin->notify(new UserPaymentNotification($data));
+            }
+            
             $admin = User::where('user_type', \App\Enums\UserType::SUPER_ADMIN)->first();
             if ($admin) {
                 $admin->notify(new UserPaymentNotification($data));
@@ -181,6 +332,7 @@ class DoctorInvoicePaymentsComponent extends Component
             'gateways' => $this->getActiveGateways(),
             'doctors' => $this->getDoctors(),
             'selectedGateway' => $this->selectedGatewayId ? $this->getActiveGateways()->firstWhere('id', (int)$this->selectedGatewayId) : null,
+            'pendingInvoices' => $this->getPendingInvoices(),
         ]);
     }
 }

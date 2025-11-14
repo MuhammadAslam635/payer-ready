@@ -123,7 +123,7 @@
                     <p class="text-sm text-text-secondary mb-3">
                         Don't have an account?
                     </p>
-                    <x-ui.button as="a" href="{{ route('register') }}" wire:navigate color="teal" class="w-full justify-center">
+                    <x-ui.button as="a" href="{{ route('register') }}" wire:navigate color="teal" class="w-full justify-center text-green">
                         Sign up for free
                     </x-ui.button>
                 </div>

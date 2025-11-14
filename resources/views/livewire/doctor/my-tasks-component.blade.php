@@ -130,44 +130,58 @@
                                         </span>
 
                                         @if ($task->status === 'pending')
-                                            <button wire:click="updateTaskStatus({{ $task->id }}, 'in_progress')" 
-                                                class="inline-flex items-center px-3 py-1.5 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
+                                            <x-ui.button
+                                                type="button"
+                                                color="teal"
+                                                variant="primary"
+                                                size="sm"
+                                                icon="play"
+                                                class="uppercase tracking-wider"
+                                                wire:click="updateTaskStatus({{ $task->id }}, 'in_progress')">
                                                 Start
-                                            </button>
-                                            <button wire:click="updateTaskStatus({{ $task->id }}, 'completed')" 
-                                                class="inline-flex items-center px-3 py-1.5 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
+                                            </x-ui.button>
+                                            <x-ui.button
+                                                type="button"
+                                                color="teal"
+                                                variant="primary"
+                                                size="sm"
+                                                icon="check"
+                                                class="uppercase tracking-wider"
+                                                wire:click="updateTaskStatus({{ $task->id }}, 'completed')">
                                                 Complete
-                                            </button>
+                                            </x-ui.button>
                                         @elseif ($task->status === 'in_progress')
-                                            <button wire:click="updateTaskStatus({{ $task->id }}, 'completed')" 
-                                                class="inline-flex items-center px-3 py-1.5 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
+                                            <x-ui.button
+                                                type="button"
+                                                color="teal"
+                                                variant="primary"
+                                                size="sm"
+                                                icon="check"
+                                                class="uppercase tracking-wider"
+                                                wire:click="updateTaskStatus({{ $task->id }}, 'completed')">
                                                 Complete
-                                            </button>
-                                            <button wire:click="updateTaskStatus({{ $task->id }}, 'pending')" 
-                                                class="inline-flex items-center px-3 py-1.5 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                                </svg>
+                                            </x-ui.button>
+                                            <x-ui.button
+                                                type="button"
+                                                color="teal"
+                                                variant="primary"
+                                                size="sm"
+                                                icon="arrow-uturn-left"
+                                                class="uppercase tracking-wider"
+                                                wire:click="updateTaskStatus({{ $task->id }}, 'pending')">
                                                 Back to Pending
-                                            </button>
+                                            </x-ui.button>
                                         @elseif ($task->status === 'completed')
-                                            <button wire:click="updateTaskStatus({{ $task->id }}, 'in_progress')" 
-                                                class="inline-flex items-center px-3 py-1.5 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wider hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                                                </svg>
+                                            <x-ui.button
+                                                type="button"
+                                                color="teal"
+                                                variant="primary"
+                                                size="sm"
+                                                icon="arrow-uturn-left"
+                                                class="uppercase tracking-wider"
+                                                wire:click="updateTaskStatus({{ $task->id }}, 'in_progress')">
                                                 Reopen
-                                            </button>
+                                            </x-ui.button>
                                         @endif
                                     </div>
                                 </div>

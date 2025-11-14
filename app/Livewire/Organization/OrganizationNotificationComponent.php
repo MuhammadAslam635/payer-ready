@@ -54,8 +54,12 @@ class OrganizationNotificationComponent extends Component
     {
         $user = Auth::user();
         
+        // Create a query that will return empty results if no user or organization_id
+        $query = DatabaseNotification::query();
+        
         if (!$user || !$user->organization_id) {
-            return collect()->paginate($this->perPage);
+            // Return empty paginated result
+            return $query->whereRaw('1 = 0')->paginate($this->perPage);
         }
 
         $query = DatabaseNotification::whereHasMorph('notifiable', ['App\Models\User'], function ($query) use ($user) {

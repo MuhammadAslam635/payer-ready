@@ -79,6 +79,11 @@ class Notifications extends Component
                 'url'        => $data['url'] ?? '#',
                 'read'       => ! is_null($notification->read_at),
                 'created_at' => Carbon::parse($notification->created_at)->diffForHumans(),
+                'icon'       => $data['icon'] ?? null,
+                'invoice_id' => $data['invoice_id'] ?? null,
+                'invoice_number' => $data['invoice_number'] ?? null,
+                'amount'     => $data['amount'] ?? null,
+                'status'     => $data['status'] ?? null,
             ];
         });
 
@@ -151,8 +156,15 @@ class Notifications extends Component
         }
     }
 
-    public function getNotificationIcon($type)
+    public function getNotificationIcon($notification)
     {
+        // If notification has custom icon (e.g., shopping-cart for invoices), use it
+        if (isset($notification['icon']) && $notification['icon']) {
+            return $notification['icon'];
+        }
+        
+        // Otherwise use type-based icon
+        $type = $notification['type'] ?? 'info';
         return match ($type) {
             'success' => 'check-circle',
             'warning' => 'exclamation-triangle',

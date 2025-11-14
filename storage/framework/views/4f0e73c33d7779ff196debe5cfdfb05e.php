@@ -125,12 +125,20 @@ $colors = match($color) {
 
 // Determine variant-specific classes for background, text, borders, and hover states
 $variantClasses = match($variant){
-    'primary' => [
-        'bg-[var(--color-primary)] hover:bg-[--alpha(var(--color-primary)/50%)', // Background color 
-        'text-[var(--color-primary-fg)]', // Text color
-        'border border-black/10 dark:border-0', // Border styles
-        $colors => filled($color)
-    ],
+    'primary' => array_merge(
+        // Use direct Tailwind classes for better browser compatibility when color is specified
+        match($color) {
+            'teal' => ['!bg-teal-600', 'hover:!bg-teal-700', '!text-white'],
+            'green' => ['!bg-green-600', 'hover:!bg-green-700', '!text-white'],
+            'blue' => ['!bg-blue-500', 'hover:!bg-blue-600', '!text-white'],
+            'red' => ['!bg-red-500', 'hover:!bg-red-600', '!text-white'],
+            'emerald' => ['!bg-emerald-600', 'hover:!bg-emerald-700', '!text-white'],
+            'cyan' => ['!bg-cyan-600', 'hover:!bg-cyan-700', '!text-white'],
+            default => ['!bg-[var(--color-primary)]', 'hover:!bg-[--alpha(var(--color-primary)/50%)]', '!text-[var(--color-primary-fg)]']
+        },
+        ['border border-black/10 dark:border-0'], // Border styles
+        filled($color) && !in_array($color, ['teal', 'green', 'blue', 'red', 'emerald', 'cyan']) ? [$colors] : [] // Only set CSS variables for colors not in direct list
+    ),
     'solid' => [
         'bg-neutral-800/5 hover:bg-neutral-800/10 dark:bg-white/10 dark:hover:bg-white/20',
         'text-neutral-800 dark:text-white'
@@ -245,7 +253,7 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
 <?php endif; ?>
         </div> 
 
-    <?php if(filled($icon)): ?>
+    <!--[if BLOCK]><![endif]--><?php if(filled($icon)): ?>
         <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => $icon,'variant' => $iconVariant,'attributes' => $iconAttributes,'dataSlot' => 'right-icon']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -266,16 +274,19 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-    <?php endif; ?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-    <?php if($slot->isNotEmpty()): ?>
-        <span >
+    <!--[if BLOCK]><![endif]--><?php if($slot->isNotEmpty()): ?>
+        <span class="<?php echo \Illuminate\Support\Arr::toCssClasses([
+            '!text-[var(--color-primary-fg)]' => $variant === 'primary' && filled($color),
+            'text-inherit' => $variant !== 'primary' || !filled($color)
+        ]); ?>">
             <?php echo e($slot); ?>
 
         </span>
-    <?php endif; ?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-    <?php if(filled($iconAfter)): ?>
+    <!--[if BLOCK]><![endif]--><?php if(filled($iconAfter)): ?>
         <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => $iconAfter,'variant' => $iconVariant,'attributes' => $iconAttributes,'dataSlot' => 'left-icon']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -296,7 +307,7 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-    <?php endif; ?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal58500cbfbf20aac906866f14bf9da72c)): ?>

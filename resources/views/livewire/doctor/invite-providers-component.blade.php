@@ -5,14 +5,15 @@
                 <h1 class="text-2xl font-bold text-slate-900">All Providers</h1>
                 <p class="text-slate-600 mt-1">Search and invite healthcare providers to your organization</p>
             </div>
-            <button wire:click="inviteSelectedProviders"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors duration-200">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
+            <x-ui.button
+                type="button"
+                color="teal"
+                variant="primary"
+                icon="user-plus"
+                class="!px-5"
+                wire:click="inviteSelectedProviders">
                 Invite New Provider
-            </button>
+            </x-ui.button>
         </div>
     </div>
 
@@ -40,8 +41,12 @@
                     <div class="grid grid-cols-5 gap-4 text-xs font-medium text-slate-500 uppercase tracking-wider">
                         <div class="col-span-1"></div>
                         <div class="col-span-1">
-                            <button wire:click="sortBy('name')"
-                                class="flex items-center space-x-1 hover:text-slate-700">
+                            <x-ui.button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                class="!px-0 !py-0 flex items-center space-x-1 hover:!text-slate-700"
+                                wire:click="sortBy('name')">
                                 <span>NAME</span>
                                 @if ($sortField === 'name')
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,11 +65,15 @@
                                             d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                     </svg>
                                 @endif
-                            </button>
+                            </x-ui.button>
                         </div>
                         <div class="col-span-1">
-                            <button wire:click="sortBy('status')"
-                                class="flex items-center space-x-1 hover:text-slate-700">
+                            <x-ui.button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                class="!px-0 !py-0 flex items-center space-x-1 hover:!text-slate-700"
+                                wire:click="sortBy('status')">
                                 <span>STATUS</span>
                                 @if ($sortField === 'status')
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +92,7 @@
                                             d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                     </svg>
                                 @endif
-                            </button>
+                            </x-ui.button>
                         </div>
                         <div class="col-span-1">SPECIALTY</div>
                         <div class="col-span-1">NPI</div>
@@ -182,14 +191,14 @@
                 <p class="text-slate-500 mb-6">Try adjusting your search criteria or invite new providers to get
                     started.</p>
 
-                <button
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors duration-200">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
+                <x-ui.button
+                    type="button"
+                    color="teal"
+                    variant="primary"
+                    icon="user-plus"
+                    class="!px-5">
                     Invite New Provider
-                </button>
+                </x-ui.button>
             </div>
         @endif
     </div>

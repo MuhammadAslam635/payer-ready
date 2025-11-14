@@ -81,12 +81,20 @@ $colors = match($color) {
 
 // Determine variant-specific classes for background, text, borders, and hover states
 $variantClasses = match($variant){
-    'primary' => [
-        'bg-[var(--color-primary)] hover:bg-[--alpha(var(--color-primary)/50%)', // Background color 
-        'text-[var(--color-primary-fg)]', // Text color
-        'border border-black/10 dark:border-0', // Border styles
-        $colors => filled($color)
-    ],
+    'primary' => array_merge(
+        // Use direct Tailwind classes for better browser compatibility when color is specified
+        match($color) {
+            'teal' => ['!bg-teal-600', 'hover:!bg-teal-700', '!text-white'],
+            'green' => ['!bg-green-600', 'hover:!bg-green-700', '!text-white'],
+            'blue' => ['!bg-blue-500', 'hover:!bg-blue-600', '!text-white'],
+            'red' => ['!bg-red-500', 'hover:!bg-red-600', '!text-white'],
+            'emerald' => ['!bg-emerald-600', 'hover:!bg-emerald-700', '!text-white'],
+            'cyan' => ['!bg-cyan-600', 'hover:!bg-cyan-700', '!text-white'],
+            default => ['!bg-[var(--color-primary)]', 'hover:!bg-[--alpha(var(--color-primary)/50%)]', '!text-[var(--color-primary-fg)]']
+        },
+        ['border border-black/10 dark:border-0'], // Border styles
+        filled($color) && !in_array($color, ['teal', 'green', 'blue', 'red', 'emerald', 'cyan']) ? [$colors] : [] // Only set CSS variables for colors not in direct list
+    ),
     'solid' => [
         'bg-neutral-800/5 hover:bg-neutral-800/10 dark:bg-white/10 dark:hover:bg-white/20',
         'text-neutral-800 dark:text-white'
@@ -176,7 +184,10 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
     @endif
 
     @if($slot->isNotEmpty())
-        <span >
+        <span @class([
+            '!text-[var(--color-primary-fg)]' => $variant === 'primary' && filled($color),
+            'text-inherit' => $variant !== 'primary' || !filled($color)
+        ])>
             {{ $slot }}
         </span>
     @endif

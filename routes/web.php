@@ -143,6 +143,7 @@ Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', '
     Route::get('/doctor-expirables',OrgDoctorExpirablesComponent::class)->name('doctor_expirables');
     Route::get('/doctor-reports',OrgDoctorReportsComponent::class)->name('doctor_reports');
     Route::get('/doctor-invoice-payments',OrgDoctorInvoicePaymentsComponent::class)->name('doctor_invoice_payments');
+    Route::get('/invoices', \App\Livewire\Organization\InvoiceListComponent::class)->name('invoices');
     Route::get('/doctor-documents', \App\Livewire\Organization\DoctorDocumentsComponent::class)->name('doctor_documents');
     // Support Tickets
     Route::get('/support-tickets', OrgAdminAllSupportTicketsComponent::class)->name('all_support_tickets');
@@ -165,6 +166,7 @@ Route::group(['prefix' => 'doctor', 'as' => 'doctor.', 'middleware' => 'auth'],f
     Route::get('/reports', ReportsComponent::class)->name('reports');
     Route::get('/expirables', ExpirablesComponent::class)->name('expirables');
     Route::get('/invoice-payments', InvoicePaymentsComponent::class)->name('invoice-payments');
+    Route::get('/invoices', \App\Livewire\Doctor\InvoiceListComponent::class)->name('invoices');
     Route::get('/documents', \App\Livewire\Doctor\DocumentsComponent::class)->name('documents');
     Route::get('/notifications',DoctorNotificationComponent::class)->name('notifications');
     Route::get('/support-tickets',AllSupportTicketsComponent::class)->name('all_support_tickets');
