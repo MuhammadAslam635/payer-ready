@@ -6,6 +6,7 @@ use App\Enums\UserType;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Specialty;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Admin\CrudTrait;
 use Illuminate\Support\Facades\Hash;
@@ -143,20 +144,64 @@ class ManageStaffComponent extends Component
             $user->update($updateData);
             $this->toastSuccess('Staff member updated successfully.');
         } else {
-            User::create([
+            $user = User::create([
                 'name' => $this->formData['name'],
                 'email' => $this->formData['email'],
                 'user_type' => $this->formData['user_type'],
                 'password' => Hash::make($this->formData['password']),
                 'is_active' => true,
-                'email_verified_at' => now(),
+                'email_verified_at' => null, // User must verify email before login
                 'is_org' => false,
                 'taxnomy_code' => $this->formData['taxnomy_code'] ?? null,
                 'speciality_id' => $this->formData['speciality_id'] ?? null,
                 'state_id' => $this->formData['state_id'] ?? null,
                 'org_id' => Auth::id(),
             ]);
-            $this->toastSuccess('Staff member created successfully.');
+            
+            // Send verification email with retry mechanism
+            try {
+                \Log::info('Sending verification email to: ' . $user->email);
+                \Log::info('User ID: ' . $user->id);
+                \Log::info('User Name: ' . $user->name);
+                \Log::info('Mail Driver: ' . config('mail.default'));
+                \Log::info('Mail Host: ' . config('mail.mailers.smtp.host'));
+                \Log::info('Mail From: ' . config('mail.from.address'));
+                
+                // Retry logic for network issues
+                $maxRetries = 3;
+                $retryDelay = 2; // seconds
+                $sent = false;
+                
+                for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+                    try {
+                        \Log::info("Email send attempt #{$attempt} for user: " . $user->email);
+                        $user->notify(new VerifyEmailNotification());
+                        $sent = true;
+                        \Log::info('Verification email notification sent successfully to: ' . $user->email . ' on attempt #' . $attempt);
+                        break;
+                    } catch (\Exception $retryException) {
+                        \Log::warning("Email send attempt #{$attempt} failed: " . $retryException->getMessage());
+                        if ($attempt < $maxRetries) {
+                            sleep($retryDelay);
+                        } else {
+                            throw $retryException;
+                        }
+                    }
+                }
+                
+                if ($sent) {
+                    $this->toastSuccess('Staff member created successfully. Verification email has been sent.');
+                } else {
+                    throw new \Exception('Failed to send email after ' . $maxRetries . ' attempts');
+                }
+            } catch (\Exception $e) {
+                \Log::error('Failed to send verification email to: ' . $user->email);
+                \Log::error('Error Message: ' . $e->getMessage());
+                \Log::error('Error Trace: ' . $e->getTraceAsString());
+                
+                // Still create user successfully, but notify about email issue
+                $this->toastSuccess('Staff member created successfully, but verification email could not be sent. Please check email configuration and logs.');
+            }
         }
 
         $this->resetForm();

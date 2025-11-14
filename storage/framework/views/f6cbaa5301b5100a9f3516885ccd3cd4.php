@@ -44,7 +44,7 @@ unset($__defined_vars, $__key, $__value); ?>
     };
 ?>
 
-<!--[if BLOCK]><![endif]--><?php switch($type):
+<?php switch($type):
     case ('div'): ?>
         <div <?php echo e($attributes); ?>>
             <?php echo e($slot); ?>
@@ -64,4 +64,4 @@ unset($__defined_vars, $__key, $__value); ?>
             <?php echo e($slot); ?>
 
         </button>
-<?php endswitch; ?><!--[if ENDBLOCK]><![endif]--><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/components/ui/button/abstract.blade.php ENDPATH**/ ?>
+<?php endswitch; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/components/ui/button/abstract.blade.php ENDPATH**/ ?>

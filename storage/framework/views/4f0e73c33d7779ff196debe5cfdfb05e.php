@@ -253,7 +253,7 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
 <?php endif; ?>
         </div> 
 
-    <!--[if BLOCK]><![endif]--><?php if(filled($icon)): ?>
+    <?php if(filled($icon)): ?>
         <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => $icon,'variant' => $iconVariant,'attributes' => $iconAttributes,'dataSlot' => 'right-icon']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -274,9 +274,9 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endif; ?>
 
-    <!--[if BLOCK]><![endif]--><?php if($slot->isNotEmpty()): ?>
+    <?php if($slot->isNotEmpty()): ?>
         <span class="<?php echo \Illuminate\Support\Arr::toCssClasses([
             '!text-[var(--color-primary-fg)]' => $variant === 'primary' && filled($color),
             'text-inherit' => $variant !== 'primary' || !filled($color)
@@ -284,9 +284,9 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
             <?php echo e($slot); ?>
 
         </span>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endif; ?>
 
-    <!--[if BLOCK]><![endif]--><?php if(filled($iconAfter)): ?>
+    <?php if(filled($iconAfter)): ?>
         <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => $iconAfter,'variant' => $iconVariant,'attributes' => $iconAttributes,'dataSlot' => 'left-icon']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -307,7 +307,7 @@ $loadingAttributes = $loadingAttributes->merge($loading ? [
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endif; ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal58500cbfbf20aac906866f14bf9da72c)): ?>

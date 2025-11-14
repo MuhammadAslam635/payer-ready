@@ -134,7 +134,7 @@ Route::middleware(['auth:sanctum',
 
     });
 
-Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', 'middleware' => 'auth'],function () {
+Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', 'middleware' => ['auth', 'verified']],function () {
     Route::get('/notifications',OrganizationNotificationComponent::class)->name('notifications');
     Route::get('/manage-staff',ManageStaffComponent::class)->name('manage_staff');
     Route::get('/doctor-tasks',DoctorTasksComponent::class)->name('doctor_tasks');
@@ -156,7 +156,7 @@ Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', '
     // });
     // Route::prefix('coordinator','as'=>'coordinator.')->group(function () {
     // });
-Route::group(['prefix' => 'doctor', 'as' => 'doctor.', 'middleware' => 'auth'],function () {
+Route::group(['prefix' => 'doctor', 'as' => 'doctor.', 'middleware' => ['auth', 'verified']],function () {
     Route::get('/tasks', MyTasksComponent::class)->name('tasks');
     Route::get('/invite-providers', InviteProvidersComponent::class)->name('invite-providers');
     Route::get('/licensing',ApplicationsComponent::class)->name('licensing');
@@ -173,7 +173,7 @@ Route::group(['prefix' => 'doctor', 'as' => 'doctor.', 'middleware' => 'auth'],f
     Route::get('create/support-ticket',CreateSupportTicketComponent::class)->name('create_support_ticket');
     Route::get('chat/{supportTicketId}',ChatSupportTicketComponent::class)->name('chat_support_tickets');
 });
-Route::group(['prefix' => 'coordinator', 'as' => 'coordinator.', 'middleware' => 'auth'],function () {
+Route::group(['prefix' => 'coordinator', 'as' => 'coordinator.', 'middleware' => ['auth', 'verified']],function () {
     Route::get('/tasks', CoordTasksComponent::class)->name('tasks');
     Route::get('/applications', CoordApplicationsComponent::class)->name('applications');
     Route::get('/licensing', CoordLicensingComponent::class)->name('licensing');
