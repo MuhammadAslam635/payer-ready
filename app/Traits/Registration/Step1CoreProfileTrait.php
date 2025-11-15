@@ -48,7 +48,13 @@ trait Step1CoreProfileTrait
             // Return existing user and their organization
             $organization = null;
             if ($userType === UserType::ORGANIZATION_ADMIN) {
-                $organization = $existingUser->organizations()->first();
+                // For organization admin, check if they are an organization themselves
+                if ($existingUser->is_org) {
+                    $organization = $existingUser;
+                } else {
+                    // Or check if they belong to a parent organization
+                    $organization = $existingUser->parentOrganization;
+                }
             }
 
             return [
