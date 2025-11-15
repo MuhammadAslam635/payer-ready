@@ -28,10 +28,10 @@ foreach ($attributes->all() as $__key => $__value) {
 }
 
 unset($__defined_vars, $__key, $__value); ?>
-<?php if (isset($component)) { $__componentOriginal3fb62e5b6094e6e7c22313ef1671c11b = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal3fb62e5b6094e6e7c22313ef1671c11b = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'heroicons::components.outline.user','data' => ['dataSlot' => $dataSlot,'class' => $class]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('heroicons::outline.user'); ?>
+<?php if (isset($component)) { $__componentOriginal758357a646b08e4783760d57fe427aa3 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal758357a646b08e4783760d57fe427aa3 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'heroicons::components.outline.chart-bar','data' => ['dataSlot' => $dataSlot,'class' => $class]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('heroicons::outline.chart-bar'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
@@ -43,11 +43,11 @@ unset($__defined_vars, $__key, $__value); ?>
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal3fb62e5b6094e6e7c22313ef1671c11b)): ?>
-<?php $attributes = $__attributesOriginal3fb62e5b6094e6e7c22313ef1671c11b; ?>
-<?php unset($__attributesOriginal3fb62e5b6094e6e7c22313ef1671c11b); ?>
+<?php if (isset($__attributesOriginal758357a646b08e4783760d57fe427aa3)): ?>
+<?php $attributes = $__attributesOriginal758357a646b08e4783760d57fe427aa3; ?>
+<?php unset($__attributesOriginal758357a646b08e4783760d57fe427aa3); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal3fb62e5b6094e6e7c22313ef1671c11b)): ?>
-<?php $component = $__componentOriginal3fb62e5b6094e6e7c22313ef1671c11b; ?>
-<?php unset($__componentOriginal3fb62e5b6094e6e7c22313ef1671c11b); ?>
-<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\storage\framework\views/4ba4dad5d0d1cc37c7bf28b68072c294.blade.php ENDPATH**/ ?>
+<?php if (isset($__componentOriginal758357a646b08e4783760d57fe427aa3)): ?>
+<?php $component = $__componentOriginal758357a646b08e4783760d57fe427aa3; ?>
+<?php unset($__componentOriginal758357a646b08e4783760d57fe427aa3); ?>
+<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\storage\framework\views/cb78489442e151cd08e71cfafd8b34d9.blade.php ENDPATH**/ ?>

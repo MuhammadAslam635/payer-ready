@@ -5,12 +5,13 @@
 <div>
                 <h1 class="text-2xl font-bold text-slate-900">Organization Manager Dashboard</h1>
                 <p class="text-slate-600 mt-1">Manage your organization's staff and doctors</p>
-                @if(isset($stats['organization']) && $stats['organization'] && $stats['organization']->business_name)
-                    <p class="text-sm text-slate-500 mt-1">{{ $stats['organization']->business_name }}</p>
-                @endif
+                <!--[if BLOCK]><![endif]--><?php if(isset($stats['organization']) && $stats['organization'] && $stats['organization']->business_name): ?>
+                    <p class="text-sm text-slate-500 mt-1"><?php echo e($stats['organization']->business_name); ?></p>
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
             <div class="text-sm text-slate-500">
-                Last updated: {{ now()->format('M d, Y \a\t g:i A') }}
+                Last updated: <?php echo e(now()->format('M d, Y \a\t g:i A')); ?>
+
             </div>
         </div>
     </div>
@@ -29,9 +30,9 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-slate-600">Total Staff</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['totalStaff']) }}</p>
+                    <p class="text-2xl font-bold text-slate-900"><?php echo e(number_format($stats['totalStaff'])); ?></p>
                     <p class="text-xs text-slate-500 mt-1">
-                        <span class="text-green-600 font-medium">{{ $stats['activeStaff'] }}</span> active
+                        <span class="text-green-600 font-medium"><?php echo e($stats['activeStaff']); ?></span> active
                     </p>
                 </div>
             </div>
@@ -49,9 +50,9 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-slate-600">Total Doctors</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['totalDoctors']) }}</p>
+                    <p class="text-2xl font-bold text-slate-900"><?php echo e(number_format($stats['totalDoctors'])); ?></p>
                     <p class="text-xs text-slate-500 mt-1">
-                        <span class="text-green-600 font-medium">{{ $stats['activeDoctors'] }}</span> active
+                        <span class="text-green-600 font-medium"><?php echo e($stats['activeDoctors']); ?></span> active
                     </p>
                 </div>
             </div>
@@ -69,7 +70,7 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-slate-600">Recent Staff</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['recentStaff']) }}</p>
+                    <p class="text-2xl font-bold text-slate-900"><?php echo e(number_format($stats['recentStaff'])); ?></p>
                     <p class="text-xs text-slate-500 mt-1">Last 30 days</p>
                 </div>
             </div>
@@ -87,7 +88,7 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <p class="text-sm font-medium text-slate-600">Recent Doctors</p>
-                    <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['recentDoctors']) }}</p>
+                    <p class="text-2xl font-bold text-slate-900"><?php echo e(number_format($stats['recentDoctors'])); ?></p>
                     <p class="text-xs text-slate-500 mt-1">Last 30 days</p>
                 </div>
             </div>
@@ -102,28 +103,29 @@
                 <h3 class="text-lg font-semibold text-slate-900">Latest Staff Members</h3>
             </div>
             <div class="p-6">
-                @if($stats['latestStaff']->count() > 0)
+                <!--[if BLOCK]><![endif]--><?php if($stats['latestStaff']->count() > 0): ?>
                     <div class="space-y-4">
-                        @foreach($stats['latestStaff'] as $staff)
+                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $stats['latestStaff']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $staff): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="flex items-center space-x-3">
                                 <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="{{ $staff['profile_photo_url'] }}" alt="{{ $staff['name'] }}">
+                                    <img class="w-8 h-8 rounded-full" src="<?php echo e($staff['profile_photo_url']); ?>" alt="<?php echo e($staff['name']); ?>">
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-slate-900 truncate">{{ $staff['name'] }}</p>
-                                    <p class="text-sm text-slate-500 truncate">{{ $staff['role'] }}</p>
+                                    <p class="text-sm font-medium text-slate-900 truncate"><?php echo e($staff['name']); ?></p>
+                                    <p class="text-sm text-slate-500 truncate"><?php echo e($staff['role']); ?></p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $staff['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $staff['is_active'] ? 'Active' : 'Inactive' }}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?php echo e($staff['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
+                                        <?php echo e($staff['is_active'] ? 'Active' : 'Inactive'); ?>
+
                                     </span>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                     </div>
-                @else
+                <?php else: ?>
                     <p class="text-slate-500 text-center py-4">No staff members found</p>
-                @endif
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
 
@@ -133,28 +135,29 @@
                 <h3 class="text-lg font-semibold text-slate-900">Latest Doctors</h3>
             </div>
             <div class="p-6">
-                @if($stats['latestDoctors']->count() > 0)
+                <!--[if BLOCK]><![endif]--><?php if($stats['latestDoctors']->count() > 0): ?>
                     <div class="space-y-4">
-                        @foreach($stats['latestDoctors'] as $doctor)
+                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $stats['latestDoctors']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="flex items-center space-x-3">
                                 <div class="flex-shrink-0">
-                                    <img class="w-8 h-8 rounded-full" src="{{ $doctor['profile_photo_url'] }}" alt="{{ $doctor['name'] }}">
+                                    <img class="w-8 h-8 rounded-full" src="<?php echo e($doctor['profile_photo_url']); ?>" alt="<?php echo e($doctor['name']); ?>">
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-slate-900 truncate">{{ $doctor['name'] }}</p>
-                                    <p class="text-sm text-slate-500 truncate">{{ $doctor['specialty'] }}</p>
+                                    <p class="text-sm font-medium text-slate-900 truncate"><?php echo e($doctor['name']); ?></p>
+                                    <p class="text-sm text-slate-500 truncate"><?php echo e($doctor['specialty']); ?></p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $doctor['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $doctor['is_active'] ? 'Active' : 'Inactive' }}
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?php echo e($doctor['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
+                                        <?php echo e($doctor['is_active'] ? 'Active' : 'Inactive'); ?>
+
                                     </span>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                     </div>
-                @else
+                <?php else: ?>
                     <p class="text-slate-500 text-center py-4">No doctors found</p>
-                @endif
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
     </div>
@@ -165,26 +168,28 @@
             <h3 class="text-lg font-semibold text-slate-900">Application Status</h3>
         </div>
         <div class="p-6">
-            @if($stats['latestApplications']->count() > 0)
+            <!--[if BLOCK]><![endif]--><?php if($stats['latestApplications']->count() > 0): ?>
                 <div class="space-y-4">
-                    @foreach($stats['latestApplications'] as $application)
+                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $stats['latestApplications']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $application): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
-                                <p class="text-sm font-medium text-slate-900">{{ $application['payer_name'] }}</p>
-                                <p class="text-sm text-slate-500">{{ $application['provider_name'] }} • {{ $application['state_name'] }}</p>
+                                <p class="text-sm font-medium text-slate-900"><?php echo e($application['payer_name']); ?></p>
+                                <p class="text-sm text-slate-500"><?php echo e($application['provider_name']); ?> • <?php echo e($application['state_name']); ?></p>
                             </div>
                             <div class="flex items-center space-x-4">
-                                <span class="text-sm text-slate-500">{{ $application['request_type'] }}</span>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $application['status'] === 'Completed' ? 'bg-green-100 text-green-800' : ($application['status'] === 'Working' ? 'bg-yellow-100 text-yellow-800' : ($application['status'] === 'Requested' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800')) }}">
-                                    {{ $application['status'] }}
+                                <span class="text-sm text-slate-500"><?php echo e($application['request_type']); ?></span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?php echo e($application['status'] === 'Completed' ? 'bg-green-100 text-green-800' : ($application['status'] === 'Working' ? 'bg-yellow-100 text-yellow-800' : ($application['status'] === 'Requested' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'))); ?>">
+                                    <?php echo e($application['status']); ?>
+
                                 </span>
                             </div>
                         </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
-            @else
+            <?php else: ?>
                 <p class="text-slate-500 text-center py-4">No applications found</p>
-            @endif
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
 </div>
+<?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/livewire/dashboard/organization-manager-dashboard-component.blade.php ENDPATH**/ ?>

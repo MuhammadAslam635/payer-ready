@@ -28,10 +28,10 @@ foreach ($attributes->all() as $__key => $__value) {
 }
 
 unset($__defined_vars, $__key, $__value); ?>
-<?php if (isset($component)) { $__componentOriginal069d4c49cb16cfa5487694642a75a1cf = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal069d4c49cb16cfa5487694642a75a1cf = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'heroicons::components.outline.building-office-2','data' => ['dataSlot' => $dataSlot,'class' => $class]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('heroicons::outline.building-office-2'); ?>
+<?php if (isset($component)) { $__componentOriginal51c594a33c7e26ba8a31970b7d34f3c7 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal51c594a33c7e26ba8a31970b7d34f3c7 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'heroicons::components.outline.calendar-days','data' => ['dataSlot' => $dataSlot,'class' => $class]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('heroicons::outline.calendar-days'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
@@ -43,11 +43,11 @@ unset($__defined_vars, $__key, $__value); ?>
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal069d4c49cb16cfa5487694642a75a1cf)): ?>
-<?php $attributes = $__attributesOriginal069d4c49cb16cfa5487694642a75a1cf; ?>
-<?php unset($__attributesOriginal069d4c49cb16cfa5487694642a75a1cf); ?>
+<?php if (isset($__attributesOriginal51c594a33c7e26ba8a31970b7d34f3c7)): ?>
+<?php $attributes = $__attributesOriginal51c594a33c7e26ba8a31970b7d34f3c7; ?>
+<?php unset($__attributesOriginal51c594a33c7e26ba8a31970b7d34f3c7); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal069d4c49cb16cfa5487694642a75a1cf)): ?>
-<?php $component = $__componentOriginal069d4c49cb16cfa5487694642a75a1cf; ?>
-<?php unset($__componentOriginal069d4c49cb16cfa5487694642a75a1cf); ?>
-<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\storage\framework\views/f41658127218688f75397cb49bc79eae.blade.php ENDPATH**/ ?>
+<?php if (isset($__componentOriginal51c594a33c7e26ba8a31970b7d34f3c7)): ?>
+<?php $component = $__componentOriginal51c594a33c7e26ba8a31970b7d34f3c7; ?>
+<?php unset($__componentOriginal51c594a33c7e26ba8a31970b7d34f3c7); ?>
+<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\storage\framework\views/1d9f184b77566e6499569d1da60c4b73.blade.php ENDPATH**/ ?>

@@ -28,10 +28,10 @@ foreach ($attributes->all() as $__key => $__value) {
 }
 
 unset($__defined_vars, $__key, $__value); ?>
-<?php if (isset($component)) { $__componentOriginale1dd3843cc966c240369bb49755117f2 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginale1dd3843cc966c240369bb49755117f2 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'heroicons::components.outline.building-office','data' => ['dataSlot' => $dataSlot,'class' => $class]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('heroicons::outline.building-office'); ?>
+<?php if (isset($component)) { $__componentOriginalaf561a8d6774f8da780f31fb6debb8b6 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalaf561a8d6774f8da780f31fb6debb8b6 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'heroicons::components.outline.squares-2x2','data' => ['dataSlot' => $dataSlot,'class' => $class]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('heroicons::outline.squares-2x2'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
@@ -43,11 +43,11 @@ unset($__defined_vars, $__key, $__value); ?>
 
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginale1dd3843cc966c240369bb49755117f2)): ?>
-<?php $attributes = $__attributesOriginale1dd3843cc966c240369bb49755117f2; ?>
-<?php unset($__attributesOriginale1dd3843cc966c240369bb49755117f2); ?>
+<?php if (isset($__attributesOriginalaf561a8d6774f8da780f31fb6debb8b6)): ?>
+<?php $attributes = $__attributesOriginalaf561a8d6774f8da780f31fb6debb8b6; ?>
+<?php unset($__attributesOriginalaf561a8d6774f8da780f31fb6debb8b6); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginale1dd3843cc966c240369bb49755117f2)): ?>
-<?php $component = $__componentOriginale1dd3843cc966c240369bb49755117f2; ?>
-<?php unset($__componentOriginale1dd3843cc966c240369bb49755117f2); ?>
-<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\storage\framework\views/b684c04746b6687ff9598e67b3872bec.blade.php ENDPATH**/ ?>
+<?php if (isset($__componentOriginalaf561a8d6774f8da780f31fb6debb8b6)): ?>
+<?php $component = $__componentOriginalaf561a8d6774f8da780f31fb6debb8b6; ?>
+<?php unset($__componentOriginalaf561a8d6774f8da780f31fb6debb8b6); ?>
+<?php endif; ?><?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\storage\framework\views/e73b99269e9c58ff3df0f99d00b448e1.blade.php ENDPATH**/ ?>

@@ -36,12 +36,40 @@ class VerifyEmailNotification extends Notification
     {
         try {
             \Log::info('VerifyEmailNotification: Creating verification URL for user: ' . $notifiable->email);
+            \Log::info('VerifyEmailNotification: APP_URL from config: ' . config('app.url'));
+            
+            // Ensure URL uses the correct domain from config
+            // Set the URL root before generating signed route to use production domain
+            $originalUrl = config('app.url');
+            if ($originalUrl && $originalUrl !== 'http://localhost') {
+                // Temporarily set APP_URL if it's not set correctly
+                if (str_contains($originalUrl, 'localhost')) {
+                    \Log::warning('VerifyEmailNotification: APP_URL contains localhost, using request host');
+                    $appUrl = request()->getSchemeAndHttpHost();
+                    if ($appUrl && $appUrl !== 'http://localhost:8000') {
+                        config(['app.url' => $appUrl]);
+                    }
+                }
+            }
             
             $verificationUrl = URL::temporarySignedRoute(
                 'verification.verify',
                 now()->addDays(7),
                 ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
             );
+            
+            // Restore original config if changed
+            if (isset($appUrl)) {
+                config(['app.url' => $originalUrl]);
+            }
+            
+            // Final check: replace localhost if still present
+            if (str_contains($verificationUrl, 'localhost')) {
+                $currentHost = request()->getSchemeAndHttpHost();
+                if ($currentHost && !str_contains($currentHost, 'localhost')) {
+                    $verificationUrl = str_replace(request()->root(), $currentHost, $verificationUrl);
+                }
+            }
 
             \Log::info('VerifyEmailNotification: Verification URL created successfully');
             \Log::info('VerifyEmailNotification: Verification URL: ' . $verificationUrl);

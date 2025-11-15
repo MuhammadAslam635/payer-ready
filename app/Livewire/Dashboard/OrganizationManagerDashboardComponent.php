@@ -32,6 +32,7 @@ class OrganizationManagerDashboardComponent extends Component
         // Check if user is an organization
         if (!$user->isOrganization()) {
             return [
+                'organization' => null, // Add organization key even if null
                 'totalStaff' => 0,
                 'totalDoctors' => 0,
                 'activeStaff' => 0,
