@@ -36,20 +36,29 @@ class VerifyEmailNotification extends Notification
     {
         try {
             \Log::info('VerifyEmailNotification: Creating verification URL for user: ' . $notifiable->email);
-            \Log::info('VerifyEmailNotification: APP_URL from config: ' . config('app.url'));
             
-            // Ensure URL uses the correct domain from config
-            // Set the URL root before generating signed route to use production domain
-            $originalUrl = config('app.url');
-            if ($originalUrl && $originalUrl !== 'http://localhost') {
-                // Temporarily set APP_URL if it's not set correctly
-                if (str_contains($originalUrl, 'localhost')) {
-                    \Log::warning('VerifyEmailNotification: APP_URL contains localhost, using request host');
-                    $appUrl = request()->getSchemeAndHttpHost();
-                    if ($appUrl && $appUrl !== 'http://localhost:8000') {
+            // Get APP_URL from config - this should be set in .env file
+            $appUrl = config('app.url');
+            \Log::info('VerifyEmailNotification: APP_URL from config: ' . $appUrl);
+            
+            // Ensure APP_URL is set and not localhost in production
+            if (!$appUrl || str_contains($appUrl, 'localhost')) {
+                // Try to get from request if available (for production)
+                if (request()->hasHeader('Host')) {
+                    $host = request()->getHost();
+                    $scheme = request()->getScheme();
+                    if ($host && !str_contains($host, 'localhost')) {
+                        $appUrl = $scheme . '://' . $host;
+                        \Log::info('VerifyEmailNotification: Using request host: ' . $appUrl);
+                        // Temporarily set config to use correct URL for route generation
                         config(['app.url' => $appUrl]);
                     }
                 }
+            }
+            
+            // Force URL generator to use APP_URL
+            if ($appUrl && !str_contains($appUrl, 'localhost')) {
+                URL::forceRootUrl($appUrl);
             }
             
             $verificationUrl = URL::temporarySignedRoute(
@@ -58,21 +67,24 @@ class VerifyEmailNotification extends Notification
                 ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())]
             );
             
-            // Restore original config if changed
-            if (isset($appUrl)) {
-                config(['app.url' => $originalUrl]);
-            }
+            // Reset URL root if we changed it
+            URL::forceRootUrl(null);
             
-            // Final check: replace localhost if still present
+            // Final check: ensure no localhost in the URL
             if (str_contains($verificationUrl, 'localhost')) {
-                $currentHost = request()->getSchemeAndHttpHost();
-                if ($currentHost && !str_contains($currentHost, 'localhost')) {
-                    $verificationUrl = str_replace(request()->root(), $currentHost, $verificationUrl);
+                $finalUrl = config('app.url');
+                if ($finalUrl && !str_contains($finalUrl, 'localhost')) {
+                    // Replace localhost with production domain
+                    $verificationUrl = str_replace('http://localhost:8000', $finalUrl, $verificationUrl);
+                    $verificationUrl = str_replace('https://localhost:8000', $finalUrl, $verificationUrl);
+                    $verificationUrl = str_replace('http://localhost', $finalUrl, $verificationUrl);
+                    $verificationUrl = str_replace('https://localhost', $finalUrl, $verificationUrl);
+                    \Log::warning('VerifyEmailNotification: Replaced localhost in URL');
                 }
             }
 
             \Log::info('VerifyEmailNotification: Verification URL created successfully');
-            \Log::info('VerifyEmailNotification: Verification URL: ' . $verificationUrl);
+            \Log::info('VerifyEmailNotification: Final Verification URL: ' . $verificationUrl);
 
             $mailMessage = (new MailMessage)
                         ->subject('Verify Your Email Address')

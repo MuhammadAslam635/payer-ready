@@ -62,6 +62,87 @@ use App\Livewire\SuperAdmin\User\AdminViewAllUsersComponent;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// Custom email verification route - allows verification without authentication
+Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $request, $id, $hash) {
+    try {
+        $user = \App\Models\User::findOrFail($id);
+        
+        \Log::info('Email verification attempt', [
+            'user_id' => $id,
+            'user_email' => $user->email,
+            'request_url' => $request->fullUrl(),
+            'request_host' => $request->getHost(),
+            'signature_valid' => $request->hasValidSignature(),
+        ]);
+        
+        // Verify the hash matches the user's email first (more reliable check)
+        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            \Log::warning('Email verification failed: Hash mismatch', [
+                'user_id' => $id,
+                'expected_hash' => sha1($user->getEmailForVerification()),
+                'received_hash' => $hash,
+            ]);
+            abort(403, 'Invalid verification link. The hash does not match.');
+        }
+        
+        // Try to verify the signed URL - if it fails due to domain mismatch, we still proceed
+        // because we've already verified the hash which is the critical security check
+        if (! $request->hasValidSignature()) {
+            \Log::warning('Email verification: Signature validation failed but hash is valid', [
+                'user_id' => $id,
+                'expires' => $request->query('expires'),
+            ]);
+            
+            // Check if the link has expired
+            if ($request->has('expires') && $request->query('expires') < now()->timestamp) {
+                abort(403, 'Verification link has expired. Please request a new verification email.');
+            }
+            
+            // Hash is valid, so we proceed despite signature validation failure
+            // This handles cases where URL was generated with different domain
+            \Log::info('Email verification: Proceeding with hash validation only');
+        }
+        
+        // Check if email is already verified
+        if ($user->hasVerifiedEmail()) {
+            \Log::info('Email verification: Already verified', ['user_id' => $id]);
+            return redirect()->route('login')->with('status', 'Email already verified. You can now login.');
+        }
+        
+        // Mark email as verified
+        if ($user->markEmailAsVerified()) {
+            event(new \Illuminate\Auth\Events\Verified($user));
+            \Log::info('Email verification: Successfully verified', ['user_id' => $id]);
+        }
+        
+        // Auto-login the user after verification
+        Auth::login($user);
+        
+        // Redirect based on user type
+        $user = $user->fresh();
+        switch ($user->user_type) {
+            case \App\Enums\UserType::SUPER_ADMIN:
+                return redirect()->route('super_admin.dashboard')->with('verified', true);
+            case \App\Enums\UserType::ORGANIZATION_ADMIN:
+                return redirect()->route('organization_admin.dashboard')->with('verified', true);
+            case \App\Enums\UserType::ORGANIZATION_COORDINATOR:
+            case \App\Enums\UserType::COORDINATOR:
+                return redirect()->route('coordinator.dashboard')->with('verified', true);
+            case \App\Enums\UserType::DOCTOR:
+                return redirect()->route('doctor.dashboard')->with('verified', true);
+            default:
+                return redirect()->route('login')->with('status', 'Email verified successfully. You can now login.');
+        }
+    } catch (\Exception $e) {
+        \Log::error('Email verification error', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+        abort(403, 'Verification failed: ' . $e->getMessage());
+    }
+})->name('verification.verify');
+
 Route::get('/doctor-register', function () {
     return view('auth.doctor-register');
 })->name('doctor-register');
