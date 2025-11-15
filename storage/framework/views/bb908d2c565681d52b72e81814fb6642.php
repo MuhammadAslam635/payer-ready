@@ -36,7 +36,8 @@
 <?php endif; ?>
 
     <!-- Hero Section -->
-    <?php if (isset($component)) { $__componentOriginal7093b478d32fe74c8dbf368ff1136fdc = $component; } ?>
+    <section id="home">
+        <?php if (isset($component)) { $__componentOriginal7093b478d32fe74c8dbf368ff1136fdc = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7093b478d32fe74c8dbf368ff1136fdc = $attributes; } ?>
 <?php $component = App\View\Components\Web\Hero::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('web.hero'); ?>
@@ -56,6 +57,7 @@
 <?php $component = $__componentOriginal7093b478d32fe74c8dbf368ff1136fdc; ?>
 <?php unset($__componentOriginal7093b478d32fe74c8dbf368ff1136fdc); ?>
 <?php endif; ?>
+    </section>
 
     <!-- Stats Section -->
     <?php if (isset($component)) { $__componentOriginalbdac7d6121f47dbaaac367d3cf43d37c = $component; } ?>
@@ -80,7 +82,8 @@
 <?php endif; ?>
 
     <!-- Why Choose Us Section -->
-    <?php if (isset($component)) { $__componentOriginalb7e3da6da61b0e29b1abdd02f31f940e = $component; } ?>
+    <section id="solutions">
+        <?php if (isset($component)) { $__componentOriginalb7e3da6da61b0e29b1abdd02f31f940e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalb7e3da6da61b0e29b1abdd02f31f940e = $attributes; } ?>
 <?php $component = App\View\Components\Web\WhyChooseSection::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('web.why-choose-section'); ?>
@@ -100,9 +103,11 @@
 <?php $component = $__componentOriginalb7e3da6da61b0e29b1abdd02f31f940e; ?>
 <?php unset($__componentOriginalb7e3da6da61b0e29b1abdd02f31f940e); ?>
 <?php endif; ?>
+    </section>
 
     <!-- Process Section -->
-    <?php if (isset($component)) { $__componentOriginal7b1770675917c5feaf66a25adc5749f5 = $component; } ?>
+    <section id="how-it-works">
+        <?php if (isset($component)) { $__componentOriginal7b1770675917c5feaf66a25adc5749f5 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7b1770675917c5feaf66a25adc5749f5 = $attributes; } ?>
 <?php $component = App\View\Components\Web\ProcessSection::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('web.process-section'); ?>
@@ -122,6 +127,7 @@
 <?php $component = $__componentOriginal7b1770675917c5feaf66a25adc5749f5; ?>
 <?php unset($__componentOriginal7b1770675917c5feaf66a25adc5749f5); ?>
 <?php endif; ?>
+    </section>
 
     <!-- Testimonials Section -->
     <?php if (isset($component)) { $__componentOriginal70a6756853514bae6852282712455997 = $component; } ?>
@@ -146,7 +152,8 @@
 <?php endif; ?>
 
     <!-- Comparison Section -->
-    <?php if (isset($component)) { $__componentOriginale9ee986ccbefc241198de78b9c69882a = $component; } ?>
+    <section id="pricing">
+        <?php if (isset($component)) { $__componentOriginale9ee986ccbefc241198de78b9c69882a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale9ee986ccbefc241198de78b9c69882a = $attributes; } ?>
 <?php $component = App\View\Components\Web\Comparison::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('web.comparison'); ?>
@@ -166,9 +173,11 @@
 <?php $component = $__componentOriginale9ee986ccbefc241198de78b9c69882a; ?>
 <?php unset($__componentOriginale9ee986ccbefc241198de78b9c69882a); ?>
 <?php endif; ?>
+    </section>
 
     <!-- FAQ Section -->
-    <?php if (isset($component)) { $__componentOriginal4a7cf00588329483d411f3c52c4cb8e9 = $component; } ?>
+    <section id="resources">
+        <?php if (isset($component)) { $__componentOriginal4a7cf00588329483d411f3c52c4cb8e9 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal4a7cf00588329483d411f3c52c4cb8e9 = $attributes; } ?>
 <?php $component = App\View\Components\Web\Faq::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('web.faq'); ?>
@@ -188,6 +197,7 @@
 <?php $component = $__componentOriginal4a7cf00588329483d411f3c52c4cb8e9; ?>
 <?php unset($__componentOriginal4a7cf00588329483d411f3c52c4cb8e9); ?>
 <?php endif; ?>
+    </section>
 
     <!-- Final CTA Section -->
     <?php if (isset($component)) { $__componentOriginald09e21c7de4c5e89c383822ca51b2a9a = $component; } ?>
@@ -212,7 +222,8 @@
 <?php endif; ?>
 
     <!-- Footer -->
-    <?php if (isset($component)) { $__componentOriginal8a8716efb3c62a45938aca52e78e0322 = $component; } ?>
+    <section id="about">
+        <?php if (isset($component)) { $__componentOriginal8a8716efb3c62a45938aca52e78e0322 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8a8716efb3c62a45938aca52e78e0322 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.footer','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('footer'); ?>
@@ -232,6 +243,72 @@
 <?php $component = $__componentOriginal8a8716efb3c62a45938aca52e78e0322; ?>
 <?php unset($__componentOriginal8a8716efb3c62a45938aca52e78e0322); ?>
 <?php endif; ?>
+    </section>
+
+    <script>
+        // Handle navigation clicks with smooth scroll
+        function handleNavClick(event) {
+            const href = event.currentTarget.getAttribute('href');
+            
+            // Check if it's an anchor link
+            if (href && href.includes('#')) {
+                const hash = href.split('#')[1];
+                const currentPath = window.location.pathname;
+                
+                // If we're not on the home page, navigate first then scroll
+                if (currentPath !== '/' && currentPath !== '') {
+                    // Let the link navigate normally, scroll will happen on page load
+                    return true;
+                }
+                
+                // We're on the home page, handle smooth scroll
+                event.preventDefault();
+                
+                const targetElement = document.getElementById(hash);
+                
+                if (targetElement) {
+                    // Get the header height for offset
+                    const headerHeight = document.querySelector('nav')?.offsetHeight || 0;
+                    const targetPosition = targetElement.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                } else if (hash === 'home') {
+                    // Scroll to top if home
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+                
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Handle page load with hash in URL
+        window.addEventListener('DOMContentLoaded', function() {
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                const targetElement = document.getElementById(hash);
+                
+                if (targetElement) {
+                    setTimeout(() => {
+                        const headerHeight = document.querySelector('nav')?.offsetHeight || 0;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 <?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/welcome.blade.php ENDPATH**/ ?>

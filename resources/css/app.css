@@ -21,3 +21,8 @@
 
 /* Dark mode disabled - variant removed */
 /* @custom-variant dark (&:where(.dark, .dark *)); */
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
