@@ -68,7 +68,7 @@ trait Step1CoreProfileTrait
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
-            'taxnomy_code' => $this->taxnomy_code,
+            'taxnomy_code' => $this->taxnomy_code ?? null,
             'password' => Hash::make($this->password),
             'speciality_id'=>$this->primarySpecialty,
             'state_id'=>$this->primaryState,
