@@ -29,7 +29,7 @@
                         <span class="font-medium text-text-primary">Welcome & Core Profile</span>
                     </div>
 
-                    <!-- Step 2: Personal & Contact -->
+                    {{-- <!-- Step 2: Personal & Contact -->
                     <div class="flex items-center gap-3 p-3 rounded-lg cursor-pointer {{ $currentStep >= 2 ? 'bg-success-50' : 'bg-gray-50' }}"
                          wire:click="goToStep(2)">
                         <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $currentStep > 2 ? 'bg-success-500 text-white' : ($currentStep == 2 ? 'bg-primary-500 text-white' : 'bg-gray-300 text-gray-500') }}">
@@ -117,7 +117,7 @@
                             @endif
                         </div>
                         <span class="font-medium text-text-primary">Review & E-Sign</span>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
@@ -143,7 +143,8 @@
                     <div class="min-h-96">
                         @if($currentStep == 1)
                             <x-auth.sign-up-form :userType="$userType" :specialties="$specialties" :states="$states" :errors="$errors" />
-                        @elseif($currentStep == 2)
+                        @endif
+                        {{-- @elseif($currentStep == 2)
                             <x-auth.personal-form :userType="$userType" />
                         @elseif($currentStep == 3)
                             <x-auth.cred-license-form :userType="$userType" :stateLicenses="$stateLicenses" :states="$states" :educations="$educations" />
@@ -171,48 +172,29 @@
                             />
                         @elseif($currentStep == 7)
                             <x-auth.review-sign-form :userType="$userType" :name="$name" :email="$email" :organizationName="$organizationName" :primarySpecialty="$primarySpecialty" :primaryState="$primaryState" :specialties="$specialties" :dateOfBirth="$dateOfBirth" :ssn="$ssn" :homeAddress="$homeAddress" :practiceAddress="$practiceAddress" :phoneNumber="$phoneNumber" :npiNumber="$npiNumber" :caqhId="$caqhId" :caqhLogin="$caqhLogin" :caqhPassword="$caqhPassword" :pecosLogin="$pecosLogin" :pecosPassword="$pecosPassword" :stateLicenses="$stateLicenses" :educations="$educations" :deaNumber="$deaNumber" :deaExpiration="$deaExpiration" :workHistory="$workHistory" :references="$references" :insuranceCarrier="$insuranceCarrier" :policyNumber="$policyNumber" :coverageAmount="$coverageAmount" :policyEffectiveDate="$policyEffectiveDate" :policyExpirationDate="$policyExpirationDate" :licenseSuspended="$licenseSuspended" :felonyConviction="$felonyConviction" :malpracticeClaims="$malpracticeClaims" :states="$states" />
-                        @endif
+                        @endif --}}
                     </div>
 
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between items-center mt-8 pt-6 border-t border-border">
-                        @if($currentStep > 1)
-                            <x-ui.button type="button" wire:click="prevStep"
-                                    class="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold rounded-lg transition-colors">
-                                Back
-                            </x-ui.button>
-                        @else
-                            <div></div>
-                        @endif
+                        <div></div>
 
                         <div class="flex items-center gap-4">
-                            @if($currentStep < 7)
-                                @if($currentStep > 1)
-                                    <x-ui.button type="button" wire:click="skipStep"
-                                            wire:loading.attr="enabled"
-                                            wire:target="skipStep"
-                                            wire:loading.class="opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed"
-                                            class="px-6 py-2 text-text-secondary hover:text-primary-600 transition-colors">
-                                        Skip for now
-                                    </x-ui.button>
-                                @endif
-                                <x-ui.button type="button" wire:click="nextStep"
-                                        wire:loading.attr="enabled"
-                                        wire:target="nextStep"
-                                        wire:loading.class="opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed"
-                                        class="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors">
-                                    Continue
-                                </x-ui.button>
-                            @else
-                                <x-ui.button type="button" wire:click="submitForm"
-                                        wire:loading.attr="enabled"
-                                        wire:target="submitForm"
-                                        wire:loading.class="opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed"
-                                        x-on:click="setTimeout(() => window.scrollTo({top: 0, behavior: 'smooth'}), 100)"
-                                        class="px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors">
-                                    Submit Profile
-                                </x-ui.button>
-                            @endif
+                            <x-ui.button type="button" wire:click="submitForm"
+                                    wire:loading.attr="enabled"
+                                    wire:target="submitForm"
+                                    wire:loading.class="opacity-50 cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed"
+                                    x-on:click="setTimeout(() => window.scrollTo({top: 0, behavior: 'smooth'}), 100)"
+                                    class="px-8 py-3 bg-success-600 hover:bg-success-700 text-white font-semibold rounded-lg transition-colors">
+                                <span wire:loading.remove wire:target="submitForm">Submit</span>
+                                <span wire:loading wire:target="submitForm" class="flex items-center">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Submitting...
+                                </span>
+                            </x-ui.button>
                         </div>
                     </div>
                 </div>

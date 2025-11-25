@@ -63,6 +63,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::view('/solutions', 'pages.solutions')->name('solutions');
+Route::view('/how-it-works', 'pages.how-it-works')->name('how-it-works');
+Route::view('/pricing', 'pages.pricing')->name('pricing');
+Route::view('/resources', 'pages.resources')->name('resources');
+Route::view('/about', 'pages.about')->name('about');
+
 // Custom email verification route - allows verification without authentication
 Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $request, $id, $hash) {
     try {

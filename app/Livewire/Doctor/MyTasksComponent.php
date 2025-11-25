@@ -45,7 +45,7 @@ class MyTasksComponent extends Component
     {
         $user = Auth::user();
 
-        $query = DoctorTask::where('user_id', Auth::user()->id);
+        $query = DoctorTask::with('taskType')->where('user_id', Auth::user()->id);
 
         switch ($this->activeTab) {
             case 'todo':

@@ -121,6 +121,10 @@
                         </th>
                         <th scope="col"
                             class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                            Expiry Alert
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                             Status
                         </th>
                         <th scope="col"
@@ -164,6 +168,35 @@
                                     {{ $license->expiration_date->format('m/d/Y') }}
                                 @else
                                     N/A
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                @if ($license->expiration_date)
+                                    @php
+                                        $daysRemaining = now()->diffInDays($license->expiration_date, false);
+                                        $badgeClass = $daysRemaining <= 0
+                                            ? 'bg-red-100 text-red-800'
+                                            : ($daysRemaining <= 90
+                                                ? 'bg-amber-100 text-amber-800'
+                                                : 'bg-emerald-100 text-emerald-800');
+                                        $label = $daysRemaining <= 0
+                                            ? 'Expired'
+                                            : ($daysRemaining <= 90 ? 'Expiring Soon' : 'Active');
+                                    @endphp
+                                    <div class="flex flex-col">
+                                        <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $badgeClass }}">
+                                            {{ $label }}
+                                        </span>
+                                        <span class="text-xs text-slate-500 mt-1">
+                                            @if ($daysRemaining <= 0)
+                                                {{ abs($daysRemaining) }} day{{ abs($daysRemaining) === 1 ? '' : 's' }} ago
+                                            @else
+                                                {{ $daysRemaining }} day{{ $daysRemaining === 1 ? '' : 's' }} remaining
+                                            @endif
+                                        </span>
+                                    </div>
+                                @else
+                                    <span class="text-slate-400">N/A</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

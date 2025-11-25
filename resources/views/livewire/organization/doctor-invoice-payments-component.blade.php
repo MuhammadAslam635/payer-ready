@@ -1,29 +1,4 @@
 <div class="space-y-6">
-    <!-- Professional Payout Message -->
-    <div class="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-200 rounded-lg p-6 shadow-sm">
-        <div class="flex items-start space-x-4">
-            <div class="flex-shrink-0">
-                <svg class="h-8 w-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            </div>
-            <div class="flex-1">
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Payment & Payout Management</h3>
-                <p class="text-sm text-slate-700 mb-3">
-                    You can add payments on behalf of your doctors. Use the payout link below to submit payment transaction details. 
-                    The admin will process these payments and update the invoice status accordingly.
-                </p>
-                <button wire:click="openAddModal"
-                    class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                    </svg>
-                    Submit Payout for Doctor
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Pending Invoices Section -->
     <div class="bg-white rounded-lg shadow-sm border border-slate-200">
         <div class="px-6 py-4 border-b border-slate-200">
@@ -139,7 +114,7 @@
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
-                        Add Payment
+                        Pay Invoice
                     </button>
                 </div>
             </div>

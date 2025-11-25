@@ -1,27 +1,12 @@
 <div class="space-y-6">
-    <!-- Professional Payout Message -->
-    <div class="bg-gradient-to-r from-teal-50 to-blue-50 border border-teal-200 rounded-lg p-6 shadow-sm">
-        <div class="flex items-start space-x-4">
-            <div class="flex-shrink-0">
-                <svg class="h-8 w-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            </div>
-            <div class="flex-1">
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Payment & Payout Information</h3>
-                <p class="text-sm text-slate-700 mb-3">
-                    To complete your payment, please submit your payment transaction details using the payout link below. 
-                    Our admin team will process your payment and update your invoice status accordingly.
-                </p>
-                <button wire:click="openAddModal"
-                    class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                    </svg>
-                    Submit Payout
-                </button>
-            </div>
-        </div>
+    <div class="flex justify-end">
+        <button wire:click="openAddModal"
+            class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+            </svg>
+            Pay Invoice
+        </button>
     </div>
 
     <!-- Pending Invoices Section -->
@@ -97,7 +82,7 @@
                         icon="plus"
                         class="!px-5 uppercase tracking-wide text-xs"
                         wire:click="openAddModal">
-                        Add Payment
+                        Pay Invoice
                     </x-ui.button>
                 </div>
             </div>
@@ -444,7 +429,7 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                             </svg>
-                            Submit Payout
+                            Pay Invoice
                         </button>
                         <button wire:click="closeInvoiceModal"
                                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:w-auto sm:text-sm">

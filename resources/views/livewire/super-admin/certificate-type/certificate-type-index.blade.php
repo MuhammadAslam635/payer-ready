@@ -27,15 +27,18 @@
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-purple-800">Certificate Types Information</h3>
                 <div class="mt-2 text-sm text-purple-700">
-                    <p>Certificate types define the different categories of professional certifications that providers can obtain. Each certificate type has specific requirements, validity periods, and renewal policies.</p>
+                    <p><strong>What are Certificate Types?</strong></p>
+                    <p class="mt-1">Certificate types define the different categories of professional certifications that providers (doctors) can obtain. Each certificate type represents a specific certification category with its own requirements, validity period, and renewal policies.</p>
+                    <p class="mt-2"><strong>Key Components:</strong></p>
                     <ul class="mt-2 list-disc list-inside space-y-1">
-                        <li><strong>Code:</strong> Unique identifier for the certificate type</li>
-                        <li><strong>Name:</strong> Full name of the certificate type</li>
-                        <li><strong>Issuing Organization:</strong> The authority that issues this type of certificate</li>
-                        <li><strong>Validity Years:</strong> How long the certificate remains valid</li>
-                        <li><strong>Default Amount:</strong> Standard cost for obtaining this certificate</li>
-                        <li><strong>Requires Renewal:</strong> Whether the certificate needs periodic renewal</li>
+                        <li><strong>Certificate Number:</strong> Unique identifier or number for this certificate type (e.g., "BCLS-001", "ACLS-2024")</li>
+                        <li><strong>Name:</strong> Full descriptive name of the certificate type (e.g., "Basic Life Support", "Advanced Cardiac Life Support")</li>
+                        <li><strong>Issuing Organization:</strong> The authority or organization that issues this type of certificate (e.g., "American Heart Association", "Red Cross")</li>
+                        <li><strong>Issue Date:</strong> The date when this certificate type was established or first issued</li>
+                        <li><strong>Expiry Date:</strong> The date when this certificate type expires or becomes invalid</li>
+                        <li><strong>Requires Renewal:</strong> Whether providers need to periodically renew this certificate to maintain validity</li>
                     </ul>
+                    <p class="mt-2"><strong>Purpose:</strong> Certificate types help track and manage different professional certifications that providers must maintain for compliance and credentialing purposes.</p>
                 </div>
             </div>
         </div>
@@ -105,7 +108,7 @@
                     @forelse($certificateTypes as $certificateType)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $certificateType->code }}
+                                {{ $certificateType->certificate_number }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $certificateType->name }}
@@ -114,10 +117,10 @@
                                 {{ $certificateType->issuing_organization }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $certificateType->validity_years }} years
+                                {{ $certificateType->issue_date ? $certificateType->issue_date->format('M d, Y') : 'N/A' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                                ${{ number_format($certificateType->default_amount, 2) }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $certificateType->expiry_date ? $certificateType->expiry_date->format('M d, Y') : 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $certificateType->requires_renewal ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800' }}">
@@ -191,12 +194,13 @@
                                         </div>
 
                                         <div>
-                                            <label for="code" class="block text-sm font-medium text-gray-700">Code</label>
+                                            <label for="certificate_number" class="block text-sm font-medium text-gray-700">Certificate Number</label>
                                             <input type="text"
-                                                   wire:model="formData.code"
-                                                   id="code"
+                                                   wire:model="formData.certificate_number"
+                                                   id="certificate_number"
+                                                   placeholder="e.g., BCLS-001, ACLS-2024"
                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                            @error('formData.code') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                            @error('formData.certificate_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div>
@@ -209,25 +213,21 @@
                                         </div>
 
                                         <div>
-                                            <label for="validity_years" class="block text-sm font-medium text-gray-700">Validity (Years)</label>
-                                            <input type="number"
-                                                   wire:model="formData.validity_years"
-                                                   id="validity_years"
-                                                   min="1"
-                                                   max="100"
+                                            <label for="issue_date" class="block text-sm font-medium text-gray-700">Issue Date</label>
+                                            <input type="date"
+                                                   wire:model="formData.issue_date"
+                                                   id="issue_date"
                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                            @error('formData.validity_years') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                            @error('formData.issue_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div>
-                                            <label for="default_amount" class="block text-sm font-medium text-gray-700">Default Amount ($)</label>
-                                            <input type="number"
-                                                   wire:model="formData.default_amount"
-                                                   id="default_amount"
-                                                   min="0"
-                                                   step="0.01"
+                                            <label for="expiry_date" class="block text-sm font-medium text-gray-700">Expiry Date</label>
+                                            <input type="date"
+                                                   wire:model="formData.expiry_date"
+                                                   id="expiry_date"
                                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
-                                            @error('formData.default_amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                                            @error('formData.expiry_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div>

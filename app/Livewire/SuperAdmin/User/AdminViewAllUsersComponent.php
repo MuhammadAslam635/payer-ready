@@ -58,6 +58,16 @@ class AdminViewAllUsersComponent extends Component
 
     public function getUsers()
     {
+        // Only show users if User Type is selected
+        if (empty($this->userTypeFilter)) {
+            return new \Illuminate\Pagination\LengthAwarePaginator(
+                collect([]),
+                0,
+                $this->perPage,
+                1
+            );
+        }
+
         return User::query()
             ->whereIn('user_type', [UserType::DOCTOR->value, UserType::ORGANIZATION_ADMIN->value])
             ->when($this->search, function ($query) {

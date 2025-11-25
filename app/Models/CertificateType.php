@@ -12,19 +12,20 @@ class CertificateType extends Model
 
     protected $fillable = [
         'name',
-        'code',
+        'certificate_number',
         'description',
         'issuing_organization',
-        'validity_years',
+        'issue_date',
+        'expiry_date',
         'requires_renewal',
         'is_active',
-        'default_amount',
     ];
 
     protected $casts = [
         'requires_renewal' => 'boolean',
         'is_active' => 'boolean',
-        'default_amount' => 'decimal:2',
+        'issue_date' => 'date',
+        'expiry_date' => 'date',
     ];
 
     /**

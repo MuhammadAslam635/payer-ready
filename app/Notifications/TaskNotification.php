@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\DatabaseMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class TaskNotification extends Notification implements ShouldQueue
@@ -35,7 +36,7 @@ class TaskNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -93,6 +94,23 @@ class TaskNotification extends Notification implements ShouldQueue
     {
         // Adjust URL based on user type
         return route('dashboard'); // You can customize this based on user role
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail($notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->subject($this->getTitle())
+            ->line($this->getMessage())
+            ->when($this->doctorTask->due_date, function ($mail) {
+                return $mail->line('Due Date: ' . $this->doctorTask->due_date->format('F d, Y'));
+            })
+            ->when($this->taskType->default_priority, function ($mail) {
+                return $mail->line('Priority: ' . ucfirst($this->taskType->default_priority));
+            })
+            ->line('View task: ' . $this->getUrl());
     }
 
     /**

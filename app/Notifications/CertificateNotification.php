@@ -34,7 +34,7 @@ class CertificateNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     /**
@@ -49,7 +49,7 @@ class CertificateNotification extends Notification implements ShouldQueue
             ->line("Dr. {$this->doctor->name} has {$actionText}.")
             ->line("Certificate Type: {$this->certificate->certificateType->name}")
             ->line("Certificate Number: {$this->certificate->certificate_number}")
-            ->action('View Certificate', url('/admin/certificates/' . $this->certificate->id))
+            ->line('View certificate: ' . url('/admin/certificates/' . $this->certificate->id))
             ->line('Please review this certificate application.');
     }
 

@@ -24,10 +24,12 @@ class ExpirablesComponent extends Component
             ->where('user_type', \App\Enums\UserType::DOCTOR)
             ->pluck('id');
 
+        $threshold = now()->addMonths(3);
+
         $licenses = DoctorLicense::query()
             ->whereIn('user_id', $doctorIds)
             ->whereNotNull('expiration_date')
-            ->where('expiration_date', '<', now())
+            ->whereDate('expiration_date', '<=', $threshold)
             ->with(['licenseType', 'state', 'user'])
             ->get()
             ->map(function ($license) {
@@ -43,7 +45,7 @@ class ExpirablesComponent extends Component
         $credentials = DoctorCredential::query()
             ->whereIn('user_id', $doctorIds)
             ->whereNotNull('expiration_date')
-            ->where('expiration_date', '<', now())
+            ->whereDate('expiration_date', '<=', $threshold)
             ->with(['state', 'payer', 'user'])
             ->get()
             ->map(function ($cred) {

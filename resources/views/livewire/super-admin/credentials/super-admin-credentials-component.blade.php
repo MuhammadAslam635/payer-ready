@@ -1,6 +1,6 @@
 <div>
     <!-- Page Header -->
-    <x-breadcrumbs tagline="Overview of doctor credentials statistics and recent activity" />
+    <x-breadcrumbs tagline="Overview of provider applications and enrollment status" />
 
     <!-- Information Section -->
     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
@@ -11,14 +11,14 @@
                 </svg>
             </div>
             <div class="ml-3">
-                <h3 class="text-sm font-medium text-blue-800">Provider Credentials Information</h3>
+                <h3 class="text-sm font-medium text-blue-800">Provider Applications Information</h3>
                 <div class="mt-2 text-sm text-blue-700">
-                    <p>This section displays all provider credentials including professional certifications, licenses, and qualifications. Credentials are essential for provider verification and compliance with healthcare regulations.</p>
+                    <p>This section displays all provider applications for payer enrollments. Track the status of applications from submission to approval.</p>
                     <ul class="mt-2 list-disc list-inside space-y-1">
-                        <li><strong>Credential Name:</strong> The official name of the credential or certification</li>
-                        <li><strong>Issuing Organization:</strong> The authority that issued the credential</li>
-                        <li><strong>Status:</strong> Current status of the credential (Active, Pending, Expired, etc.)</li>
-                        <li><strong>Verification:</strong> Whether the credential has been verified by administrators</li>
+                        <li><strong>Payer Name:</strong> The insurance company or payer for the application</li>
+                        <li><strong>Submission Date:</strong> When the application was submitted</li>
+                        <li><strong>Status:</strong> Current status of the application (Pending, Working, Completed, etc.)</li>
+                        <li><strong>Effective Date:</strong> Date when the payer approves the application</li>
                     </ul>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                         id="search"
                         class="w-full" 
                         wire:model.live.debounce.300ms="search" 
-                        placeholder="Doctor name, email, credential name..."
+                        placeholder="Doctor name, email, payer name..."
                     />
                 </div>
 
@@ -132,17 +132,11 @@
                                 <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ml-1"></i>
                             @endif
                         </th>
-                        <th wire:click="sortBy('credential_name')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
-                            Credential Name
-                            @if($sortBy === 'credential_name')
-                                <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ml-1"></i>
-                            @endif
-                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issuing Organization</th>
-                        <th wire:click="sortBy('credential_number')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
-                            Credential Number
-                            @if($sortBy === 'credential_number')
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payer Name</th>
+                        <th wire:click="sortBy('submitted_at')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                            Submission Date
+                            @if($sortBy === 'submitted_at')
                                 <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ml-1"></i>
                             @endif
                         </th>
@@ -152,16 +146,9 @@
                                 <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ml-1"></i>
                             @endif
                         </th>
-                        <th wire:click="sortBy('expiration_date')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
-                            Expiration
-                            @if($sortBy === 'expiration_date')
-                                <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ml-1"></i>
-                            @endif
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verified</th>
-                        <th wire:click="sortBy('created_at')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
-                            Created
-                            @if($sortBy === 'created_at')
+                        <th wire:click="sortBy('effective_date')" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100">
+                            Effective Date
+                            @if($sortBy === 'effective_date')
                                 <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }} ml-1"></i>
                             @endif
                         </th>
@@ -173,17 +160,18 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $credential->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $credential->credential_name ?: 'N/A' }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $credential->user->name }}</div>
                                 <div class="text-sm text-gray-500">{{ $credential->user->email }}</div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $credential->issuing_organization ?? 'N/A' }}
-                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $credential->credential_number }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $credential->payer->name ?? 'N/A' }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                @if($credential->submitted_at)
+                                    {{ $credential->submitted_at->format('M d, Y') }}
+                                @else
+                                    <span class="text-gray-500">N/A</span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @php
@@ -204,35 +192,11 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                @if($credential->expiration_date)
-                                    <span class="{{ $credential->expiration_date->isPast() ? 'text-red-600' : '' }}">
-                                        {{ $credential->expiration_date->format('M d, Y') }}
-                                    </span>
-                                    @if($credential->expiration_date->isPast())
-                                        <div class="text-xs text-red-600">Expired</div>
-                                    @elseif($credential->expiration_date->diffInDays() <= 30)
-                                        <div class="text-xs text-yellow-600">Expires soon</div>
-                                    @endif
+                                @if($credential->effective_date)
+                                    {{ $credential->effective_date->format('M d, Y') }}
                                 @else
                                     <span class="text-gray-500">N/A</span>
                                 @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if($credential->is_verified)
-                                    <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                        <i class="fas fa-check mr-1"></i> Verified
-                                    </span>
-                                    @if($credential->verified_at)
-                                        <div class="text-xs text-gray-500 mt-1">{{ $credential->verified_at->format('M d, Y') }}</div>
-                                    @endif
-                                @else
-                                    <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                                        <i class="fas fa-clock mr-1"></i> Pending
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $credential->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
@@ -242,7 +206,7 @@
                                         wire:click="editCredential({{ $credential->id }})"
                                         class="bg-primary-500 rounded-md"
                                     >
-                                        Edit Credential
+                                        Edit Application
                                     </x-ui.button>
                                     <x-ui.button 
                                         size="sm" 
@@ -250,14 +214,14 @@
                                         wire:click="confirmDelete({{ $credential->id }})"
                                         class="bg-red-500 rounded-md"
                                     >
-                                        Delete Credential
+                                        Delete Application
                                     </x-ui.button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="px-6 py-12 text-center">
+                            <td colspan="7" class="px-6 py-12 text-center">
                                 <div class="text-gray-500">
                                     <i class="fas fa-search text-4xl mb-4"></i>
                                     <p class="text-lg">No credentials found matching your criteria.</p>
@@ -283,7 +247,7 @@
             <div class="flex items-center justify-center min-h-screen px-4">
                 <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-screen overflow-y-auto">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Edit Credential - {{ $selectedCredential->credential_name }}</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Edit Application</h3>
                         <x-ui.button icon="clock" type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600" wire:click="closeModal">
                             
                         </x-ui.button>
@@ -300,40 +264,10 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Credential Name -->
-                                <div>
-                                    <x-ui.label for="editCredentialName" class="block text-sm font-medium text-gray-700 mb-2">Credential Name *</x-ui.label>
-                                    <x-ui.input 
-                                        type="text"  
-                                        wire:model="editCredentialName"
-                                    />
-                                    <x-ui.error name="editCredentialName" />
-                                </div>
-
-                                <!-- Issuing Organization -->
-                                <div>
-                                    <x-ui.label for="editIssuingOrganization" class="block text-sm font-medium text-gray-700 mb-2">Issuing Organization *</x-ui.label>
-                                    <x-ui.input 
-                                        type="text" 
-                                        wire:model="editIssuingOrganization"
-                                    />
-                                 <x-ui.error name="editIssuingOrganization" />
-                                </div>
-
-                                <!-- Credential Number -->
-                                <div>
-                                    <x-ui.label for="editCredentialNumber" class="block text-sm font-medium text-gray-700 mb-2">Credential Number *</x-ui.label>
-                                    <x-ui.input 
-                                        type="text" 
-                                        wire:model="editCredentialNumber"
-                                    />
-                                    <x-ui.label name="editCredentialNumber" />
-                                </div>
-
                                 <!-- Status -->
                                 <div>
                                     <x-ui.label for="editStatus" class="block text-sm font-medium text-gray-700 mb-2">Status *</x-ui.label>
-                                    <x-ui.select class="w-full"  wire:model="editStatus">
+                                    <x-ui.select class="w-full" wire:model="editStatus">
                                         <x-ui.select.option value="">Select Status</x-ui.select.option>
                                         @foreach($credentialStatuses as $value => $label)
                                             <x-ui.select.option value="{{ $value }}">{{ $label }}</x-ui.select.option>
@@ -342,24 +276,15 @@
                                     <x-ui.error name="editStatus" />
                                 </div>
 
-                                <!-- Issue Date -->
+                                <!-- Effective Date -->
                                 <div>
-                                    <x-ui.label for="editIssueDate" class="block text-sm font-medium text-gray-700 mb-2">Issue Date</x-ui.label>
+                                    <x-ui.label for="editEffectiveDate" class="block text-sm font-medium text-gray-700 mb-2">Effective Date</x-ui.label>
                                     <x-ui.input 
                                         type="date" 
-                                        wire:model="editIssueDate"
+                                        wire:model="editEffectiveDate"
                                     />
-                                    <x-ui.error name="editIssueDate" />
-                                </div>
-
-                                <!-- Expiration Date -->
-                                <div>
-                                    <x-ui.label for="editExpirationDate" class="block text-sm font-medium text-gray-700 mb-2">Expiration Date</x-ui.label>
-                                    <x-ui.input 
-                                        type="date" 
-                                        wire:model="editExpirationDate"
-                                    />
-                                    <x-ui.label name="editExpirationDate" />
+                                    <x-ui.error name="editEffectiveDate" />
+                                    <p class="mt-1 text-xs text-gray-500">Date when payer approves the application</p>
                                 </div>
                             </div>
 
@@ -400,7 +325,7 @@
                         </div>
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
                             <x-ui.button type="button" variant="outline" class="outline-primary-500 rounded-md" wire:click="closeModal">Cancel</x-ui.button>
-                            <x-ui.button type="submit" variant="primary" class="bg-primary-500 rounded-md">Update Credential</x-ui.button>
+                            <x-ui.button type="submit" variant="primary" class="bg-primary-500 rounded-md">Update Application</x-ui.button>
                         </div>
                     </form>
                 </div>
@@ -429,12 +354,11 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="text-gray-700 mb-4">Are you sure you want to delete this credential?</p>
+                        <p class="text-gray-700 mb-4">Are you sure you want to delete this application?</p>
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <div class="text-sm">
-                                <strong>Credential Name:</strong> {{ $selectedCredential->credential_name }}<br>
                                 <strong>Doctor:</strong> {{ $selectedCredential->user->name }}<br>
-                                <strong>Credential Number:</strong> {{ $selectedCredential->credential_number }}<br>
+                                <strong>Payer:</strong> {{ $selectedCredential->payer->name ?? 'N/A' }}<br>
                                 <strong>Status:</strong> {{ ucfirst($selectedCredential->status) }}
                             </div>
                         </div>
@@ -442,7 +366,7 @@
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
                         <x-ui.button type="button" variant="outline" wire:click="closeModal">Cancel</x-ui.button>
                         <x-ui.button type="button" variant="danger" wire:click="deleteCredential">
-                            <i class="fas fa-trash mr-2"></i> Delete Credential
+                            <i class="fas fa-trash mr-2"></i> Delete Application
                         </x-ui.button>
                     </div>
                 </div>

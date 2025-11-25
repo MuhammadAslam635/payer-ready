@@ -104,10 +104,17 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             STATUS
                         </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            ACTIONS
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($enrollments as $enrollment)
+                        @php
+                            $statusValue = strtolower((string) $enrollment->status);
+                            $isRequested = $statusValue === \App\Enums\CredentialStatus::REQUESTED->value;
+                        @endphp
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $enrollment->payer->name }}
@@ -125,22 +132,37 @@
                                 {{ $enrollment->user->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span
-                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
-                                    {{ $enrollment['status'] === 'Completed'
-                                        ? 'bg-green-100 text-green-800'
-                                        : ($enrollment['status'] === 'Working'
-                                            ? 'bg-yellow-100 text-yellow-800'
-                                            : ($enrollment['status'] === 'Requested'
-                                                ? 'bg-blue-100 text-blue-800'
-                                                : 'bg-gray-100 text-gray-800')) }}">
-                                    {{ $enrollment['status'] }}
+                                @php
+                                    $statusClass = match ($statusValue) {
+                                        'completed' => 'bg-green-100 text-green-800',
+                                        'working' => 'bg-yellow-100 text-yellow-800',
+                                        'requested' => 'bg-blue-100 text-blue-800',
+                                        default => 'bg-gray-100 text-gray-800',
+                                    };
+                                @endphp
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $statusClass }}">
+                                    {{ ucfirst($statusValue) }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                @if($isRequested)
+                                    <x-ui.button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        squared
+                                        icon="trash"
+                                        class="text-red-600 hover:text-red-900"
+                                        wire:click="delete({{ $enrollment->id }})"
+                                        title="Delete Payer Enrollment" />
+                                @else
+                                    <span class="text-xs text-gray-400 italic">Not available</span>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                                 <div class="flex flex-col items-center">
                                     <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -299,6 +321,55 @@
                     <!-- Modal Footer -->
 
 
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Delete Confirmation Modal -->
+    @if($showDeleteModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                <x-ui.icon name="exclamation-triangle" class="h-6 w-6 text-red-600" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                    Delete Payer Enrollment
+                                </h3>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">
+                                        Are you sure you want to delete this payer enrollment? This action cannot be undone.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                        <x-ui.button
+                            type="button"
+                            color="red"
+                            variant="primary"
+                            class="w-full sm:w-auto sm:ml-3"
+                            wire:click="confirmDelete">
+                            Delete
+                        </x-ui.button>
+                        <x-ui.button
+                            type="button"
+                            variant="outline"
+                            color="slate"
+                            class="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto"
+                            wire:click="cancelDelete">
+                            Cancel
+                        </x-ui.button>
+                    </div>
                 </div>
             </div>
         </div>

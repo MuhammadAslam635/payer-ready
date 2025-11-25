@@ -27,7 +27,7 @@ class LicenseNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     /**
@@ -40,7 +40,7 @@ class LicenseNotification extends Notification
             ->line($this->data['message'] ?? 'A new license notification has been created.')
             ->line("License Type: " . ($this->data['license_type'] ?? 'Unknown'))
             ->line("License Number: " . ($this->data['license_number'] ?? 'Unknown'))
-            ->action('View License', url($this->data['url'] ?? '/admin/licenses'))
+            ->line('View license: ' . ($this->data['url'] ?? url('/admin/licenses')))
             ->line('Please review this license application.');
     }
 

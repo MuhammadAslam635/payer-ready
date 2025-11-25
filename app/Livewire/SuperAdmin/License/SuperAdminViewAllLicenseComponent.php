@@ -109,7 +109,7 @@ class SuperAdminViewAllLicenseComponent extends Component
     {
         $this->validate([
             'editLicenseNumber' => 'required|string|max:255',
-            'editStatus' => 'required|in:' . implode(',', array_column(LicenseStatus::cases(), 'value')),
+            'editStatus' => 'required|in:pending,in_process,active,expired,suspended',
             'editIssueDate' => 'nullable|date',
             'editExpirationDate' => 'nullable|date|after:editIssueDate',
             'editIssuingAuthority' => 'nullable|string|max:255',
@@ -189,7 +189,15 @@ class SuperAdminViewAllLicenseComponent extends Component
 
         $licenseTypes = LicenseType::orderBy('name')->get();
         $states = State::orderBy('name')->get();
-        $licenseStatuses = LicenseStatus::options();
+        
+        // Filter statuses for edit modal: remove 'requested' and 'revoked', include 'in_process'
+        $allStatuses = LicenseStatus::options();
+        $licenseStatuses = collect($allStatuses)
+            ->reject(function ($label, $value) {
+                return in_array($value, ['requested', 'revoked']);
+            })
+            ->merge(['in_process' => 'In Process'])
+            ->toArray();
 
         return view('livewire.super-admin.license.super-admin-view-all-license-component', [
             'licenses' => $licenses,

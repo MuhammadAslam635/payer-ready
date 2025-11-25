@@ -27,14 +27,18 @@ class DoctorCredential extends Model
         'verification_notes',
         'payer_id',
         'request_type',
+        'submitted_at',
+        'effective_date',
     ];
 
     protected $casts = [
         'issue_date' => 'date',
         'expiration_date' => 'date',
+        'effective_date' => 'date',
         'metadata' => 'array',
         'is_verified' => 'boolean',
         'verified_at' => 'datetime',
+        'submitted_at' => 'datetime',
     ];
 
     /**

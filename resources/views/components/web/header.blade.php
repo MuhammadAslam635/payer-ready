@@ -1,50 +1,4 @@
 <nav class="bg-white border-b border-gray-200 sticky top-0 z-50" x-data="{ mobileMenuOpen: false }" x-on:click.away="mobileMenuOpen = false">
-    <script>
-        // Make handleNavClick globally available
-        if (typeof handleNavClick === 'undefined') {
-            window.handleNavClick = function(event) {
-                const href = event.currentTarget.getAttribute('href');
-                
-                // Check if it's an anchor link
-                if (href && href.includes('#')) {
-                    const hash = href.split('#')[1];
-                    const currentPath = window.location.pathname;
-                    
-                    // If we're not on the home page, navigate first then scroll
-                    if (currentPath !== '/' && currentPath !== '') {
-                        // Let the link navigate normally, scroll will happen on page load
-                        return true;
-                    }
-                    
-                    // We're on the home page, handle smooth scroll
-                    event.preventDefault();
-                    
-                    const targetElement = document.getElementById(hash);
-                    
-                    if (targetElement) {
-                        // Get the header height for offset
-                        const headerHeight = document.querySelector('nav')?.offsetHeight || 0;
-                        const targetPosition = targetElement.offsetTop - headerHeight;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    } else if (hash === 'home') {
-                        // Scroll to top if home
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        });
-                    }
-                    
-                    return false;
-                }
-                
-                return true;
-            };
-        }
-    </script>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4">
             <!-- Logo -->
@@ -52,12 +6,12 @@
 
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex items-center space-x-8">
-                <a href="/#home" onclick="return handleNavClick(event)" class="text-text-secondary hover:text-primary-600 transition-colors">Home</a>
-                <a href="/#solutions" onclick="return handleNavClick(event)" class="text-text-secondary hover:text-primary-600 transition-colors">Solutions</a>
-                <a href="/#how-it-works" onclick="return handleNavClick(event)" class="text-text-secondary hover:text-primary-600 transition-colors">How It Works</a>
-                <a href="/#pricing" onclick="return handleNavClick(event)" class="text-text-secondary hover:text-primary-600 transition-colors">Pricing</a>
-                <a href="/#resources" onclick="return handleNavClick(event)" class="text-text-secondary hover:text-primary-600 transition-colors">Resources</a>
-                <a href="/#about" onclick="return handleNavClick(event)" class="text-text-secondary hover:text-primary-600 transition-colors">About</a>
+                <a href="{{ route('home') }}" class="text-text-secondary hover:text-primary-600 transition-colors">Home</a>
+                <a href="{{ route('solutions') }}" class="text-text-secondary hover:text-primary-600 transition-colors">Solutions</a>
+                <a href="{{ route('how-it-works') }}" class="text-text-secondary hover:text-primary-600 transition-colors">How It Works</a>
+                <a href="{{ route('pricing') }}" class="text-text-secondary hover:text-primary-600 transition-colors">Pricing</a>
+                <a href="{{ route('resources') }}" class="text-text-secondary hover:text-primary-600 transition-colors">Resources</a>
+                <a href="{{ route('about') }}" class="text-text-secondary hover:text-primary-600 transition-colors">About</a>
             </div>
 
             <!-- Desktop Auth Links -->
@@ -99,12 +53,12 @@
              class="lg:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
                 <!-- Mobile Navigation Links -->
-                <a href="/#home" @click="mobileMenuOpen = false" onclick="return handleNavClick(event)" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Home</a>
-                <a href="/#solutions" @click="mobileMenuOpen = false" onclick="return handleNavClick(event)" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Solutions</a>
-                <a href="/#how-it-works" @click="mobileMenuOpen = false" onclick="return handleNavClick(event)" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">How It Works</a>
-                <a href="/#pricing" @click="mobileMenuOpen = false" onclick="return handleNavClick(event)" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Pricing</a>
-                <a href="/#resources" @click="mobileMenuOpen = false" onclick="return handleNavClick(event)" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Resources</a>
-                <a href="/#about" @click="mobileMenuOpen = false" onclick="return handleNavClick(event)" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">About</a>
+                <a href="{{ route('home') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Home</a>
+                <a href="{{ route('solutions') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Solutions</a>
+                <a href="{{ route('how-it-works') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">How It Works</a>
+                <a href="{{ route('pricing') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Pricing</a>
+                <a href="{{ route('resources') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Resources</a>
+                <a href="{{ route('about') }}" @click="mobileMenuOpen = false" class="block px-3 py-2 text-base font-medium text-text-secondary hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">About</a>
 
                 <!-- Mobile Auth Links -->
                 <div class="border-t border-gray-200 pt-4 mt-4">

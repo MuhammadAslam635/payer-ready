@@ -149,12 +149,12 @@
             <!-- Footer with Payout Button -->
             <div class="bg-gray-50 px-6 py-4 sm:flex sm:flex-row-reverse gap-3">
                 @if($selectedInvoice->status === 'pending')
-                    <button wire:click="openPayoutFromInvoice"
+                        <button wire:click="openPayoutFromInvoice"
                             class="w-full inline-flex justify-center items-center px-4 py-2 bg-teal-600 text-base font-medium text-white rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:ml-3 sm:w-auto sm:text-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                         </svg>
-                        Submit Payout
+                            Pay Invoice
                     </button>
                 @endif
                 <button wire:click="closeInvoiceModal"

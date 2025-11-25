@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\DatabaseMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class InvoiceNotification extends Notification
@@ -29,7 +30,7 @@ class InvoiceNotification extends Notification
      */
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -95,6 +96,26 @@ class InvoiceNotification extends Notification
         }
         
         return route('super-admin.all_invoices');
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail($notifiable): MailMessage
+    {
+        $invoiceNumber = $this->invoice->invoice_number;
+        $amount = '$' . number_format($this->invoice->total, 2);
+        
+        return (new MailMessage)
+            ->subject($this->getTitle())
+            ->line($this->getMessage())
+            ->when($this->invoice->due_date, function ($mail) {
+                return $mail->line('Due Date: ' . $this->invoice->due_date->format('F d, Y'));
+            })
+            ->line('Invoice Number: ' . $invoiceNumber)
+            ->line('Amount: ' . $amount)
+            ->line('Status: ' . ucfirst($this->invoice->status))
+            ->line('View invoice: ' . $this->getUrl($notifiable));
     }
 
     /**

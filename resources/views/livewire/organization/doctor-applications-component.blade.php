@@ -122,6 +122,7 @@
                                     @endif
                                 </button>
                             </th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Expiry Alert</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
                             <th class="px-4 py-3"></th>
                         </tr>
@@ -135,6 +136,35 @@
                                 <td class="px-4 py-3 text-sm text-slate-900">{{ $license->state->name ?? '—' }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-900">{{ optional($license->issue_date)->format('M d, Y') }}</td>
                                 <td class="px-4 py-3 text-sm text-slate-900">{{ optional($license->expiration_date)->format('M d, Y') }}</td>
+                                <td class="px-4 py-3 text-sm">
+                                    @if($license->expiration_date)
+                                        @php
+                                            $daysRemaining = now()->diffInDays($license->expiration_date, false);
+                                            $alertClass = $daysRemaining <= 0
+                                                ? 'bg-red-100 text-red-800'
+                                                : ($daysRemaining <= 90
+                                                    ? 'bg-amber-100 text-amber-800'
+                                                    : 'bg-emerald-100 text-emerald-800');
+                                            $alertLabel = $daysRemaining <= 0
+                                                ? 'Expired'
+                                                : ($daysRemaining <= 90 ? 'Expiring Soon' : 'Active');
+                                        @endphp
+                                        <div class="flex flex-col">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $alertClass }}">
+                                                {{ $alertLabel }}
+                                            </span>
+                                            <span class="text-xs text-slate-500 mt-1">
+                                                @if($daysRemaining <= 0)
+                                                    {{ abs($daysRemaining) }} day{{ abs($daysRemaining) === 1 ? '' : 's' }} ago
+                                                @else
+                                                    {{ $daysRemaining }} day{{ $daysRemaining === 1 ? '' : 's' }} remaining
+                                                @endif
+                                            </span>
+                                        </div>
+                                    @else
+                                        <span class="text-slate-400">N/A</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-3 text-sm">
                                     @php
                                         $statusValue = $license->status?->value;
@@ -174,7 +204,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-4 py-8 text-center text-slate-500">No licenses found</td>
+                                <td colspan="9" class="px-4 py-8 text-center text-slate-500">No licenses found</td>
                             </tr>
                         @endforelse
                     </tbody>

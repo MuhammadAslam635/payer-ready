@@ -21,11 +21,11 @@ class CertificateTypeIndex extends Component
     {
         return [
             'name' => '',
-            'code' => '',
+            'certificate_number' => '',
             'description' => '',
             'issuing_organization' => '',
-            'validity_years' => 1,
-            'default_amount' => 0.00,
+            'issue_date' => '',
+            'expiry_date' => '',
             'requires_renewal' => true,
             'is_active' => true,
         ];
@@ -34,11 +34,11 @@ class CertificateTypeIndex extends Component
     protected function getTableColumns(): array
     {
         return [
-            'code' => 'Code',
+            'certificate_number' => 'Certificate Number',
             'name' => 'Name',
             'issuing_organization' => 'Issuing Organization',
-            'validity_years' => 'Validity (Years)',
-            'default_amount' => 'Default Amount',
+            'issue_date' => 'Issue Date',
+            'expiry_date' => 'Expiry Date',
             'requires_renewal' => 'Requires Renewal',
             'is_active' => 'Status',
         ];
@@ -46,7 +46,7 @@ class CertificateTypeIndex extends Component
 
     protected function getSearchableFields(): array
     {
-        return ['code', 'name', 'description', 'issuing_organization'];
+        return ['certificate_number', 'name', 'description', 'issuing_organization'];
     }
 
     protected function rules(): array
@@ -55,11 +55,11 @@ class CertificateTypeIndex extends Component
         
         return [
             'formData.name' => 'required|string|max:255',
-            'formData.code' => 'required|string|max:20|unique:certificate_types,code,' . $modelId,
+            'formData.certificate_number' => 'required|string|max:255|unique:certificate_types,certificate_number,' . $modelId,
             'formData.description' => 'nullable|string|max:1000',
             'formData.issuing_organization' => 'required|string|max:255',
-            'formData.validity_years' => 'required|integer|min:1|max:100',
-            'formData.default_amount' => 'required|numeric|min:0|max:999999.99',
+            'formData.issue_date' => 'required|date',
+            'formData.expiry_date' => 'required|date|after:formData.issue_date',
             'formData.requires_renewal' => 'boolean',
             'formData.is_active' => 'boolean',
         ];
@@ -69,14 +69,14 @@ class CertificateTypeIndex extends Component
     {
         return [
             'formData.name.required' => 'The name field is required.',
-            'formData.code.required' => 'The code field is required.',
-            'formData.code.unique' => 'The code has already been taken.',
+            'formData.certificate_number.required' => 'The certificate number field is required.',
+            'formData.certificate_number.unique' => 'The certificate number has already been taken.',
             'formData.issuing_organization.required' => 'The issuing organization field is required.',
-            'formData.validity_years.required' => 'The validity years field is required.',
-            'formData.validity_years.min' => 'The validity years must be at least 1.',
-            'formData.default_amount.required' => 'The default amount field is required.',
-            'formData.default_amount.numeric' => 'The default amount must be a valid number.',
-            'formData.default_amount.min' => 'The default amount must be at least 0.',
+            'formData.issue_date.required' => 'The issue date field is required.',
+            'formData.issue_date.date' => 'The issue date must be a valid date.',
+            'formData.expiry_date.required' => 'The expiry date field is required.',
+            'formData.expiry_date.date' => 'The expiry date must be a valid date.',
+            'formData.expiry_date.after' => 'The expiry date must be after the issue date.',
         ];
     }
 

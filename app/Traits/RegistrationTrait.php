@@ -191,6 +191,7 @@ trait RegistrationTrait
             $rules['primaryState'] = 'required|exists:states,id';
         } elseif ($this->userType === 'organization') {
             $rules['organizationName'] = 'required|string|max:255';
+            $rules['primarySpecialty'] = 'required|exists:specialties,id';
             $rules['primaryState'] = 'required|exists:states,id';
         }
 
@@ -282,35 +283,38 @@ trait RegistrationTrait
         }
 
         try {
+            // Validate step 1 before submission
+            $this->validateStep1CoreProfile();
+
             DB::beginTransaction();
 
-            // Process each step using trait methods
+            // Process only step 1 - create user account
             $step1Result = $this->processStep1CoreProfile();
             $user = $step1Result['user'];
             $organization = $step1Result['organization'];
 
-            // Process optional steps only if they have data
-            if ($this->hasPersonalData()) {
-                $this->processStep2PersonalContact($user);
-            }
+            // Commented out - other steps are not processed
+            // if ($this->hasPersonalData()) {
+            //     $this->processStep2PersonalContact($user);
+            // }
 
-            if ($this->hasCredentialsData()) {
-                $this->processStep3CredentialsLicenses($user);
-            }
+            // if ($this->hasCredentialsData()) {
+            //     $this->processStep3CredentialsLicenses($user);
+            // }
 
-            if ($this->hasWorkHistoryData()) {
-                $this->processStep4ProfessionalHistory($user);
-            }
+            // if ($this->hasWorkHistoryData()) {
+            //     $this->processStep4ProfessionalHistory($user);
+            // }
 
-            if ($this->hasInsuranceData() || $this->hasAttestationData()) {
-                $this->processStep5InsuranceAttestation($user);
-            }
+            // if ($this->hasInsuranceData() || $this->hasAttestationData()) {
+            //     $this->processStep5InsuranceAttestation($user);
+            // }
 
-            if ($this->hasDocumentData()) {
-                $this->processStep6DocumentUpload($user);
-            }
+            // if ($this->hasDocumentData()) {
+            //     $this->processStep6DocumentUpload($user);
+            // }
 
-            $this->processStep7ReviewESign($user);
+            // $this->processStep7ReviewESign($user);
 
             DB::commit();
 
@@ -324,7 +328,8 @@ trait RegistrationTrait
 
             // Authenticate user
             Auth::login($user, true);
-           $this->toastSuccess("Login Successfully. Redirecting To dashboard.");
+            $this->toastSuccess("Registration successful! Redirecting to dashboard.");
+            
             // Redirect based on user type
             if ($user->user_type === UserType::DOCTOR) {
                 return redirect()->route('doctor.dashboard');

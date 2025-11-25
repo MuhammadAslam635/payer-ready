@@ -22,6 +22,9 @@ class PracticeLocation extends Model
         'specialty',
         'npi_type_1',
         'npi_type_2',
+        'tax_id',
+        'office_phone',
+        'office_fax',
         'is_primary',
     ];
 

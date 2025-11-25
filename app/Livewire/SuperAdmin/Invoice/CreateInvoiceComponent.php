@@ -42,6 +42,7 @@ class CreateInvoiceComponent extends Component
     // Cart properties
     public $cartInstance = 'invoice';
     public $cartItems = [];
+    public $cartSubtotal = 0;
     public $cartTotal = 0;
     public $cartCount = 0;
 
@@ -49,6 +50,11 @@ class CreateInvoiceComponent extends Component
     public $showItemModal = false;
     public $itemType = '';
     public $availableItems = [];
+
+    // Manual item properties
+    public $manualItemName = '';
+    public $manualItemDescription = '';
+    public $manualItemAmount = '';
 
     protected $listeners = [
         'cart-updated' => 'refreshCart',
@@ -181,6 +187,41 @@ class CreateInvoiceComponent extends Component
         $this->dispatch('item-added');
     }
 
+    public function addManualItem()
+    {
+        if (!$this->selectedDoctor) {
+            $this->toast('Please select a doctor first.', 'error');
+            return;
+        }
+
+        $this->validate([
+            'manualItemName' => 'required|string|max:255',
+            'manualItemAmount' => 'required|numeric|min:0.01',
+            'manualItemDescription' => 'nullable|string|max:500',
+        ], [], [
+            'manualItemName' => 'service name',
+            'manualItemAmount' => 'amount',
+        ]);
+
+        $cartId = 'custom_' . uniqid();
+
+        Cart::instance($this->cartInstance)->add([
+            'id' => $cartId,
+            'name' => $this->manualItemName,
+            'qty' => 1,
+            'price' => (float) $this->manualItemAmount,
+            'options' => [
+                'description' => $this->manualItemDescription ?: 'Custom service',
+                'type' => 'custom',
+                'item_id' => null,
+            ]
+        ]);
+
+        $this->reset(['manualItemName', 'manualItemDescription', 'manualItemAmount']);
+        $this->refreshCart();
+        $this->toast('Custom item added successfully!', 'success');
+    }
+
     public function removeFromCart($rowId)
     {
         Cart::instance($this->cartInstance)->remove($rowId);
@@ -198,9 +239,11 @@ class CreateInvoiceComponent extends Component
 
     public function refreshCart()
     {
-        $this->cartItems = Cart::instance($this->cartInstance)->content()->toArray();
-        $this->cartTotal = Cart::instance($this->cartInstance)->total();
-        $this->cartCount = Cart::instance($this->cartInstance)->count();
+        $cart = Cart::instance($this->cartInstance);
+        $this->cartItems = $cart->content()->toArray();
+        $this->cartSubtotal = (float) $cart->subtotal(2, '.', '');
+        $this->cartTotal = (float) $cart->total(2, '.', '');
+        $this->cartCount = $cart->count();
     }
 
     public function closeModal()
@@ -223,20 +266,24 @@ class CreateInvoiceComponent extends Component
             DB::beginTransaction();
 
             // Create invoice
+            $cart = Cart::instance($this->cartInstance);
+            $cartSubtotal = (float) $cart->subtotal(2, '.', '');
+            $finalTotal = $cartSubtotal - (float) $this->discount + (float) $this->tax;
+
             $invoice = Invoice::create([
                 'invoice_number' => Invoice::generateInvoiceNumber(),
                 'user_id' => $this->selectedDoctor,
-                'subtotal' => Cart::instance($this->cartInstance)->subtotal(),
+                'subtotal' => $cartSubtotal,
                 'discount' => $this->discount,
                 'tax' => $this->tax,
-                'total' => Cart::instance($this->cartInstance)->total() - $this->discount + $this->tax,
+                'total' => $finalTotal,
                 'status' => 'pending',
                 'due_date' => $this->dueDate,
                 'notes' => $this->invoiceNotes,
             ]);
 
             // Create invoice items
-            foreach (Cart::instance($this->cartInstance)->content() as $cartItem) {
+            foreach ($cart->content() as $cartItem) {
                 $itemableType = match($cartItem->options->type) {
                     'certificate' => DoctorCertificate::class,
                     'license' => DoctorLicense::class,
@@ -248,8 +295,8 @@ class CreateInvoiceComponent extends Component
                     'invoice_id' => $invoice->id,
                     'description' => $cartItem->options->description,
                     'quantity' => $cartItem->qty,
-                    'unit_price' => $cartItem->price,
-                    'amount' => $cartItem->total,
+                    'unit_price' => (float) $cartItem->price,
+                    'amount' => (float) $cartItem->total,
                     'itemable_id' => $cartItem->options->item_id,
                     'itemable_type' => $itemableType,
                     'notes' => null,

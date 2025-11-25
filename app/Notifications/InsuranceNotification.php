@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\UserType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -38,7 +39,9 @@ class InsuranceNotification extends Notification
     {
         $mailMessage = new MailMessage;
 
-        if ($this->data['type'] === 'payer_enrollment_request') {
+        $dashboardUrl = $this->getDashboardUrl($notifiable);
+
+        if (($this->data['type'] ?? null) === 'payer_enrollment_request') {
             $mailMessage
                 ->subject('New Payer Enrollment Request')
                 ->line('A new payer enrollment request has been submitted.')
@@ -47,9 +50,9 @@ class InsuranceNotification extends Notification
                 ->line('State: ' . $this->data['state_name'])
                 ->line('Request Type: ' . $this->data['request_type'])
                 ->line('Default Amount: $' . number_format($this->data['default_amount'], 2))
-                ->action('View Request', url('/admin/credentials/' . $this->data['credential_id']))
+                ->line('View all requests: ' . $dashboardUrl)
                 ->line('Please review and process this request.');
-        } elseif ($this->data['type'] === 'payer_enrollment_confirmation') {
+        } elseif (($this->data['type'] ?? null) === 'payer_enrollment_confirmation') {
             $mailMessage
                 ->subject('Payer Enrollment Request Submitted')
                 ->line('Your payer enrollment request has been successfully submitted.')
@@ -58,7 +61,7 @@ class InsuranceNotification extends Notification
                 ->line('State: ' . $this->data['state_name'])
                 ->line('Request Type: ' . $this->data['request_type'])
                 ->line('Default Amount: $' . number_format($this->data['default_amount'], 2))
-                ->action('View Status', url('/doctor/credentials/' . $this->data['credential_id']))
+                ->line('View status: ' . $dashboardUrl)
                 ->line('We will notify you once your request has been processed.');
         }
 
@@ -108,5 +111,18 @@ class InsuranceNotification extends Notification
             default:
                 return 'You have a new insurance notification';
         }
+    }
+
+    /**
+     * Resolve dashboard URL based on user type.
+     */
+    protected function getDashboardUrl($notifiable): string
+    {
+        return match ($notifiable->user_type ?? null) {
+            UserType::SUPER_ADMIN => route('super-admin.view_all_credentials'),
+            UserType::ORGANIZATION_ADMIN => route('organization-admin.doctor_applications'),
+            UserType::DOCTOR => route('doctor.applications'),
+            default => url('/'),
+        };
     }
 }

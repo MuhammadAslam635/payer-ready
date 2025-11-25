@@ -15,6 +15,8 @@ class DoctorProfile extends Model
         'user_id',
         'npi_number',
         'dea_number',
+        'dea_issue_date',
+        'dea_expiry_date',
         'caqh_id',
         'status',
         'primary_specialty_id',
@@ -27,6 +29,8 @@ class DoctorProfile extends Model
     protected $casts = [
         'board_certified' => 'boolean',
         'board_certification_date' => 'date',
+        'dea_issue_date' => 'date',
+        'dea_expiry_date' => 'date',
     ];
 
     /**

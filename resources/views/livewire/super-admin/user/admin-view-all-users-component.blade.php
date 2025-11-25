@@ -15,6 +15,19 @@
     <!-- Filters -->
     <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- User Type Filter -->
+            <div>
+                <label for="userTypeFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">User Type <span class="text-red-500">*</span></label>
+                <select wire:model.live="userTypeFilter" 
+                        id="userTypeFilter"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="">Select User Type</option>
+                    @foreach($userTypes as $value => $label)
+                        <option value="{{ $value }}">{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <!-- Search -->
             <div>
                 <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search</label>
@@ -22,20 +35,8 @@
                        wire:model.live.debounce.300ms="search" 
                        id="search"
                        placeholder="Search by name or email..."
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-            </div>
-
-            <!-- User Type Filter -->
-            <div>
-                <label for="userTypeFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">User Type</label>
-                <select wire:model.live="userTypeFilter" 
-                        id="userTypeFilter"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                    <option value="">All Types</option>
-                    @foreach($userTypes as $value => $label)
-                        <option value="{{ $value }}">{{ $label }}</option>
-                    @endforeach
-                </select>
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                       @if(!$userTypeFilter) disabled @endif>
             </div>
 
             <!-- Status Filter -->
@@ -43,16 +44,25 @@
                 <label for="statusFilter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
                 <select wire:model.live="statusFilter" 
                         id="statusFilter"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        @if(!$userTypeFilter) disabled @endif>
                     <option value="">All Status</option>
                     <option value="1">Active</option>
                     <option value="0">Inactive</option>
                 </select>
             </div>
         </div>
+        @if(!$userTypeFilter)
+            <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <p class="text-sm text-blue-800">
+                    <strong>Note:</strong> Please select a User Type to view users.
+                </p>
+            </div>
+        @endif
     </div>
 
     <!-- Users Grid -->
+    @if($userTypeFilter)
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @forelse($users as $user)
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
@@ -130,9 +140,20 @@
     </div>
 
     <!-- Pagination -->
-    @if($users->hasPages())
+    @if($userTypeFilter && $users->hasPages())
         <div class="mt-6">
             {{ $users->links() }}
         </div>
+    @endif
+    @else
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
+        <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+        </svg>
+        <h3 class="mt-2 text-lg font-medium text-gray-900 dark:text-white">No Users Selected</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Please select a User Type from the filter above to view users.
+        </p>
+    </div>
     @endif
 </div>

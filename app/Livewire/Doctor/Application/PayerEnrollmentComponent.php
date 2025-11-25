@@ -14,6 +14,9 @@ use App\Models\DoctorCredential;
 use App\Notifications\InsuranceNotification;
 use App\Traits\HasToast;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 #[Title('Payer Enrollments')]
@@ -23,10 +26,12 @@ class PayerEnrollmentComponent extends Component
     use HasToast;
     public $activeTab = 'all';
     public $showRequestModal = false;
+    public $showDeleteModal = false;
     public $selectedProvider = '';
     public $selectedPayer = '';
     public $selectedRequestType = '';
     public $selectedState = '';
+    public $deleteId = null;
 
     public $enrollments;
     public $payers = [];
@@ -88,72 +93,75 @@ class PayerEnrollmentComponent extends Component
             'selectedRequestType' => 'required',
             'selectedState' => 'required',
         ]);
-        // dd($this->all());
+
+        DB::beginTransaction();
 
         try {
-            // Get the selected models
-            $provider = User::find($this->selectedProvider);
-            $payer = Payer::find($this->selectedPayer);
-            $state = State::find($this->selectedState);
+            $provider = User::findOrFail($this->selectedProvider);
+            $payer = Payer::findOrFail($this->selectedPayer);
+            $state = State::findOrFail($this->selectedState);
 
-            // Create DoctorCredential record
             $credential = DoctorCredential::create([
-                'user_id' => $this->selectedProvider,
-                'payer_id' => $this->selectedPayer,
-                'state_id' => $this->selectedState,
+                'user_id' => $provider->id,
+                'payer_id' => $payer->id,
+                'state_id' => $state->id,
                 'request_type' => $this->selectedRequestType,
-                'credential_number'=>Str::random(10),
-                'status' => 'pending',
+                'credential_number'=> Str::upper(Str::random(10)),
+                'status' => CredentialStatus::REQUESTED,
                 'submitted_at' => now(),
             ]);
 
-            // Prepare notification data
-            $notificationData = [
-                'type' => 'payer_enrollment_request',
-                'provider_name' => $provider->name,
-                'payer_name' => $payer->name,
-                'state_name' => $state->name,
-                'request_type' => $this->selectedRequestType,
-                'default_amount' => $payer->default_amount ?? 0,
-                'credential_id' => $credential->id,
-            ];
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Doctor payer enrollment failed', [
+                'error' => $e->getMessage(),
+                'provider_id' => $this->selectedProvider,
+            ]);
+            $this->toastError('Failed to submit payer enrollment request. Please try again.');
+            return;
+        }
 
-            // Send notification to admins
+        $notificationData = [
+            'type' => 'payer_enrollment_request',
+            'provider_name' => $provider->name,
+            'payer_name' => $payer->name,
+            'state_name' => $state->name,
+            'request_type' => $this->selectedRequestType,
+            'default_amount' => $payer->default_amount ?? 0,
+            'credential_id' => $credential->id,
+        ];
+
+        try {
             $adminUsers = User::whereIn('user_type', [
                 UserType::SUPER_ADMIN,
-                UserType::ORGANIZATION_ADMIN
+                UserType::ORGANIZATION_ADMIN,
             ])->where('is_active', true)->get();
 
-            foreach ($adminUsers as $admin) {
-                $admin->notify(new InsuranceNotification($notificationData));
+            if ($adminUsers->isNotEmpty()) {
+                Notification::send($adminUsers, new InsuranceNotification($notificationData));
             }
 
-            // Dispatch real-time notification event
-            $this->dispatch('notification-added', [
-                'title' => 'New Certificate Request',
-                'message' => "Dr. {$provider->name} has requested a new certificate for {$payer->name}",
-                'type' => 'info'
+            $provider->notify(new InsuranceNotification(array_merge($notificationData, [
+                'type' => 'payer_enrollment_confirmation',
+            ])));
+        } catch (\Throwable $notificationException) {
+            Log::error('Failed to send payer enrollment notifications', [
+                'error' => $notificationException->getMessage(),
+                'credential_id' => $credential->id,
             ]);
-
-            // Send confirmation notification to provider
-            $confirmationData = array_merge($notificationData, [
-                'type' => 'payer_enrollment_confirmation'
-            ]);
-
-            $provider->notify(new InsuranceNotification($confirmationData));
-
-            $this->closeRequestModal();
-
-            // Add a flash message
-            $this->toastSuccess('Payer enrollment request submitted successfully!');
-
-            // Refresh the enrollments list
-            $this->loadEnrollments();
-            $this->calculateStats();
-
-        } catch (\Exception $e) {
-            $this->toastError('Failed to submit payer enrollment request. Please try again.',$e->getMessage());
         }
+
+        $this->dispatch('notification-added', [
+            'title' => 'New Payer Enrollment Request',
+            'message' => "Dr. {$provider->name} has requested payer {$payer->name}",
+            'type' => 'info',
+        ]);
+
+        $this->closeRequestModal();
+        $this->toastSuccess('Payer enrollment request submitted successfully!');
+        $this->loadEnrollments();
+        $this->calculateStats();
     }
 
     private function loadEnrollments()
@@ -169,6 +177,60 @@ class PayerEnrollmentComponent extends Component
                 return strtolower(str_replace(' ', '_', $enrollment->status)) === $this->activeTab;
             });
         }
+    }
+
+    public function delete($enrollmentId)
+    {
+        $enrollment = DoctorCredential::findOrFail($enrollmentId);
+
+        if ($enrollment->user_id !== Auth::id()) {
+            $this->toastError('Unauthorized access');
+            return;
+        }
+
+        if ($enrollment->status !== CredentialStatus::REQUESTED->value && $enrollment->status !== CredentialStatus::REQUESTED) {
+            $this->toastError('Only applications in Requested status can be deleted.');
+            return;
+        }
+
+        $this->deleteId = $enrollmentId;
+        $this->showDeleteModal = true;
+    }
+
+    public function confirmDelete()
+    {
+        try {
+            $enrollment = DoctorCredential::findOrFail($this->deleteId);
+            
+            // Ensure the enrollment belongs to the current user
+            if ($enrollment->user_id !== Auth::id()) {
+                $this->toastError('Unauthorized access');
+                $this->cancelDelete();
+                return;
+            }
+
+            if (strtolower((string)$enrollment->status) !== CredentialStatus::REQUESTED->value) {
+                $this->toastError('Only applications in Requested status can be deleted.');
+                $this->cancelDelete();
+                return;
+            }
+
+            $enrollment->delete();
+
+            $this->toastSuccess('Payer enrollment deleted successfully!');
+            $this->cancelDelete();
+            $this->loadEnrollments();
+            $this->calculateStats();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to delete payer enrollment: ' . $e->getMessage());
+            $this->cancelDelete();
+        }
+    }
+
+    public function cancelDelete()
+    {
+        $this->showDeleteModal = false;
+        $this->deleteId = null;
     }
 
     private function calculateStats()

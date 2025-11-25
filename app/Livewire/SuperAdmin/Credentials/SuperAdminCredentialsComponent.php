@@ -37,23 +37,15 @@ class SuperAdminCredentialsComponent extends Component
     public $selectedCredential = null;
 
     // Edit Form Properties
-    public $editCredentialName = '';
-    public $editIssuingOrganization = '';
-    public $editCredentialNumber = '';
-    public $editIssueDate = '';
-    public $editExpirationDate = '';
     public $editStatus = '';
+    public $editEffectiveDate = '';
     public $editDescription = '';
     public $editIsVerified = false;
     public $editVerificationNotes = '';
 
     protected $rules = [
-        'editCredentialName' => 'required|string|max:255',
-        'editIssuingOrganization' => 'required|string|max:255',
-        'editCredentialNumber' => 'required|string|max:255',
-        'editIssueDate' => 'nullable|date',
-        'editExpirationDate' => 'nullable|date|after:editIssueDate',
         'editStatus' => 'required|string',
+        'editEffectiveDate' => 'nullable|date',
         'editDescription' => 'nullable|string',
         'editIsVerified' => 'boolean',
         'editVerificationNotes' => 'nullable|string',
@@ -129,12 +121,8 @@ class SuperAdminCredentialsComponent extends Component
         $this->selectedCredential = DoctorCredential::with(['user', 'state', 'payer'])->find($credentialId);
         
         if ($this->selectedCredential) {
-            $this->editCredentialName = $this->selectedCredential->credential_name;
-            $this->editIssuingOrganization = $this->selectedCredential->issuing_organization;
-            $this->editCredentialNumber = $this->selectedCredential->credential_number;
-            $this->editIssueDate = $this->selectedCredential->issue_date?->format('Y-m-d') ?? '';
-            $this->editExpirationDate = $this->selectedCredential->expiration_date?->format('Y-m-d') ?? '';
             $this->editStatus = $this->selectedCredential->status;
+            $this->editEffectiveDate = $this->selectedCredential->effective_date?->format('Y-m-d') ?? '';
             $this->editDescription = $this->selectedCredential->description ?? '';
             $this->editIsVerified = $this->selectedCredential->is_verified;
             $this->editVerificationNotes = $this->selectedCredential->verification_notes ?? '';
@@ -149,12 +137,8 @@ class SuperAdminCredentialsComponent extends Component
 
         try {
             $this->selectedCredential->update([
-                'credential_name' => $this->editCredentialName,
-                'issuing_organization' => $this->editIssuingOrganization,
-                'credential_number' => $this->editCredentialNumber,
-                'issue_date' => $this->editIssueDate ?: null,
-                'expiration_date' => $this->editExpirationDate ?: null,
                 'status' => $this->editStatus,
+                'effective_date' => $this->editEffectiveDate ?: null,
                 'description' => $this->editDescription,
                 'is_verified' => $this->editIsVerified,
                 'verification_notes' => $this->editVerificationNotes,
@@ -162,11 +146,11 @@ class SuperAdminCredentialsComponent extends Component
                 'verified_by' => $this->editIsVerified ? Auth::user()->id : null,
             ]);
 
-            $this->toastSuccess('Credential updated successfully!');
+            $this->toastSuccess('Application updated successfully!');
             $this->closeModal();
             $this->dispatch('refreshCredentials');
         } catch (\Exception $e) {
-            $this->toastError('Error updating credential: ' . $e->getMessage());
+            $this->toastError('Error updating application: ' . $e->getMessage());
         }
     }
 
@@ -180,7 +164,7 @@ class SuperAdminCredentialsComponent extends Component
     {
         try {
             $this->selectedCredential->delete();
-            $this->toastSuccess('Credential deleted successfully!');
+            $this->toastSuccess('Application deleted successfully!');
             $this->closeModal();
             $this->dispatch('refreshCredentials');
         } catch (\Exception $e) {
@@ -199,12 +183,8 @@ class SuperAdminCredentialsComponent extends Component
 
     private function resetEditForm()
     {
-        $this->editCredentialName = '';
-        $this->editIssuingOrganization = '';
-        $this->editCredentialNumber = '';
-        $this->editIssueDate = '';
-        $this->editExpirationDate = '';
         $this->editStatus = '';
+        $this->editEffectiveDate = '';
         $this->editDescription = '';
         $this->editIsVerified = false;
         $this->editVerificationNotes = '';
@@ -216,12 +196,12 @@ class SuperAdminCredentialsComponent extends Component
             ->with(['user', 'state', 'payer', 'verifier'])
             ->when($this->search, function (Builder $query) {
                 $query->where(function (Builder $subQuery) {
-                    $subQuery->where('credential_name', 'like', '%' . $this->search . '%')
-                        ->orWhere('credential_number', 'like', '%' . $this->search . '%')
-                        ->orWhere('issuing_organization', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('user', function (Builder $userQuery) {
+                    $subQuery->whereHas('user', function (Builder $userQuery) {
                             $userQuery->where('name', 'like', '%' . $this->search . '%')
                                 ->orWhere('email', 'like', '%' . $this->search . '%');
+                        })
+                        ->orWhereHas('payer', function (Builder $payerQuery) {
+                            $payerQuery->where('name', 'like', '%' . $this->search . '%');
                         });
                 });
             })

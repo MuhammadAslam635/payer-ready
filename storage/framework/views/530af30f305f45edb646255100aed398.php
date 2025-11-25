@@ -25,13 +25,13 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <img class="w-8 h-8 rounded-full object-cover bg-slate-200"
-                                        src="<?php echo e($request['doctor']['profile_photo_url']); ?>"
-                                        alt="<?php echo e($request['doctor']['name']); ?>">
+                                        src="<?php echo e($request['doctor']['profile_photo_url'] ?? asset('images/default-avatar.png')); ?>"
+                                        alt="<?php echo e($request['doctor']['name'] ?? 'N/A'); ?>">
                                     <div class="ml-3">
-                                        <p class="text-sm font-medium text-slate-900"><?php echo e($request['doctor']['name']); ?>
+                                        <p class="text-sm font-medium text-slate-900"><?php echo e($request['doctor']['name'] ?? 'N/A'); ?>
 
                                         </p>
-                                        <p class="text-xs text-slate-500"><?php echo e($request['doctor']['email']); ?></p>
+                                        <p class="text-xs text-slate-500"><?php echo e($request['doctor']['email'] ?? 'N/A'); ?></p>
                                     </div>
                                 </div>
                             </td>

@@ -19,7 +19,7 @@ class UserPaymentNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -27,7 +27,7 @@ class UserPaymentNotification extends Notification
         return (new MailMessage)
             ->subject($this->data['title'] ?? 'New Payment Submitted')
             ->line($this->data['message'] ?? 'A new payment has been submitted.')
-            ->action('View', url($this->data['url'] ?? '/'))
+            ->line('View details: ' . ($this->data['url'] ?? url('/')))
             ->line('Thank you.');
     }
 

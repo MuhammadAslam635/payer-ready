@@ -67,6 +67,64 @@
                                     </x-ui.button>
                                 </div>
                             </div>
+
+                            <!-- Manual Item Entry -->
+                            <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4 mt-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-sm font-semibold text-gray-700 flex items-center">
+                                        <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6" />
+                                        </svg>
+                                        Add Custom Service
+                                    </h4>
+                                    <span class="text-xs text-gray-500">Use when no predefined item fits</span>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="sm:col-span-1">
+                                        <x-ui.label>Service Name</x-ui.label>
+                                        <x-ui.input
+                                            type="text"
+                                            wire:model.live="manualItemName"
+                                            placeholder="e.g., Expedited Application"
+                                            class="mt-1 block w-full"
+                                        />
+                                        <x-ui.error name="manualItemName" />
+                                    </div>
+                                    <div class="sm:col-span-1">
+                                        <x-ui.label>Amount (USD)</x-ui.label>
+                                        <x-ui.input
+                                            type="number"
+                                            wire:model.live="manualItemAmount"
+                                            min="0"
+                                            step="0.01"
+                                            placeholder="0.00"
+                                            class="mt-1 block w-full"
+                                        />
+                                        <x-ui.error name="manualItemAmount" />
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <x-ui.label>Description (optional)</x-ui.label>
+                                        <textarea
+                                            wire:model.live="manualItemDescription"
+                                            rows="2"
+                                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            placeholder="Add any details about this service..."
+                                        ></textarea>
+                                        <x-ui.error name="manualItemDescription" />
+                                    </div>
+                                </div>
+                                <div class="mt-4 flex justify-end">
+                                    <x-ui.button
+                                        type="button"
+                                        wire:click="addManualItem"
+                                        wire:loading.attr="disabled"
+                                        class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <span wire:loading.remove wire:target="addManualItem">Add Custom Item</span>
+                                        <span wire:loading wire:target="addManualItem">Adding...</span>
+                                    </x-ui.button>
+                                </div>
+                            </div>
                         @endif
 
                         <!-- Invoice Details -->
@@ -185,7 +243,7 @@
                                 <div class="border-t border-gray-200 pt-4 space-y-2">
                                     <div class="flex justify-between text-sm">
                                         <span class="text-gray-600">Subtotal:</span>
-                                        <span class="font-medium">${{ number_format($cartTotal, 2) }}</span>
+                                        <span class="font-medium">${{ number_format($cartSubtotal, 2) }}</span>
                                     </div>
                                     @if($discount > 0)
                                         <div class="flex justify-between text-sm">
@@ -201,7 +259,7 @@
                                     @endif
                                     <div class="flex justify-between text-base font-semibold border-t border-gray-200 pt-2">
                                         <span>Total:</span>
-                                        <span>${{ number_format($cartTotal - $discount + $tax, 2) }}</span>
+                                        <span>${{ number_format($cartSubtotal - $discount + $tax, 2) }}</span>
                                     </div>
                                 </div>
                             @else

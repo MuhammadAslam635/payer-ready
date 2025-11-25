@@ -10,20 +10,32 @@ use App\Models\Specialty;
 use App\Models\User;
 use App\Models\PracticeLocation;
 use App\Models\State;
+use App\Models\Address;
+use App\Models\DoctorLicense;
+use App\Models\DoctorCertificate;
+use App\Models\Education;
+use App\Models\Insurance;
+use App\Models\LicenseType;
+use App\Models\CertificateType;
+use App\Models\DoctorDocument;
+use App\Models\DocumentType;
+use App\Notifications\DocumentNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Traits\HasToast;
+use Livewire\WithFileUploads;
 
 #[Title('Doctor Profile')]
 #[Layout('layouts.dashboard')]
 class DoctorProfileComponent extends Component
 {
-    use HasToast;
+    use HasToast, WithFileUploads;
 
     public $editing = false;
     public $doctorProfile;
     public $specialties = [];
     public $showEditForm = false;
-    public $activeTab = 'information';
+    public $activeTab = 'personal';
     
     // Practice Location Modal
     public $showPracticeModal = false;
@@ -50,7 +62,6 @@ class DoctorProfileComponent extends Component
     public $phone = '';
     public $fax_number = '';
     public $date_of_birth = '';
-    public $is_active = true;
     public $npi_number = '';
     public $provider_type = '';
     public $ssn_encrypted = '';
@@ -64,6 +75,12 @@ class DoctorProfileComponent extends Component
     public $nppes_password = '';
     public $availity_login = '';
     public $availity_password = '';
+    
+    // Password visibility toggles
+    public $showNppesPassword = false;
+    public $showCaqhPassword = false;
+    public $showAvailityPassword = false;
+    public $showPecosPassword = false;
 
     // Doctor Profile fields
     public $status = 'active';
@@ -72,13 +89,84 @@ class DoctorProfileComponent extends Component
     public $board_certified = false;
     public $board_certification_date = '';
     public $bio = '';
+    public $dea_number = '';
+    public $dea_issue_date = '';
+    public $dea_expiry_date = '';
+    
+    // License form fields
+    public $license_license_number = '';
+    public $license_license_type_id = '';
+    public $license_state_id = '';
+    public $license_issue_date = '';
+    public $license_expiry_date = '';
+    
+    // Certification form fields
+    public $cert_certificate_number = '';
+    public $cert_certificate_type_id = '';
+    public $cert_issuing_organization = '';
+    public $cert_issue_date = '';
+    public $cert_expiry_date = '';
+
+    // Address fields
+    public $address = '';
+    public $address_state_id = '';
+    public $address_country = 'US';
+    public $address_type = 'home';
+
+    // Professional IDs - Licenses, Certifications, DEA
+    public $licenses = [];
+    public $certificates = [];
+    public $licenseTypes = [];
+    public $certificateTypes = [];
+
+    // Educational Information
+    public $educations = [];
+    public $edu_institution_name = '';
+    public $edu_degree = '';
+    public $edu_completed_year = '';
+    public $editingEducationId = null;
+
+    // Specialties (multiple)
+    public $selectedSpecialties = [];
+
+    // Practice Location additional fields
+    public $practice_tax_id = '';
+    public $practice_office_phone = '';
+    public $practice_office_fax = '';
+
+    // Professional Liability Insurance
+    public $insurance_carrier = '';
+    public $insurance_policy_number = '';
+    public $insurance_coverage_amount_per_occurrence = '';
+    public $insurance_coverage_amount_aggregate = '';
+    public $insurance_policy_effective_date = '';
+    public $insurance_policy_expiration_date = '';
+
+    // Document Upload
+    public $showUploadModal = false;
+    public $showEditModal = false;
+    public $selectedDocumentType = '';
+    public $documentFile;
+    public $notes = '';
+    public $editingDocument = null;
+    public $editNotes = '';
+    public $documents = [];
 
     public function mount()
     {
         $this->loadProfile();
         $this->specialties = Specialty::orderBy('name')->get();
         $this->states = State::orderBy('name')->get();
+        $this->licenseTypes = LicenseType::orderBy('name')->get();
+        $this->certificateTypes = CertificateType::orderBy('name')->get();
         $this->loadPracticeLocations();
+        $this->loadAddress();
+        $this->loadLicenses();
+        $this->loadCertificates();
+        $this->loadEducations();
+        $this->loadInsurance();
+        $this->loadSpecialties();
+        $this->loadDocuments();
     }
 
     public function loadProfile()
@@ -92,7 +180,6 @@ class DoctorProfileComponent extends Component
         $this->phone = $user->phone ?? '';
         $this->fax_number = $user->fax_number ?? '';
         $this->date_of_birth = $user->date_of_birth;
-        $this->is_active = $user->is_active ?? true;
         $this->npi_number = $user->npi_number ?? '';
         $this->provider_type = $user->provider_type ?? '';
         $this->ssn_encrypted = $user->ssn_encrypted ?? '';
@@ -117,7 +204,221 @@ class DoctorProfileComponent extends Component
             $this->board_certification_date = $this->doctorProfile->board_certification_date ?
                 $this->doctorProfile->board_certification_date->format('Y-m-d') : '';
             $this->bio = $this->doctorProfile->bio ?? '';
+            $this->dea_number = $this->doctorProfile->dea_number ?? '';
+            $this->dea_issue_date = $this->doctorProfile->dea_issue_date ? 
+                $this->doctorProfile->dea_issue_date->format('Y-m-d') : '';
+            $this->dea_expiry_date = $this->doctorProfile->dea_expiry_date ? 
+                $this->doctorProfile->dea_expiry_date->format('Y-m-d') : '';
         }
+    }
+
+    public function loadAddress()
+    {
+        $user = Auth::user();
+        $primaryAddress = $user->addresses()->where('is_primary', true)->first();
+        if ($primaryAddress) {
+            $this->address = $primaryAddress->address ?? '';
+            $this->address_state_id = $primaryAddress->state_id ?? '';
+            $this->address_country = $primaryAddress->country ?? 'US';
+            $this->address_type = $primaryAddress->address_type ?? 'home';
+        }
+    }
+
+    public function loadLicenses()
+    {
+        $this->licenses = DoctorLicense::where('user_id', Auth::id())
+            ->with(['state', 'licenseType'])
+            ->orderBy('expiration_date', 'desc')
+            ->get();
+    }
+
+    public function loadCertificates()
+    {
+        $this->certificates = DoctorCertificate::where('user_id', Auth::id())
+            ->with('certificateType')
+            ->orderBy('expiration_date', 'desc')
+            ->get();
+    }
+
+    public function loadEducations()
+    {
+        $this->educations = Education::where('user_id', Auth::id())
+            ->orderBy('completed_year', 'desc')
+            ->get();
+    }
+
+    public function loadInsurance()
+    {
+        $insurance = Insurance::where('user_id', Auth::id())->first();
+        if ($insurance) {
+            $this->insurance_carrier = $insurance->carrier ?? '';
+            $this->insurance_policy_number = $insurance->policy_number ?? '';
+            $this->insurance_coverage_amount_per_occurrence = $insurance->coverage_amount ?? '';
+            $this->insurance_coverage_amount_aggregate = $insurance->coverage_amount ?? '';
+            $this->insurance_policy_effective_date = $insurance->policy_effective_date ? 
+                $insurance->policy_effective_date->format('Y-m-d') : '';
+            $this->insurance_policy_expiration_date = $insurance->policy_expiration_date ? 
+                $insurance->policy_expiration_date->format('Y-m-d') : '';
+        }
+    }
+
+    public function loadSpecialties()
+    {
+        $user = Auth::user();
+        $this->selectedSpecialties = $user->specialties()->pluck('specialties.id')->toArray();
+    }
+
+    public function loadDocuments()
+    {
+        $this->documents = DoctorDocument::with('documentType')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    public function openUploadModal()
+    {
+        $this->showUploadModal = true;
+        $this->reset(['selectedDocumentType', 'documentFile', 'notes']);
+    }
+
+    public function closeUploadModal()
+    {
+        $this->showUploadModal = false;
+        $this->reset(['selectedDocumentType', 'documentFile', 'notes']);
+        $this->resetErrorBag();
+    }
+
+    public function openEditModal($documentId)
+    {
+        $this->editingDocument = DoctorDocument::find($documentId);
+        if ($this->editingDocument && $this->editingDocument->user_id === Auth::id()) {
+            $this->editNotes = $this->editingDocument->notes ?? '';
+            $this->showEditModal = true;
+        }
+    }
+
+    public function closeEditModal()
+    {
+        $this->showEditModal = false;
+        $this->editingDocument = null;
+        $this->editNotes = '';
+        $this->resetErrorBag();
+    }
+
+    public function uploadDocument()
+    {
+        $this->validate([
+            'selectedDocumentType' => 'required|exists:document_types,id',
+            'documentFile' => 'required|file|max:10240', // 10MB max
+            'notes' => 'nullable|string|max:1000',
+        ]);
+
+        try {
+            $documentType = DocumentType::find($this->selectedDocumentType);
+            
+            // Generate unique filename
+            $originalFilename = $this->documentFile->getClientOriginalName();
+            $extension = $this->documentFile->getClientOriginalExtension();
+            $storedFilename = time() . '_' . uniqid() . '.' . $extension;
+            
+            // Store file
+            $filePath = $this->documentFile->storeAs('doctor-documents', $storedFilename, 'public');
+            
+            // Create document record
+            $document = DoctorDocument::create([
+                'user_id' => Auth::id(),
+                'document_type_id' => $this->selectedDocumentType,
+                'original_filename' => $originalFilename,
+                'stored_filename' => $storedFilename,
+                'file_path' => $filePath,
+                'file_size_bytes' => $this->documentFile->getSize(),
+                'mime_type' => $this->documentFile->getMimeType(),
+                'file_hash' => hash_file('sha256', $this->documentFile->path()),
+                'upload_date' => now(),
+                'is_verified' => false,
+                'is_current' => true,
+                'notes' => $this->notes,
+            ]);
+
+            // Send notification
+            Auth::user()->notify(new DocumentNotification($document, 'uploaded'));
+
+            $this->toastSuccess('Document uploaded successfully!');
+            $this->closeUploadModal();
+            $this->loadDocuments();
+            
+            // Emit event to refresh notifications
+            $this->dispatch('refresh-notifications');
+            
+        } catch (\Exception $e) {
+            $this->toastError('Failed to upload document: ' . $e->getMessage());
+        }
+    }
+
+    public function updateDocument()
+    {
+        $this->validate([
+            'editNotes' => 'nullable|string|max:1000',
+        ]);
+
+        try {
+            if ($this->editingDocument && $this->editingDocument->user_id === Auth::id()) {
+                $this->editingDocument->update([
+                    'notes' => $this->editNotes,
+                ]);
+
+                $this->toastSuccess('Document updated successfully!');
+                $this->closeEditModal();
+                $this->loadDocuments();
+            }
+        } catch (\Exception $e) {
+            $this->toastError('Failed to update document: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteDocument($documentId)
+    {
+        try {
+            $document = DoctorDocument::find($documentId);
+            if ($document && $document->user_id === Auth::id()) {
+                // Delete file from storage
+                if (Storage::disk('public')->exists($document->file_path)) {
+                    Storage::disk('public')->delete($document->file_path);
+                }
+                
+                $document->delete();
+                $this->toastSuccess('Document deleted successfully!');
+                $this->loadDocuments();
+            }
+        } catch (\Exception $e) {
+            $this->toastError('Failed to delete document: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadDocument($documentId)
+    {
+        try {
+            $document = DoctorDocument::find($documentId);
+            if ($document && $document->user_id === Auth::id()) {
+                if (Storage::disk('public')->exists($document->file_path)) {
+                    return Storage::disk('public')->download($document->file_path, $document->original_filename);
+                }
+            }
+            
+            $this->toastError('File not found!');
+        } catch (\Exception $e) {
+            $this->toastError('Failed to download document: ' . $e->getMessage());
+        }
+    }
+
+    public function formatFileSize($bytes)
+    {
+        if ($bytes === 0) return '0 Bytes';
+        $k = 1024;
+        $sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        $i = floor(log($bytes) / log($k));
+        return round($bytes / pow($k, $i), 2) . ' ' . $sizes[$i];
     }
 
 
@@ -159,6 +460,9 @@ class DoctorProfileComponent extends Component
         $this->practice_specialty = '';
         $this->practice_npi_type_1 = '';
         $this->practice_npi_type_2 = '';
+        $this->practice_tax_id = '';
+        $this->practice_office_phone = '';
+        $this->practice_office_fax = '';
         $this->is_primary_location = false;
         $this->resetValidation();
     }
@@ -183,6 +487,9 @@ class DoctorProfileComponent extends Component
         $this->practice_specialty = $practice->specialty;
         $this->practice_npi_type_1 = $practice->npi_type_1 ?? '';
         $this->practice_npi_type_2 = $practice->npi_type_2 ?? '';
+        $this->practice_tax_id = $practice->tax_id ?? '';
+        $this->practice_office_phone = $practice->office_phone ?? '';
+        $this->practice_office_fax = $practice->office_fax ?? '';
         $this->is_primary_location = $practice->is_primary;
 
         $this->showPracticeModal = true;
@@ -201,6 +508,9 @@ class DoctorProfileComponent extends Component
             'practice_specialty' => 'required|string|max:255',
             'practice_npi_type_1' => 'nullable|string|max:50',
             'practice_npi_type_2' => 'nullable|string|max:50',
+            'practice_tax_id' => 'nullable|string|max:50',
+            'practice_office_phone' => 'nullable|string|max:20',
+            'practice_office_fax' => 'nullable|string|max:20',
             'is_primary_location' => 'boolean',
         ]);
 
@@ -217,6 +527,9 @@ class DoctorProfileComponent extends Component
                 'specialty' => $this->practice_specialty,
                 'npi_type_1' => $this->practice_npi_type_1,
                 'npi_type_2' => $this->practice_npi_type_2,
+                'tax_id' => $this->practice_tax_id,
+                'office_phone' => $this->practice_office_phone,
+                'office_fax' => $this->practice_office_fax,
                 'is_primary' => $this->is_primary_location,
             ];
 
@@ -269,6 +582,8 @@ class DoctorProfileComponent extends Component
             'date_of_birth' => 'required|date',
             'npi_number' => 'required|string|max:50',
             'provider_type' => 'required|string',
+            'address' => 'nullable|string|max:500',
+            'address_state_id' => 'nullable|exists:states,id',
         ]);
 
         try {
@@ -282,10 +597,53 @@ class DoctorProfileComponent extends Component
                 'npi_number' => $this->npi_number,
                 'provider_type' => $this->provider_type,
                 'ssn_encrypted' => $this->ssn_encrypted,
-                'is_active' => $this->is_active,
             ]);
 
+            // Update or create address
+            if ($this->address) {
+                $primaryAddress = $user->addresses()->where('is_primary', true)->first();
+                if ($primaryAddress) {
+                    $primaryAddress->update([
+                        'address' => $this->address,
+                        'state_id' => $this->address_state_id,
+                        'country' => $this->address_country,
+                        'address_type' => $this->address_type,
+                    ]);
+                } else {
+                    // Unmark all other addresses as primary
+                    $user->addresses()->update(['is_primary' => false]);
+                    
+                    Address::create([
+                        'user_id' => $user->id,
+                        'address' => $this->address,
+                        'state_id' => $this->address_state_id,
+                        'country' => $this->address_country,
+                        'address_type' => $this->address_type,
+                        'is_primary' => true,
+                    ]);
+                }
+            }
+
+            // Update DEA in doctor profile
+            if ($this->doctorProfile) {
+                $this->doctorProfile->update([
+                    'dea_number' => $this->dea_number,
+                    'dea_issue_date' => $this->dea_issue_date,
+                    'dea_expiry_date' => $this->dea_expiry_date,
+                ]);
+            } else {
+                DoctorProfile::create([
+                    'user_id' => Auth::id(),
+                    'dea_number' => $this->dea_number,
+                    'dea_issue_date' => $this->dea_issue_date,
+                    'dea_expiry_date' => $this->dea_expiry_date,
+                    'status' => 'active',
+                ]);
+            }
+
             $this->toastSuccess('Information saved successfully');
+            $this->loadProfile();
+            $this->loadAddress();
         } catch (\Exception $e) {
             $this->toastError('Failed to save information: ' . $e->getMessage());
         }
@@ -296,6 +654,7 @@ class DoctorProfileComponent extends Component
         $this->validate([
             'primary_specialty_id' => 'required|exists:specialties,id',
             'taxonomy_code' => 'required|string|max:50',
+            'selectedSpecialties' => 'nullable|array',
         ]);
 
         try {
@@ -317,10 +676,54 @@ class DoctorProfileComponent extends Component
                 ]);
             }
 
+            // Sync specialties
+            if (!empty($this->selectedSpecialties)) {
+                $user->specialties()->sync($this->selectedSpecialties);
+            }
+
             $this->toastSuccess('Specialty and taxonomy code saved successfully');
             $this->loadProfile();
+            $this->loadSpecialties();
         } catch (\Exception $e) {
             $this->toastError('Failed to save specialty: ' . $e->getMessage());
+        }
+    }
+
+    public function saveInsurance()
+    {
+        $this->validate([
+            'insurance_carrier' => 'nullable|string|max:255',
+            'insurance_policy_number' => 'nullable|string|max:100',
+            'insurance_coverage_amount_per_occurrence' => 'nullable|numeric|min:0',
+            'insurance_coverage_amount_aggregate' => 'nullable|numeric|min:0',
+            'insurance_policy_effective_date' => 'nullable|date',
+            'insurance_policy_expiration_date' => 'nullable|date|after:insurance_policy_effective_date',
+        ]);
+
+        try {
+            $user = Auth::user();
+            $insurance = Insurance::where('user_id', $user->id)->first();
+            
+            $data = [
+                'user_id' => $user->id,
+                'carrier' => $this->insurance_carrier,
+                'policy_number' => $this->insurance_policy_number,
+                'coverage_amount' => $this->insurance_coverage_amount_per_occurrence,
+                'policy_effective_date' => $this->insurance_policy_effective_date,
+                'policy_expiration_date' => $this->insurance_policy_expiration_date,
+                'status' => 'approved', // Using 'approved' as it's a valid enum value for active insurance
+            ];
+
+            if ($insurance) {
+                $insurance->update($data);
+            } else {
+                Insurance::create($data);
+            }
+
+            $this->toastSuccess('Insurance information saved successfully');
+            $this->loadInsurance();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to save insurance: ' . $e->getMessage());
         }
     }
 
@@ -346,6 +749,206 @@ class DoctorProfileComponent extends Component
         }
     }
 
+    public function saveDEAInfo()
+    {
+        $this->validate([
+            'dea_number' => 'nullable|string|max:50',
+            'dea_issue_date' => 'nullable|date',
+            'dea_expiry_date' => 'nullable|date|after:dea_issue_date',
+        ]);
+
+        try {
+            if ($this->doctorProfile) {
+                $this->doctorProfile->update([
+                    'dea_number' => $this->dea_number,
+                    'dea_issue_date' => $this->dea_issue_date,
+                    'dea_expiry_date' => $this->dea_expiry_date,
+                ]);
+            } else {
+                DoctorProfile::create([
+                    'user_id' => Auth::id(),
+                    'dea_number' => $this->dea_number,
+                    'dea_issue_date' => $this->dea_issue_date,
+                    'dea_expiry_date' => $this->dea_expiry_date,
+                    'status' => 'active',
+                ]);
+                $this->loadProfile();
+            }
+
+            $this->toastSuccess('DEA information saved successfully');
+            $this->loadProfile();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to save DEA information: ' . $e->getMessage());
+        }
+    }
+
+    public function saveLicense()
+    {
+        $this->validate([
+            'license_license_number' => 'required|string|max:255',
+            'license_license_type_id' => 'required|exists:license_types,id',
+            'license_state_id' => 'required|exists:states,id',
+            'license_issue_date' => 'required|date',
+            'license_expiry_date' => 'required|date|after:license_issue_date',
+        ]);
+
+        try {
+            DoctorLicense::create([
+                'user_id' => Auth::id(),
+                'license_type_id' => $this->license_license_type_id,
+                'state_id' => $this->license_state_id,
+                'license_number' => $this->license_license_number,
+                'issue_date' => $this->license_issue_date,
+                'expiration_date' => $this->license_expiry_date,
+                'status' => \App\Enums\LicenseStatus::ACTIVE,
+            ]);
+
+            $this->toastSuccess('License added successfully');
+            $this->resetLicenseForm();
+            $this->loadLicenses();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to add license: ' . $e->getMessage());
+        }
+    }
+
+    public function resetLicenseForm()
+    {
+        $this->license_license_number = '';
+        $this->license_license_type_id = '';
+        $this->license_state_id = '';
+        $this->license_issue_date = '';
+        $this->license_expiry_date = '';
+        $this->resetValidation();
+    }
+
+    public function saveCertification()
+    {
+        $this->validate([
+            'cert_certificate_number' => 'required|string|max:255',
+            'cert_certificate_type_id' => 'required|exists:certificate_types,id',
+            'cert_issuing_organization' => 'required|string|max:255',
+            'cert_issue_date' => 'required|date',
+            'cert_expiry_date' => 'required|date|after:cert_issue_date',
+        ]);
+
+        try {
+            $certificateType = CertificateType::find($this->cert_certificate_type_id);
+            
+            DoctorCertificate::create([
+                'user_id' => Auth::id(),
+                'certificate_type_id' => $this->cert_certificate_type_id,
+                'certificate_name' => $certificateType->name ?? 'Certificate',
+                'certificate_number' => $this->cert_certificate_number,
+                'issuing_organization' => $this->cert_issuing_organization,
+                'issue_date' => $this->cert_issue_date,
+                'expiration_date' => $this->cert_expiry_date,
+                'is_current' => true,
+            ]);
+
+            $this->toastSuccess('Certification added successfully');
+            $this->resetCertificationForm();
+            $this->loadCertificates();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to add certification: ' . $e->getMessage());
+        }
+    }
+
+    public function resetCertificationForm()
+    {
+        $this->cert_certificate_number = '';
+        $this->cert_certificate_type_id = '';
+        $this->cert_issuing_organization = '';
+        $this->cert_issue_date = '';
+        $this->cert_expiry_date = '';
+        $this->resetValidation();
+    }
+
+    public function saveEducation()
+    {
+        $this->validate([
+            'edu_institution_name' => 'required|string|max:255',
+            'edu_degree' => 'required|string|max:100',
+            'edu_completed_year' => 'required|date',
+        ]);
+
+        try {
+            // Extract year from date
+            $completedYear = $this->edu_completed_year ? date('Y', strtotime($this->edu_completed_year)) : null;
+
+            if ($this->editingEducationId) {
+                $education = Education::findOrFail($this->editingEducationId);
+                if ($education->user_id !== Auth::id()) {
+                    $this->toastError('Unauthorized access');
+                    return;
+                }
+                $education->update([
+                    'institution_name' => $this->edu_institution_name,
+                    'degree' => $this->edu_degree,
+                    'completed_year' => $completedYear,
+                ]);
+                $this->toastSuccess('Educational information updated successfully');
+            } else {
+                Education::create([
+                    'user_id' => Auth::id(),
+                    'institution_name' => $this->edu_institution_name,
+                    'degree' => $this->edu_degree,
+                    'completed_year' => $completedYear,
+                ]);
+                $this->toastSuccess('Educational information added successfully');
+            }
+
+            $this->resetEducationForm();
+            $this->loadEducations();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to save educational information: ' . $e->getMessage());
+        }
+    }
+
+    public function editEducation($educationId)
+    {
+        try {
+            $education = Education::findOrFail($educationId);
+            if ($education->user_id !== Auth::id()) {
+                $this->toastError('Unauthorized access');
+                return;
+            }
+
+            $this->editingEducationId = $education->id;
+            $this->edu_institution_name = $education->institution_name;
+            $this->edu_degree = $education->degree;
+            // Convert year to date format (first day of the year)
+            $this->edu_completed_year = $education->completed_year ? $education->completed_year . '-01-01' : '';
+        } catch (\Exception $e) {
+            $this->toastError('Failed to load education: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteEducation($educationId)
+    {
+        try {
+            $education = Education::findOrFail($educationId);
+            if ($education->user_id !== Auth::id()) {
+                $this->toastError('Unauthorized access');
+                return;
+            }
+
+            $education->delete();
+            $this->toastSuccess('Educational information deleted successfully');
+            $this->loadEducations();
+        } catch (\Exception $e) {
+            $this->toastError('Failed to delete educational information: ' . $e->getMessage());
+        }
+    }
+
+    public function resetEducationForm()
+    {
+        $this->editingEducationId = null;
+        $this->edu_institution_name = '';
+        $this->edu_degree = '';
+        $this->edu_completed_year = '';
+        $this->resetValidation();
+    }
+
     public function getProviderTypesProperty()
     {
         return [
@@ -366,10 +969,18 @@ class DoctorProfileComponent extends Component
         ];
     }
 
+    public function getDocumentTypesProperty()
+    {
+        return DocumentType::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+    }
+
     public function render()
     {
         return view('livewire.doctor.doctor-profile-component', [
             'providerTypes' => $this->providerTypes,
+            'documentTypes' => $this->documentTypes,
         ]);
     }
 }

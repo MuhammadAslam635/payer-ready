@@ -14,12 +14,16 @@
             <div class="border-b border-slate-200">
                 <nav class="flex space-x-8 px-6" aria-label="Tabs">
                     <!-- All Tasks Tab -->
-                    <button wire:click="setActiveTab('all')" @class([
-                        'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200',
-                        'border-teal-500 text-teal-600' => $activeTab === 'all',
-                        'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
-                            $activeTab !== 'all',
-                    ])>
+                    <x-ui.button
+                        type="button"
+                        variant="ghost"
+                        wire:click="setActiveTab('all')"
+                        @class([
+                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 rounded-none',
+                            'border-teal-500 text-teal-600' => $activeTab === 'all',
+                            'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
+                                $activeTab !== 'all',
+                        ])>
                         All
                         <span @class([
                             'ml-2 py-0.5 px-2 rounded-full text-xs font-medium',
@@ -28,15 +32,19 @@
                         ])>
                             {{ $taskCounts['all'] }}
                         </span>
-                    </button>
+                    </x-ui.button>
 
                     <!-- To Do Tab -->
-                    <button wire:click="setActiveTab('todo')" @class([
-                        'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200',
-                        'border-teal-500 text-teal-600' => $activeTab === 'todo',
-                        'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
-                            $activeTab !== 'todo',
-                    ])>
+                    <x-ui.button
+                        type="button"
+                        variant="ghost"
+                        wire:click="setActiveTab('todo')"
+                        @class([
+                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 rounded-none',
+                            'border-teal-500 text-teal-600' => $activeTab === 'todo',
+                            'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
+                                $activeTab !== 'todo',
+                        ])>
                         To Do
                         <span @class([
                             'ml-2 py-0.5 px-2 rounded-full text-xs font-medium',
@@ -45,15 +53,19 @@
                         ])>
                             {{ $taskCounts['todo'] }}
                         </span>
-                    </button>
+                    </x-ui.button>
 
                     <!-- In Progress Tab -->
-                    <button wire:click="setActiveTab('in_progress')" @class([
-                        'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200',
-                        'border-teal-500 text-teal-600' => $activeTab === 'in_progress',
-                        'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
-                            $activeTab !== 'in_progress',
-                    ])>
+                    <x-ui.button
+                        type="button"
+                        variant="ghost"
+                        wire:click="setActiveTab('in_progress')"
+                        @class([
+                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 rounded-none',
+                            'border-teal-500 text-teal-600' => $activeTab === 'in_progress',
+                            'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
+                                $activeTab !== 'in_progress',
+                        ])>
                         In Progress
                         <span @class([
                             'ml-2 py-0.5 px-2 rounded-full text-xs font-medium',
@@ -62,15 +74,19 @@
                         ])>
                             {{ $taskCounts['in_progress'] }}
                         </span>
-                    </button>
+                    </x-ui.button>
 
                     <!-- Completed Tab -->
-                    <button wire:click="setActiveTab('completed')" @class([
-                        'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200',
-                        'border-teal-500 text-teal-600' => $activeTab === 'completed',
-                        'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
-                            $activeTab !== 'completed',
-                    ])>
+                    <x-ui.button
+                        type="button"
+                        variant="ghost"
+                        wire:click="setActiveTab('completed')"
+                        @class([
+                            'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 rounded-none',
+                            'border-teal-500 text-teal-600' => $activeTab === 'completed',
+                            'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' =>
+                                $activeTab !== 'completed',
+                        ])>
                         Completed
                         <span @class([
                             'ml-2 py-0.5 px-2 rounded-full text-xs font-medium',
@@ -79,7 +95,7 @@
                         ])>
                             {{ $taskCounts['completed'] }}
                         </span>
-                    </button>
+                    </x-ui.button>
                 </nav>
             </div>
 
@@ -93,8 +109,13 @@
                                 class="bg-slate-50 rounded-lg p-4 border border-slate-200 hover:border-slate-300 transition-colors duration-200">
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1">
-                                        <h3 class="text-lg font-medium text-slate-900 mb-2">{{ $task->title }}</h3>
-                                        <p class="text-slate-600 mb-3">{{ $task->description }}</p>
+                                        <h3 class="text-lg font-medium text-slate-900 mb-2">{{ $task->taskType->name ?? 'Unknown Task' }}</h3>
+                                        @if($task->taskType && $task->taskType->description)
+                                            <p class="text-slate-600 mb-3">{{ $task->taskType->description }}</p>
+                                        @endif
+                                        @if($task->notes)
+                                            <p class="text-slate-600 mb-3 text-sm italic">{{ $task->notes }}</p>
+                                        @endif
 
                                         <div class="flex items-center space-x-4 text-sm text-slate-500">
                                             <span class="flex items-center">

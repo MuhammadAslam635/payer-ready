@@ -13,7 +13,7 @@ enum UserType: string
     public static function label(self $userType): string
     {
         return match($userType) {
-            self::DOCTOR => 'Doctor',
+            self::DOCTOR => 'Provider',
             self::ORGANIZATION_ADMIN => 'Organization Admin',
             self::SUPER_ADMIN => 'Super Admin',
             self::COORDINATOR => 'Coordinator',
@@ -35,7 +35,7 @@ enum UserType: string
     {
         return
         [
-            self::DOCTOR->value => 'Doctor',
+            self::DOCTOR->value => 'Provider',
             self::ORGANIZATION_COORDINATOR->value => 'Organization Coordinator',
             self::SUPER_ADMIN->value => 'Super Admin',
             self::COORDINATOR->value => 'Coordinator',

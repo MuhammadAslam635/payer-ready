@@ -133,6 +133,29 @@ class SuperAdminDashboardComponent extends Component
 
     private function getLatestCertificateRequests()
     {
-        return DoctorCertificate::latest()->take(5)->get();
+        return DoctorCertificate::with(['user', 'certificateType', 'user.parentOrganization'])
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($certificate) {
+                $user = $certificate->user;
+                $certificateType = $certificate->certificateType;
+                
+                return [
+                    'doctor' => $user ? [
+                        'name' => $user->name ?? 'N/A',
+                        'email' => $user->email ?? 'N/A',
+                        'profile_photo_url' => $user->profile_photo_url ?? asset('images/default-avatar.png'),
+                    ] : null,
+                    'certificate_type' => $certificateType ? $certificateType->name : ($certificate->certificate_name ?? 'N/A'),
+                    'organization_name' => $user && $user->parentOrganization ? $user->parentOrganization->business_name : 'N/A',
+                    'status' => $certificate->is_current ? 'approved' : 'pending',
+                    'created_at' => $certificate->created_at,
+                ];
+            })
+            ->filter(function ($request) {
+                return $request['doctor'] !== null;
+            })
+            ->values();
     }
 }

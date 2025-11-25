@@ -6,6 +6,7 @@ use App\Models\DoctorDocument;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\DatabaseMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class DocumentNotification extends Notification implements ShouldQueue
@@ -29,7 +30,7 @@ class DocumentNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -84,6 +85,29 @@ class DocumentNotification extends Notification implements ShouldQueue
     protected function getUrl(): string
     {
         return route('doctor.documents');
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail($notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->subject($this->getTitle())
+            ->line($this->getMessage())
+            ->when($this->document->documentType, function ($mail) {
+                return $mail->line('Document Type: ' . ($this->document->documentType->name ?? 'Unknown'));
+            })
+            ->when($this->document->upload_date, function ($mail) {
+                return $mail->line('Upload Date: ' . $this->document->upload_date->format('F d, Y'));
+            })
+            ->when($this->type === 'verified', function ($mail) {
+                return $mail->line('Your document has been verified and is now active.');
+            })
+            ->when($this->type === 'rejected', function ($mail) {
+                return $mail->line('Please review the document requirements and upload a corrected version.');
+            })
+            ->line('View documents: ' . $this->getUrl());
     }
 
     /**

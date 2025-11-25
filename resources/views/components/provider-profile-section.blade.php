@@ -61,128 +61,87 @@
         <!-- Profile Details -->
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Personal Information -->
+                <!-- Pending Applications -->
                 <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-2">Personal Information</h3>
-
-                    @if(auth()->user()->date_of_birth)
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-slate-600">Date of Birth:</span>
-                            <span class="text-sm text-slate-900">{{ \Carbon\Carbon::parse(auth()->user()->date_of_birth)->format('M d, Y') }}</span>
-                        </div>
-                    @endif
-
-                    @if(auth()->user()->npi_number)
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-slate-600">NPI Number:</span>
-                            <span class="text-sm text-slate-900 font-mono">{{ auth()->user()->npi_number }}</span>
-                        </div>
-                    @endif
-
-                    @if(auth()->user()->dea_number)
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-slate-600">DEA Number:</span>
-                            <span class="text-sm text-slate-900 font-mono">{{ auth()->user()->dea_number }}</span>
-                        </div>
-                    @endif
-
-                    @if(auth()->user()->dea_expiration_date)
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-slate-600">DEA Expiration:</span>
-                            <span class="text-sm text-slate-900">{{ \Carbon\Carbon::parse(auth()->user()->dea_expiration_date)->format('M d, Y') }}</span>
-                        </div>
+                    <h3 class="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-2">Pending Applications</h3>
+                    @php
+                        $pendingApplications = \App\Models\DoctorCredential::where('user_id', auth()->id())
+                            ->where(function($query) {
+                                $query->where('status', 'pending')
+                                      ->orWhere('status', 'requested')
+                                      ->orWhere('status', 'working');
+                            })
+                            ->count();
+                    @endphp
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-600">Total Pending:</span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $pendingApplications > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                            {{ $pendingApplications }}
+                        </span>
+                    </div>
+                    @if($pendingApplications > 0)
+                        <a href="{{ route('doctor.applications') }}" wire:navigate class="text-sm text-teal-600 hover:text-teal-800 font-medium">
+                            View Applications →
+                        </a>
+                    @else
+                        <p class="text-sm text-slate-500">No pending applications</p>
                     @endif
                 </div>
 
-                <!-- Professional Information -->
+                <!-- Pending License -->
                 <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-2">Professional Information</h3>
-
-                    @if(auth()->user()->specialties->count() > 0)
-                        <div>
-                            <span class="text-sm font-medium text-slate-600 block mb-2">Specialties:</span>
-                            <div class="space-y-1">
-                                @foreach(auth()->user()->specialties as $specialty)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        {{ $specialty->name }}
-                                        @if($specialty->pivot->is_primary)
-                                            <span class="ml-1 text-green-600">•</span>
-                                        @endif
-                                    </span>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(auth()->user()->caqh_id)
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-slate-600">CAQH ID:</span>
-                            <span class="text-sm text-slate-900 font-mono">{{ auth()->user()->caqh_id }}</span>
-                        </div>
-                    @endif
-
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-medium text-slate-600">Member Since:</span>
-                        <span class="text-sm text-slate-900">{{ auth()->user()->created_at->format('M Y') }}</span>
+                    <h3 class="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-2">Pending License</h3>
+                    @php
+                        $pendingLicenses = \App\Models\DoctorLicense::where('user_id', auth()->id())
+                            ->whereIn('status', [\App\Enums\LicenseStatus::PENDING->value, \App\Enums\LicenseStatus::REQUESTED->value])
+                            ->count();
+                    @endphp
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-600">Total Pending:</span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $pendingLicenses > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                            {{ $pendingLicenses }}
+                        </span>
                     </div>
+                    @if($pendingLicenses > 0)
+                        <a href="{{ route('doctor.applications') }}" wire:navigate class="text-sm text-teal-600 hover:text-teal-800 font-medium">
+                            View Licenses →
+                        </a>
+                    @else
+                        <p class="text-sm text-slate-500">No pending licenses</p>
+                    @endif
                 </div>
 
-                <!-- Account Status -->
+                <!-- Expirables -->
                 <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-2">Account Status</h3>
-
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-slate-600">Email Verified:</span>
-                            <span class="inline-flex items-center">
-                                @if(auth()->user()->email_verified_at)
-                                    <svg class="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span class="text-sm text-green-600">Verified</span>
-                                @else
-                                    <svg class="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span class="text-sm text-red-600">Not Verified</span>
-                                @endif
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-slate-600">E-Signature:</span>
-                            <span class="inline-flex items-center">
-                                @if(auth()->user()->e_signature)
-                                    <svg class="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span class="text-sm text-green-600">Completed</span>
-                                @else
-                                    <svg class="w-4 h-4 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span class="text-sm text-yellow-600">Pending</span>
-                                @endif
-                            </span>
-                        </div>
-
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-slate-600">Terms Accepted:</span>
-                            <span class="inline-flex items-center">
-                                @if(auth()->user()->terms_condition)
-                                    <svg class="w-4 h-4 text-green-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span class="text-sm text-green-600">Accepted</span>
-                                @else
-                                    <svg class="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span class="text-sm text-red-600">Not Accepted</span>
-                                @endif
-                            </span>
-                        </div>
+                    <h3 class="text-lg font-semibold text-slate-900 border-b border-slate-200 pb-2">Expirables</h3>
+                    @php
+                        $expiringLicenses = \App\Models\DoctorLicense::where('user_id', auth()->id())
+                            ->whereNotNull('expiration_date')
+                            ->where('expiration_date', '>', now())
+                            ->where('expiration_date', '<=', now()->addDays(60))
+                            ->count();
+                        
+                        $expiringCredentials = \App\Models\DoctorCredential::where('user_id', auth()->id())
+                            ->whereNotNull('expiration_date')
+                            ->where('expiration_date', '>', now())
+                            ->where('expiration_date', '<=', now()->addDays(60))
+                            ->count();
+                        
+                        $totalExpirables = $expiringLicenses + $expiringCredentials;
+                    @endphp
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-600">Expiring Soon (60 days):</span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $totalExpirables > 0 ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800' }}">
+                            {{ $totalExpirables }}
+                        </span>
                     </div>
+                    @if($totalExpirables > 0)
+                        <a href="{{ route('doctor.expirables') }}" wire:navigate class="text-sm text-teal-600 hover:text-teal-800 font-medium">
+                            View Expirables →
+                        </a>
+                    @else
+                        <p class="text-sm text-slate-500">No items expiring soon</p>
+                    @endif
                 </div>
             </div>
 
