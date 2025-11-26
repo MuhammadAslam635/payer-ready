@@ -17,9 +17,16 @@ use App\Traits\RegistrationTrait;
 class Registration extends Component
 {
     use RegistrationTrait;
+    
     public function mount($userType = 'doctor')
     {
         $this->userType = $userType;
+    }
+
+    public function hydrate()
+    {
+        // Ensure arrays are always arrays after Livewire deserializes
+        $this->initializeArrayProperties();
     }
 
     public function render()

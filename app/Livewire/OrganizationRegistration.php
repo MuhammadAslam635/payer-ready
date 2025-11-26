@@ -12,9 +12,16 @@ use Livewire\Attributes\Layout;
 class OrganizationRegistration extends Component
 {
     use RegistrationTrait;
+    
     public function mount($userType = 'organization')
     {
         $this->userType = $userType;
+    }
+
+    public function hydrate()
+    {
+        // Ensure arrays are always arrays after Livewire deserializes
+        $this->initializeArrayProperties();
     }
 
     public function render()

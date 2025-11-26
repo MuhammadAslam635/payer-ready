@@ -26,10 +26,12 @@ class PracticeLocation extends Model
         'office_phone',
         'office_fax',
         'is_primary',
+        'is_secondary',
     ];
 
     protected $casts = [
         'is_primary' => 'boolean',
+        'is_secondary' => 'boolean',
     ];
 
     /**

@@ -55,6 +55,7 @@ class DoctorProfileComponent extends Component
     public $practice_npi_type_1 = '';
     public $practice_npi_type_2 = '';
     public $is_primary_location = false;
+    public $is_secondary_location = false;
 
     // Form fields - User table fields
     public $name = '';
@@ -464,6 +465,7 @@ class DoctorProfileComponent extends Component
         $this->practice_office_phone = '';
         $this->practice_office_fax = '';
         $this->is_primary_location = false;
+        $this->is_secondary_location = false;
         $this->resetValidation();
     }
 
@@ -491,6 +493,7 @@ class DoctorProfileComponent extends Component
         $this->practice_office_phone = $practice->office_phone ?? '';
         $this->practice_office_fax = $practice->office_fax ?? '';
         $this->is_primary_location = $practice->is_primary;
+        $this->is_secondary_location = $practice->is_secondary ?? false;
 
         $this->showPracticeModal = true;
     }
@@ -512,6 +515,7 @@ class DoctorProfileComponent extends Component
             'practice_office_phone' => 'nullable|string|max:20',
             'practice_office_fax' => 'nullable|string|max:20',
             'is_primary_location' => 'boolean',
+            'is_secondary_location' => 'boolean',
         ]);
 
         try {
@@ -531,6 +535,7 @@ class DoctorProfileComponent extends Component
                 'office_phone' => $this->practice_office_phone,
                 'office_fax' => $this->practice_office_fax,
                 'is_primary' => $this->is_primary_location,
+                'is_secondary' => $this->is_secondary_location,
             ];
 
             if ($this->editingPracticeId) {

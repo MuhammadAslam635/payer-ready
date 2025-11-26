@@ -72,13 +72,20 @@ Route::view('/about', 'pages.about')->name('about');
 // Custom email verification route - allows verification without authentication
 Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $request, $id, $hash) {
     try {
-        $user = \App\Models\User::findOrFail($id);
+        // Find user - use find() instead of findOrFail to handle 404 better
+        $user = \App\Models\User::find($id);
+        
+        if (!$user) {
+            \Log::warning('Email verification failed: User not found', ['user_id' => $id]);
+            return redirect()->route('login')->with('error', 'Invalid verification link. User not found. Please register again or contact support.');
+        }
         
         \Log::info('Email verification attempt', [
             'user_id' => $id,
             'user_email' => $user->email,
             'request_url' => $request->fullUrl(),
             'request_host' => $request->getHost(),
+            'request_port' => $request->getPort(),
             'signature_valid' => $request->hasValidSignature(),
         ]);
         
@@ -89,7 +96,7 @@ Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $requ
                 'expected_hash' => sha1($user->getEmailForVerification()),
                 'received_hash' => $hash,
             ]);
-            abort(403, 'Invalid verification link. The hash does not match.');
+            return redirect()->route('login')->with('error', 'Invalid verification link. The verification link is invalid or has been tampered with.');
         }
         
         // Try to verify the signed URL - if it fails due to domain mismatch, we still proceed
@@ -102,7 +109,12 @@ Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $requ
             
             // Check if the link has expired
             if ($request->has('expires') && $request->query('expires') < now()->timestamp) {
-                abort(403, 'Verification link has expired. Please request a new verification email.');
+                \Log::warning('Email verification: Link expired', [
+                    'user_id' => $id,
+                    'expires' => $request->query('expires'),
+                    'current_time' => now()->timestamp,
+                ]);
+                return redirect()->route('login')->with('error', 'Verification link has expired. Please request a new verification email.');
             }
             
             // Hash is valid, so we proceed despite signature validation failure
@@ -140,12 +152,18 @@ Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Http\Request $requ
             default:
                 return redirect()->route('login')->with('status', 'Email verified successfully. You can now login.');
         }
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        \Log::error('Email verification error: User not found', [
+            'user_id' => $id,
+            'error' => $e->getMessage(),
+        ]);
+        return redirect()->route('login')->with('error', 'Invalid verification link. User not found. Please register again or contact support.');
     } catch (\Exception $e) {
         \Log::error('Email verification error', [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
         ]);
-        abort(403, 'Verification failed: ' . $e->getMessage());
+        return redirect()->route('login')->with('error', 'Verification failed: ' . $e->getMessage());
     }
 })->name('verification.verify');
 

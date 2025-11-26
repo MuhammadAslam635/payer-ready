@@ -191,7 +191,7 @@
                     
                     <!-- DEA Information -->
                     <div class="space-y-4 bg-white p-6 rounded-lg border border-slate-200">
-                        <h4 class="font-medium text-slate-900 mb-4">A. DEA Information</h4>
+                        <h4 class="font-medium text-slate-900 mb-4">DEA Information</h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <x-ui.label for="dea_number">DEA Number</x-ui.label>
@@ -199,12 +199,12 @@
                                 @error('dea_number') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                             </div>
                             <div>
-                                <x-ui.label for="dea_issue_date">B. Issue Date</x-ui.label>
+                                <x-ui.label for="dea_issue_date">Issue Date</x-ui.label>
                                 <x-ui.input wire:model="dea_issue_date" type="date" id="dea_issue_date" />
                                 @error('dea_issue_date') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                             </div>
                             <div>
-                                <x-ui.label for="dea_expiry_date">C. Expiry Date</x-ui.label>
+                                <x-ui.label for="dea_expiry_date">Expiry Date</x-ui.label>
                                 <x-ui.input wire:model="dea_expiry_date" type="date" id="dea_expiry_date" />
                                 @error('dea_expiry_date') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                             </div>
@@ -224,7 +224,7 @@
 
                     <!-- Licenses Section -->
                     <div class="space-y-4 bg-white p-6 rounded-lg border border-slate-200">
-                        <h4 class="font-medium text-slate-900 mb-4">D. License Information</h4>
+                        <h4 class="font-medium text-slate-900 mb-4">License Information</h4>
                         
                         <!-- Add License Form -->
                         <div class="bg-slate-50 p-4 rounded-lg mb-4">
@@ -257,12 +257,12 @@
                                     @error('license_state_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
-                                    <x-ui.label for="license_issue_date">E. Issue Date</x-ui.label>
+                                    <x-ui.label for="license_issue_date">Issue Date</x-ui.label>
                                     <x-ui.input wire:model="license_issue_date" type="date" id="license_issue_date" />
                                     @error('license_issue_date') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
-                                    <x-ui.label for="license_expiry_date">F. Expiry Date</x-ui.label>
+                                    <x-ui.label for="license_expiry_date">Expiry Date</x-ui.label>
                                     <x-ui.input wire:model="license_expiry_date" type="date" id="license_expiry_date" />
                                     @error('license_expiry_date') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                                 </div>
@@ -1153,9 +1153,14 @@
                                     </div>
                                 </div>
 
-                                <!-- Is Primary -->
-                                <div class="flex items-center mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                                    <x-ui.checkbox wire:model="is_primary_location" id="is_primary_location" label="Set as Primary Location" />
+                                <!-- Location Type Checkboxes -->
+                                <div class="space-y-3 mt-4">
+                                    <div class="flex items-center p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <x-ui.checkbox wire:model="is_primary_location" id="is_primary_location" label="Set as Primary Location" />
+                                    </div>
+                                    <div class="flex items-center p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <x-ui.checkbox wire:model="is_secondary_location" id="is_secondary_location" label="Set as Secondary Location" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,3 +1,4 @@
+    @if(isset($showComponent) && $showComponent)
     <div class="relative">
         <!-- Cart Icon with Badge -->
         <div class="relative inline-flex items-center">
@@ -88,3 +89,4 @@
             </div>
         @endif
     </div>
+    @endif

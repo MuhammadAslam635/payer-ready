@@ -54,6 +54,9 @@ trait RegistrationTrait
             $this->userType = $userType;
         }
 
+        // Initialize array properties to ensure they're always arrays, not Collections
+        $this->initializeArrayProperties();
+
         // Store email in session to prevent data corruption
         if (!empty($this->email)) {
             session(['registration_email' => $this->email]);
@@ -64,6 +67,75 @@ trait RegistrationTrait
         if (session()->has('registration_email') && empty($this->email)) {
             $this->email = session('registration_email');
             $this->originalEmail = $this->email;
+        }
+    }
+
+    /**
+     * Initialize array properties to ensure they're always arrays
+     * This prevents Livewire from treating them as Eloquent Collections
+     */
+    protected function initializeArrayProperties()
+    {
+        // Helper function to convert to plain array
+        $toPlainArray = function($value) {
+            // If it's a Collection, convert to array
+            if ($value instanceof \Illuminate\Support\Collection) {
+                return $value->toArray();
+            }
+            // If it's already an array, return as is
+            if (is_array($value)) {
+                return $value;
+            }
+            // If it's an object with toArray method, convert it
+            if (is_object($value) && method_exists($value, 'toArray')) {
+                return $value->toArray();
+            }
+            // Default: return as array
+            return (array) $value;
+        };
+
+        // Ensure stateLicenses is always an array
+        if (!isset($this->stateLicenses) || !is_array($this->stateLicenses)) {
+            $this->stateLicenses = [
+                ['state' => '', 'license_number' => '', 'issue_date' => '', 'expiration_date' => '']
+            ];
+        } else {
+            // Convert to plain array, ensuring each item is also an array
+            $this->stateLicenses = array_values(array_map(function($item) use ($toPlainArray) {
+                return $toPlainArray($item);
+            }, $this->stateLicenses));
+        }
+
+        // Ensure educations is always an array
+        if (!isset($this->educations) || !is_array($this->educations)) {
+            $this->educations = [
+                ['institution' => '', 'degree' => '', 'year_completed' => '']
+            ];
+        } else {
+            // Convert to plain array, ensuring each item is also an array
+            $this->educations = array_values(array_map(function($item) use ($toPlainArray) {
+                return $toPlainArray($item);
+            }, $this->educations));
+        }
+
+        // Ensure workHistory is always an array
+        if (!isset($this->workHistory) || !is_array($this->workHistory)) {
+            $this->workHistory = [];
+        } else {
+            // Convert to plain array, ensuring each item is also an array
+            $this->workHistory = array_values(array_map(function($item) use ($toPlainArray) {
+                return $toPlainArray($item);
+            }, $this->workHistory));
+        }
+
+        // Ensure references is always an array
+        if (!isset($this->references) || !is_array($this->references)) {
+            $this->references = [];
+        } else {
+            // Convert to plain array, ensuring each item is also an array
+            $this->references = array_values(array_map(function($item) use ($toPlainArray) {
+                return $toPlainArray($item);
+            }, $this->references));
         }
     }
 
@@ -318,6 +390,15 @@ trait RegistrationTrait
 
             DB::commit();
 
+            // Send email verification notification
+            if (!$user->hasVerifiedEmail()) {
+                $user->sendEmailVerificationNotification();
+                Log::info('=== VERIFICATION EMAIL SENT ===', [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                ]);
+            }
+
             // Clean up session variables after successful registration
             session()->forget('registration_email');
             Log::info('=== REGISTRATION COMPLETED - SESSION CLEANED ===', [
@@ -326,20 +407,9 @@ trait RegistrationTrait
                 'session_email_removed' => true
             ]);
 
-            // Authenticate user
-            Auth::login($user, true);
-            $this->toastSuccess("Registration successful! Redirecting to dashboard.");
-            
-            // Redirect based on user type
-            if ($user->user_type === UserType::DOCTOR) {
-                return redirect()->route('doctor.dashboard');
-            }
-
-            if ($user->user_type === UserType::ORGANIZATION_ADMIN) {
-                return redirect()->route('organization_admin.dashboard');
-            }
-
-            return redirect()->route('home');
+            // Don't auto-login - user must verify email first
+            // Redirect to login page with message to check email
+            return redirect()->route('login')->with('status', 'Registration successful! Please check your email to verify your account before logging in.');
 
         } catch (\Exception $e) {
             DB::rollBack();

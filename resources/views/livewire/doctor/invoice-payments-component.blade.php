@@ -1,14 +1,4 @@
 <div class="space-y-6">
-    <div class="flex justify-end">
-        <button wire:click="openAddModal"
-            class="inline-flex items-center px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-md transition-colors duration-200">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-            </svg>
-            Pay Invoice
-        </button>
-    </div>
-
     <!-- Pending Invoices Section -->
     <div class="bg-white rounded-lg shadow-sm border border-slate-200">
         <div class="px-6 py-4 border-b border-slate-200">

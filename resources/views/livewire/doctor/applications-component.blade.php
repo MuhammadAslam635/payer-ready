@@ -8,7 +8,10 @@
                     <p class="mt-1 text-sm text-slate-600">Manage provider licenses, renewals, and regulations.</p>
                 </div>
                 <div class="mt-4 sm:mt-0 flex flex-col lg:flex-row space-x-3">
-                    <x-ui.button variant="ghost" class="bg-slate-100 text-slate-900 text-xs hover:bg-slate-200 rounded-md">Export CSV</x-ui.button>
+                    <x-ui.button variant="ghost" wire:click="exportCsv" wire:loading.attr="disabled" class="bg-slate-100 text-slate-900 text-xs hover:bg-slate-200 rounded-md">
+                        <span wire:loading.remove wire:target="exportCsv">Export CSV</span>
+                        <span wire:loading wire:target="exportCsv">Exporting...</span>
+                    </x-ui.button>
                     <x-ui.button icon="plus" variant="primary" wire:click.prevent="openAddModal" wire:target="openAddModal" wire:loading.attr="disabled"
                         class="bg-teal-500 rounded-md text-white text-xs hover:bg-teal-600">
                         Add License

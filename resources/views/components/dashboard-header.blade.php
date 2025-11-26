@@ -56,7 +56,9 @@
             @livewire("components.notifications")
 
             <!-- Cart Notification (Super Admin Only) -->
-            @livewire("components.cart-notification-component")
+            @if(Auth::check() && Auth::user()->user_type === \App\Enums\UserType::SUPER_ADMIN)
+                @livewire("components.cart-notification-component")
+            @endif
 
             <!-- Profile Dropdown -->
             <div class="relative" x-data="{ open: false }">
@@ -66,7 +68,9 @@
                     <div class="text-left hidden sm:block">
                         <p class="font-semibold text-xs sm:text-sm text-slate-800 truncate max-w-20 sm:max-w-none">
                             {{ $user->name }}</p>
-                        <p class="text-xs text-slate-500 hidden lg:block">{{ $user->user_type }}</p>
+                        <p class="text-xs text-slate-500 hidden lg:block">
+                            {{ \App\Enums\UserType::label($user->user_type) }}
+                        </p>
                     </div>
                     <svg class="w-3 h-3 sm:w-4 sm:h-4 text-slate-400 hidden sm:block" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">

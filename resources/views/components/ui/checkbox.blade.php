@@ -59,7 +59,7 @@
         
         <div class="flex-1">
             @if($label)
-                <span class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                <span class="text-sm font-medium text-slate-900 !text-slate-900" style="color: #0f172a !important;">
                     {{ $label }}
                     @if($required)
                         <span class="text-red-500 ml-1">*</span>

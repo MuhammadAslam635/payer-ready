@@ -26,7 +26,8 @@ class ApplicationsComponent extends Component
     use WithPagination, HasToast, WithFileUploads;
 
     public $activeTab     = 'all';
-    public $licenses      = [];
+    // Don't store licenses as public property to avoid serialization issues
+    // Will be loaded in render() method instead
     public $perPage       = 10;
     public $sortField     = 'created_at';
     public $sortDirection = 'desc';
@@ -47,8 +48,8 @@ class ApplicationsComponent extends Component
     protected $cachedLicenseTypes = null;
     protected $cachedStates       = null;
 
-    // Selected license for view/edit/delete
-    public $selectedLicense = null;
+    // Selected license for view/edit/delete - store only ID to avoid serialization issues
+    public $selectedLicenseId = null;
     public $deleteId        = null;
 
     // Add License Modal fields using addForm array
@@ -100,26 +101,78 @@ class ApplicationsComponent extends Component
     public function mount()
     {
         $this->selectedProvider = Auth::user()->name;
-        $this->loadLicenses();
+        // Don't load licenses here - will be loaded in render() to avoid serialization issues
+    }
+
+    public function dehydrate()
+    {
+        // CRITICAL: Clear ALL Collections before Livewire serializes to prevent method_exists() errors
+        // This must happen before Livewire tries to serialize the component
+        
+        // Clear cached Collections (they will be reloaded when needed)
+        if ($this->cachedLicenseTypes instanceof \Illuminate\Database\Eloquent\Collection) {
+            $this->cachedLicenseTypes = null;
+        }
+        if ($this->cachedStates instanceof \Illuminate\Database\Eloquent\Collection) {
+            $this->cachedStates = null;
+        }
+        
+        // Ensure form arrays are always arrays (not Collections or objects)
+        if (isset($this->addForm) && !is_array($this->addForm)) {
+            $this->addForm = is_object($this->addForm) && method_exists($this->addForm, 'toArray') 
+                ? $this->addForm->toArray() 
+                : (array) $this->addForm;
+        }
+        
+        if (isset($this->requestForm) && !is_array($this->requestForm)) {
+            $this->requestForm = is_object($this->requestForm) && method_exists($this->requestForm, 'toArray') 
+                ? $this->requestForm->toArray() 
+                : (array) $this->requestForm;
+        }
+        
+        if (isset($this->editForm) && !is_array($this->editForm)) {
+            $this->editForm = is_object($this->editForm) && method_exists($this->editForm, 'toArray') 
+                ? $this->editForm->toArray() 
+                : (array) $this->editForm;
+        }
+    }
+
+    public function hydrate()
+    {
+        // Ensure form arrays are always arrays (not Collections or objects)
+        if (isset($this->addForm) && !is_array($this->addForm)) {
+            $this->addForm = is_object($this->addForm) && method_exists($this->addForm, 'toArray') 
+                ? $this->addForm->toArray() 
+                : (array) $this->addForm;
+        }
+        
+        if (isset($this->requestForm) && !is_array($this->requestForm)) {
+            $this->requestForm = is_object($this->requestForm) && method_exists($this->requestForm, 'toArray') 
+                ? $this->requestForm->toArray() 
+                : (array) $this->requestForm;
+        }
+        
+        if (isset($this->editForm) && !is_array($this->editForm)) {
+            $this->editForm = is_object($this->editForm) && method_exists($this->editForm, 'toArray') 
+                ? $this->editForm->toArray() 
+                : (array) $this->editForm;
+        }
     }
 
     public function setActiveTab($tab)
     {
         $this->activeTab = $tab;
         $this->resetPage();
-        $this->loadLicenses();
     }
 
     public function updatedActiveTab()
     {
         $this->resetPage();
-        $this->loadLicenses();
     }
 
     public function updatedSearch()
     {
         $this->resetPage();
-        $this->loadLicenses();
     }
 
     public function sortBy($field)
@@ -130,10 +183,9 @@ class ApplicationsComponent extends Component
             $this->sortField     = $field;
             $this->sortDirection = 'asc';
         }
-        $this->loadLicenses();
     }
 
-    public function loadLicenses()
+    protected function getLicenses()
     {
         $user   = Auth::user();
         $userId = $user->id;
@@ -187,7 +239,84 @@ class ApplicationsComponent extends Component
             $query->orderBy($this->sortField, $this->sortDirection);
         }
 
-        $this->licenses = $query->get();
+        // Return Collection - will be used only in render(), not stored as property
+        return $query->get();
+    }
+
+    public function exportCsv()
+    {
+        $user   = Auth::user();
+        $userId = $user->id;
+
+        $query = DoctorLicense::with(['licenseType', 'state'])
+            ->where('user_id', $userId);
+
+        // Filter by status tab (same as loadLicenses)
+        switch ($this->activeTab) {
+            case 'active':
+                $query->where('status', LicenseStatus::ACTIVE);
+                break;
+            case 'expired':
+                $query->where('expiration_date', '<', now());
+                break;
+            case 'expiring':
+                $query->where('expiration_date', '>', now())
+                    ->where('expiration_date', '<=', now()->addDays(30));
+                break;
+            case 'pending':
+                $query->where('status', LicenseStatus::PENDING);
+                break;
+            default:
+                // 'all' - no additional filter
+                break;
+        }
+
+        // Search functionality
+        if (! empty($this->search)) {
+            $query->where(function ($q) {
+                $q->where('license_number', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('licenseType', function ($typeQuery) {
+                        $typeQuery->where('name', 'like', '%' . $this->search . '%');
+                    })
+                    ->orWhereHas('state', function ($stateQuery) {
+                        $stateQuery->where('name', 'like', '%' . $this->search . '%');
+                    });
+            });
+        }
+
+        // Get all licenses (no pagination for export)
+        $licenses = $query->orderBy('created_at', 'desc')->get();
+
+        // Generate CSV
+        $csv = collect([
+            ['License Number', 'License Type', 'State', 'Issue Date', 'Expiration Date', 'Status', 'Issuing Authority', 'Notes', 'Created At'],
+            ...$licenses->map(function ($license) {
+                return [
+                    $license->license_number ?? '',
+                    $license->licenseType->name ?? 'N/A',
+                    $license->state->name ?? 'N/A',
+                    $license->issue_date ? $license->issue_date->format('Y-m-d') : '',
+                    $license->expiration_date ? $license->expiration_date->format('Y-m-d') : '',
+                    $license->status ? ($license->status instanceof \App\Enums\LicenseStatus ? $license->status->label() : (string)$license->status) : 'N/A',
+                    $license->issuing_authority ?? '',
+                    $license->notes ?? '',
+                    $license->created_at ? $license->created_at->format('Y-m-d H:i:s') : '',
+                ];
+            })
+        ])->map(function ($row) {
+            return implode(',', array_map(function ($v) {
+                return '"' . str_replace('"', '""', (string)$v) . '"';
+            }, $row));
+        })->implode("\r\n");
+
+        $filename = 'licenses_' . strtolower($this->activeTab) . '_' . now()->format('Y-m-d_H-i-s') . '.csv';
+
+        return response()->streamDownload(function () use ($csv) {
+            echo $csv;
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 
     // Modal methods
@@ -311,7 +440,6 @@ class ApplicationsComponent extends Component
 
             $this->toastSuccess('License added successfully!');
             $this->closeAddModal();
-            $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error saving license: ' . $e->getMessage(), [
                 'trace'     => $e->getTraceAsString(),
@@ -343,7 +471,6 @@ class ApplicationsComponent extends Component
 
             $this->toastSuccess('License request submitted successfully!');
             $this->closeRequestModal();
-            $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error submitting license request: ' . $e->getMessage(), [
                 'trace'     => $e->getTraceAsString(),
@@ -435,14 +562,14 @@ class ApplicationsComponent extends Component
     // View License Modal Methods
     public function viewLicense($licenseId)
     {
-        $this->selectedLicense = DoctorLicense::with(['licenseType', 'state'])->find($licenseId);
+        $this->selectedLicenseId = $licenseId;
         $this->showViewModal   = true;
     }
 
     public function closeViewModal()
     {
         $this->showViewModal   = false;
-        $this->selectedLicense = null;
+        $this->selectedLicenseId = null;
     }
 
     // Edit License Modal Methods
@@ -451,7 +578,7 @@ class ApplicationsComponent extends Component
         $license = DoctorLicense::with(['licenseType', 'state'])->find($licenseId);
 
         if ($license) {
-            $this->selectedLicense = $license;
+            $this->selectedLicenseId = $licenseId;
             $this->editForm        = [
                 'license_type_id'   => $license->license_type_id,
                 'state_id'          => $license->state_id,
@@ -470,7 +597,7 @@ class ApplicationsComponent extends Component
     public function closeEditModal()
     {
         $this->showEditModal   = false;
-        $this->selectedLicense = null;
+        $this->selectedLicenseId = null;
         $this->resetEditForm();
     }
 
@@ -506,19 +633,22 @@ class ApplicationsComponent extends Component
                 'editForm.document'          => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png,gif|max:10240', // 10MB max
             ]);
 
+            // Load license by ID
+            $license = DoctorLicense::findOrFail($this->selectedLicenseId);
+            
             // Handle document upload if provided
-            $documentPath = $this->selectedLicense->document; // Keep current document by default
+            $documentPath = $license->document; // Keep current document by default
             if ($this->editForm['document']) {
                 // Delete old document if it exists
-                if ($this->selectedLicense->document && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->selectedLicense->document)) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($this->selectedLicense->document);
+                if ($license->document && \Illuminate\Support\Facades\Storage::disk('public')->exists($license->document)) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($license->document);
                 }
                 
                 // Upload new document
                 $documentPath = $this->handleDocumentUpload('edit');
             }
 
-            $this->selectedLicense->update([
+            $license->update([
                 'license_type_id'   => $this->editForm['license_type_id'],
                 'state_id'          => $this->editForm['state_id'],
                 'license_number'    => $this->editForm['license_number'],
@@ -533,11 +663,10 @@ class ApplicationsComponent extends Component
 
             $this->toastSuccess('License updated successfully!');
             $this->closeEditModal();
-            $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error updating license: ' . $e->getMessage(), [
                 'trace'      => $e->getTraceAsString(),
-                'license_id' => $this->selectedLicense->id,
+                'license_id' => $this->selectedLicenseId,
                 'form_data'  => $this->editForm,
             ]);
             $this->toastError('Error updating license: ' . $e->getMessage());
@@ -559,7 +688,6 @@ class ApplicationsComponent extends Component
 
             $this->toastSuccess('License deleted successfully!');
             $this->cancelDelete();
-            $this->loadLicenses();
         } catch (\Exception $e) {
             Log::error('Error deleting license: ' . $e->getMessage(), [
                 'trace'      => $e->getTraceAsString(),
@@ -605,10 +733,21 @@ class ApplicationsComponent extends Component
             $states       = $this->getStates();
         }
 
+        // Load licenses in render() - never store as property to avoid serialization issues
+        $licenses = $this->getLicenses();
+
+        // Load selected license if needed (for modals) - don't store as property
+        $selectedLicense = null;
+        if ($this->selectedLicenseId) {
+            $selectedLicense = DoctorLicense::with(['licenseType', 'state'])->find($this->selectedLicenseId);
+        }
+
         return view('livewire.doctor.applications-component', [
             'licenseCounts' => $licenseCounts,
             'licenseTypes'  => $licenseTypes,
             'states'        => $states,
+            'licenses'      => $licenses,
+            'selectedLicense' => $selectedLicense,
         ]);
     }
 

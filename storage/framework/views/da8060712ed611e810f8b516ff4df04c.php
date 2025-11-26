@@ -61,6 +61,25 @@ if (isset($__sessionPrevious) && empty($__sessionPrevious)) { unset($__sessionPr
 endif;
 unset($__sessionArgs); ?>
 
+                <!-- Error Message -->
+                <?php $__sessionArgs = ['error'];
+if (session()->has($__sessionArgs[0])) :
+if (isset($value)) { $__sessionPrevious[] = $value; }
+$value = session()->get($__sessionArgs[0]); ?>
+                    <div class="mb-6 bg-error-50 border border-error-200 rounded-lg p-4">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-error-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <p class="text-error-800 text-sm"><?php echo e($value); ?></p>
+                        </div>
+                    </div>
+                <?php unset($value);
+if (isset($__sessionPrevious) && !empty($__sessionPrevious)) { $value = array_pop($__sessionPrevious); }
+if (isset($__sessionPrevious) && empty($__sessionPrevious)) { unset($__sessionPrevious); }
+endif;
+unset($__sessionArgs); ?>
+
                 <!-- Validation Errors -->
                 <?php if($errors->any()): ?>
                     <div class="mb-6 bg-error-50 border border-error-200 rounded-lg p-4">

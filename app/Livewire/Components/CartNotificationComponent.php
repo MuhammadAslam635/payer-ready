@@ -50,7 +50,7 @@ class CartNotificationComponent extends Component
     public function render()
     {
         // Only show for super_admin users
-        if (!Auth::check() || Auth::user()->user_type !== 'super_admin') {
+        if (!Auth::check() || Auth::user()->user_type !== \App\Enums\UserType::SUPER_ADMIN) {
             return view('livewire.components.cart-notification-component', [
                 'showComponent' => false
             ]);

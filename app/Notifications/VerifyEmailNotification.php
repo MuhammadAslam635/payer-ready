@@ -41,23 +41,33 @@ class VerifyEmailNotification extends Notification
             $appUrl = config('app.url');
             \Log::info('VerifyEmailNotification: APP_URL from config: ' . $appUrl);
             
-            // Ensure APP_URL is set and not localhost in production
+            // Ensure APP_URL is set and includes port if needed
             if (!$appUrl || str_contains($appUrl, 'localhost')) {
                 // Try to get from request if available (for production)
                 if (request()->hasHeader('Host')) {
                     $host = request()->getHost();
                     $scheme = request()->getScheme();
+                    $port = request()->getPort();
+                    
                     if ($host && !str_contains($host, 'localhost')) {
                         $appUrl = $scheme . '://' . $host;
+                        if ($port && $port != 80 && $port != 443) {
+                            $appUrl .= ':' . $port;
+                        }
                         \Log::info('VerifyEmailNotification: Using request host: ' . $appUrl);
                         // Temporarily set config to use correct URL for route generation
+                        config(['app.url' => $appUrl]);
+                    } elseif ($host && str_contains($host, 'localhost') && $port) {
+                        // For localhost, include port if available
+                        $appUrl = $scheme . '://' . $host . ':' . $port;
+                        \Log::info('VerifyEmailNotification: Using localhost with port: ' . $appUrl);
                         config(['app.url' => $appUrl]);
                     }
                 }
             }
             
             // Force URL generator to use APP_URL
-            if ($appUrl && !str_contains($appUrl, 'localhost')) {
+            if ($appUrl) {
                 URL::forceRootUrl($appUrl);
             }
             

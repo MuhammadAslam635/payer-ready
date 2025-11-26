@@ -74,7 +74,7 @@ trait Step1CoreProfileTrait
             'state_id'=>$this->primaryState,
             'user_type' => $userType,
             'is_active' => true,
-            'email_verified_at' => now(),
+            'email_verified_at' => null, // User must verify email before login
         ]);
 
         $organization = null;

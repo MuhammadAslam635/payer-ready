@@ -10,14 +10,17 @@
                 <div class="mt-4 sm:mt-0 flex flex-col lg:flex-row space-x-3">
                     <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['variant' => 'ghost','class' => 'bg-slate-100 text-slate-900 text-xs hover:bg-slate-200 rounded-md']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['variant' => 'ghost','wire:click' => 'exportCsv','wire:loading.attr' => 'disabled','class' => 'bg-slate-100 text-slate-900 text-xs hover:bg-slate-200 rounded-md']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','class' => 'bg-slate-100 text-slate-900 text-xs hover:bg-slate-200 rounded-md']); ?>Export CSV <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['variant' => 'ghost','wire:click' => 'exportCsv','wire:loading.attr' => 'disabled','class' => 'bg-slate-100 text-slate-900 text-xs hover:bg-slate-200 rounded-md']); ?>
+                        <span wire:loading.remove wire:target="exportCsv">Export CSV</span>
+                        <span wire:loading wire:target="exportCsv">Exporting...</span>
+                     <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginala8bb031a483a05f647cb99ed3a469847)): ?>
 <?php $attributes = $__attributesOriginala8bb031a483a05f647cb99ed3a469847; ?>

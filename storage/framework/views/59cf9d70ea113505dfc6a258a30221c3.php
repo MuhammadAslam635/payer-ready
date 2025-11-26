@@ -1,26 +1,9 @@
 <div class="relative" x-data="{ open: false }">
     <button @click="open = !open"
-        class="relative text-slate-500 p-2 bg-primary-100 rounded-full hover:text-primary-600 transition-colors">
-        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'bell-alert','class' => 'h-5 w-5 sm:h-6 sm:w-6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('ui.icon'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['name' => 'bell-alert','class' => 'h-5 w-5 sm:h-6 sm:w-6']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
-<?php $attributes = $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
-<?php unset($__attributesOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a)): ?>
-<?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
-<?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
-<?php endif; ?>
+        class="relative p-2 bg-teal-100 rounded-full hover:bg-teal-200 transition-colors">
+        <svg class="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" style="color: #0d9488 !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
         <!--[if BLOCK]><![endif]--><?php if($unreadCount > 0): ?>
             <span class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
