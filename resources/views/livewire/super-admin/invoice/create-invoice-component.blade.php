@@ -259,7 +259,7 @@
                                     @endif
                                     <div class="flex justify-between text-base font-semibold border-t border-gray-200 pt-2">
                                         <span>Total:</span>
-                                        <span>${{ number_format($cartSubtotal - $discount + $tax, 2) }}</span>
+                                        <span>${{ number_format($cartSubtotal - (float) $discount + (float) $tax, 2) }}</span>
                                     </div>
                                 </div>
                             @else
