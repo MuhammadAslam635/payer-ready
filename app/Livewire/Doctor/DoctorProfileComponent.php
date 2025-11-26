@@ -628,15 +628,15 @@ class DoctorProfileComponent extends Component
             if ($this->doctorProfile) {
                 $this->doctorProfile->update([
                     'dea_number' => $this->dea_number,
-                    'dea_issue_date' => $this->dea_issue_date,
-                    'dea_expiry_date' => $this->dea_expiry_date,
+                    'dea_issue_date' => $this->dea_issue_date ?: null,
+                    'dea_expiry_date' => $this->dea_expiry_date ?: null,
                 ]);
             } else {
                 DoctorProfile::create([
                     'user_id' => Auth::id(),
                     'dea_number' => $this->dea_number,
-                    'dea_issue_date' => $this->dea_issue_date,
-                    'dea_expiry_date' => $this->dea_expiry_date,
+                    'dea_issue_date' => $this->dea_issue_date ?: null,
+                    'dea_expiry_date' => $this->dea_expiry_date ?: null,
                     'status' => 'active',
                 ]);
             }
@@ -761,15 +761,15 @@ class DoctorProfileComponent extends Component
             if ($this->doctorProfile) {
                 $this->doctorProfile->update([
                     'dea_number' => $this->dea_number,
-                    'dea_issue_date' => $this->dea_issue_date,
-                    'dea_expiry_date' => $this->dea_expiry_date,
+                    'dea_issue_date' => $this->dea_issue_date ?: null,
+                    'dea_expiry_date' => $this->dea_expiry_date ?: null,
                 ]);
             } else {
                 DoctorProfile::create([
                     'user_id' => Auth::id(),
                     'dea_number' => $this->dea_number,
-                    'dea_issue_date' => $this->dea_issue_date,
-                    'dea_expiry_date' => $this->dea_expiry_date,
+                    'dea_issue_date' => $this->dea_issue_date ?: null,
+                    'dea_expiry_date' => $this->dea_expiry_date ?: null,
                     'status' => 'active',
                 ]);
                 $this->loadProfile();
