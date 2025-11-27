@@ -147,13 +147,15 @@
         setupEventListeners() {
             // Listen for specific modal events
             window.addEventListener(this.closeEventName, (e) => {
-                if (e.detail?.id === this.modalId) {
+                const payload = (e.detail && typeof e.detail === 'object' && 'id' in e.detail) ? e.detail.id : e.detail;
+                if (payload === this.modalId) {
                     this.close();
                 }
             });
 
             window.addEventListener(this.openEventName, (e) => {
-                if (e.detail?.id === this.modalId) {
+                const payload = (e.detail && typeof e.detail === 'object' && 'id' in e.detail) ? e.detail.id : e.detail;
+                if (payload === this.modalId) {
                     this.open();
                 }
             });
