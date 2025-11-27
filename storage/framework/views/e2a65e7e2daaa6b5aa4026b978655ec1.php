@@ -45,19 +45,19 @@ unset($__defined_vars, $__key, $__value); ?>
 ?>
 
 <div <?php echo e($attributes->class($classes)); ?> data-slot="label">
-    <!--[if BLOCK]><![endif]--><?php if($slot->isNotEmpty()): ?>
+    <?php if($slot->isNotEmpty()): ?>
         <?php echo e($slot); ?>
 
     <?php else: ?>
         <?php echo e($text); ?>
 
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endif; ?>
     
     
-    <!--[if BLOCK]><![endif]--><?php if(isset($required) && $required): ?> 
+    <?php if(isset($required) && $required): ?> 
         <span class="text-red-500 text-xs px-1 py-1" aria-hidden="true">
             *
         </span>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <?php endif; ?>
 </div>
 <?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/components/ui/label.blade.php ENDPATH**/ ?>
