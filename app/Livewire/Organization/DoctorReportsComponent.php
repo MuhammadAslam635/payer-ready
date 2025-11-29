@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Doctor Reports')]
+#[Title('Provider Reports')]
 #[Layout('layouts.dashboard')]
 class DoctorReportsComponent extends Component
 {
@@ -45,10 +45,11 @@ class DoctorReportsComponent extends Component
 
         $licensesQuery = DoctorLicense::query()
             ->whereIn('user_id', $doctorIds)
-            ->with(['licenseType', 'state']);
+            ->with(['licenseType', 'state', 'user.specialties']);
 
         $insurancesQuery = Insurance::query()
-            ->whereIn('user_id', $doctorIds);
+            ->whereIn('user_id', $doctorIds)
+            ->with(['user.specialties']);
 
         if ($this->startDate) {
             $licensesQuery->whereDate('created_at', '>=', $this->startDate);
@@ -59,22 +60,50 @@ class DoctorReportsComponent extends Component
             $insurancesQuery->whereDate('created_at', '<=', $this->endDate);
         }
 
-        $licenses = $licensesQuery->get()->map(function ($license) use ($organizationName) {
+        $licenses = $licensesQuery->get()->map(function ($license) {
+            // Get provider name
+            $providerName = $license->user->name ?? 'N/A';
+            
+            // Get specialty/type - primary specialty or first specialty
+            $specialty = 'N/A';
+            if ($license->user && $license->user->specialties) {
+                $primarySpecialty = $license->user->specialties->where('pivot.is_primary', true)->first();
+                if ($primarySpecialty) {
+                    $specialty = $primarySpecialty->name;
+                } elseif ($license->user->specialties->count() > 0) {
+                    $specialty = $license->user->specialties->first()->name;
+                }
+            }
+            
             return [
                 'category' => 'License',
-                'about' => trim(($license->licenseType->name ?? 'License') . ' ' . (isset($license->state) ? '(' . ($license->state->code ?? $license->state->name) . ')' : '')),
-                'organization' => $organizationName,
-                'group_npi' => $license->license_number ?? null,
+                'specialty_type' => $specialty,
+                'provider_name' => $providerName,
+                'license_number' => $license->license_number ?? '—',
                 'created_at' => $license->created_at,
             ];
         });
 
-        $insurances = $insurancesQuery->get()->map(function ($ins) use ($organizationName) {
+        $insurances = $insurancesQuery->get()->map(function ($ins) {
+            // Get provider name
+            $providerName = $ins->user->name ?? 'N/A';
+            
+            // Get specialty/type - primary specialty or first specialty
+            $specialty = 'N/A';
+            if ($ins->user && $ins->user->specialties) {
+                $primarySpecialty = $ins->user->specialties->where('pivot.is_primary', true)->first();
+                if ($primarySpecialty) {
+                    $specialty = $primarySpecialty->name;
+                } elseif ($ins->user->specialties->count() > 0) {
+                    $specialty = $ins->user->specialties->first()->name;
+                }
+            }
+            
             return [
                 'category' => 'Insurance',
-                'about' => trim(($ins->carrier ?? 'Insurance') . ' - Policy ' . ($ins->policy_number ?? '—')),
-                'organization' => $organizationName,
-                'group_npi' => $ins->policy_number ?? null,
+                'specialty_type' => $specialty,
+                'provider_name' => $providerName,
+                'license_number' => '—', // Insurance doesn't have license number
                 'created_at' => $ins->created_at,
             ];
         });
@@ -115,19 +144,19 @@ class DoctorReportsComponent extends Component
 
             return response()->streamDownload(function () use ($output) {
                 echo $output;
-            }, 'organization-report.pdf', [
+            }, 'provider-report.pdf', [
                 'Content-Type' => 'application/pdf',
             ]);
         }
 
         $csv = collect([
-            ['Type', 'About', 'Business/Clinic/Organization', 'Group NPI', 'Created At'],
+            ['Type', 'Specialty/Type', 'Provider Name', 'License Number', 'Created At'],
             ...array_map(function ($i) {
                 return [
                     $i['category'],
-                    $i['about'],
-                    $i['organization'] ?? '',
-                    $i['group_npi'] ?? '',
+                    $i['specialty_type'] ?? '',
+                    $i['provider_name'] ?? '',
+                    $i['license_number'] ?? '',
                     $i['created_at'] ? $i['created_at']->format('Y-m-d') : '',
                 ];
             }, $currentItems)
@@ -135,7 +164,7 @@ class DoctorReportsComponent extends Component
 
         return response()->streamDownload(function () use ($csv) {
             echo $csv;
-        }, 'organization-report.csv', [
+        }, 'provider-report.csv', [
             'Content-Type' => 'text/csv',
         ]);
     }

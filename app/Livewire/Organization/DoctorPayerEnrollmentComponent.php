@@ -25,6 +25,7 @@ class DoctorPayerEnrollmentComponent extends Component
 
     public $activeTab = 'all';
     public $showRequestModal = false;
+    public $providerType = ''; // 'provider' or 'organization'
     public $selectedProvider = '';
     public $selectedPayer = '';
     public $selectedRequestType = '';
@@ -72,24 +73,42 @@ class DoctorPayerEnrollmentComponent extends Component
 
     public function resetModalForm()
     {
+        $this->providerType = '';
         $this->selectedProvider = '';
         $this->selectedPayer = '';
         $this->selectedRequestType = '';
         $this->selectedState = '';
     }
 
+    public function updatedProviderType($value)
+    {
+        // When organization is selected, automatically set selectedProvider to organization admin ID
+        if ($value === 'organization') {
+            $this->selectedProvider = Auth::id();
+        } else {
+            // Reset selectedProvider when switching to provider type
+            $this->selectedProvider = '';
+        }
+    }
+
     public function submitRequest()
     {
         $this->validate([
+            'providerType' => 'required|in:provider,organization',
             'selectedProvider' => 'required|exists:users,id',
             'selectedPayer' => 'required|exists:payers,id',
             'selectedRequestType' => 'required|string',
             'selectedState' => 'required|exists:states,id',
         ]);
 
+        // If organization is selected, set selectedProvider to organization admin ID
+        if ($this->providerType === 'organization') {
+            $this->selectedProvider = Auth::id();
+        }
+
         // Ensure selected provider belongs to this organization admin
-        $doctorIds = $this->getOrgDoctorIds();
-        if (!in_array((int)$this->selectedProvider, $doctorIds)) {
+        $validProviderIds = $this->getOrgProviderIds();
+        if (!in_array((int)$this->selectedProvider, $validProviderIds)) {
             $this->addError('selectedProvider', 'Invalid provider selection.');
             return;
         }
@@ -152,9 +171,9 @@ class DoctorPayerEnrollmentComponent extends Component
 
     private function loadEnrollments(): void
     {
-        $doctorIds = $this->getOrgDoctorIds();
+        $providerIds = $this->getOrgProviderIds();
         $all = DoctorCredential::with(['payer','state','user'])
-            ->whereIn('user_id', $doctorIds)
+            ->whereIn('user_id', $providerIds)
             ->get();
 
         if ($this->activeTab === 'all') {
@@ -166,14 +185,14 @@ class DoctorPayerEnrollmentComponent extends Component
 
     private function calculateStats(): void
     {
-        $doctorIds = $this->getOrgDoctorIds();
+        $providerIds = $this->getOrgProviderIds();
         $this->stats = [
-            'all' => DoctorCredential::whereIn('user_id', $doctorIds)->count(),
-            'requested' => DoctorCredential::whereIn('user_id', $doctorIds)->where('status', CredentialStatus::REQUESTED)->count(),
-            'working' => DoctorCredential::whereIn('user_id', $doctorIds)->where('status', CredentialStatus::WORKING)->count(),
-            'pending' => DoctorCredential::whereIn('user_id', $doctorIds)->where('status', CredentialStatus::PENDING)->count(),
-            'completed' => DoctorCredential::whereIn('user_id', $doctorIds)->where('status', CredentialStatus::COMPLETED)->count(),
-            'return_for_correction' => DoctorCredential::whereIn('user_id', $doctorIds)->where('status', CredentialStatus::REVOKED)->count(),
+            'all' => DoctorCredential::whereIn('user_id', $providerIds)->count(),
+            'requested' => DoctorCredential::whereIn('user_id', $providerIds)->where('status', CredentialStatus::REQUESTED)->count(),
+            'working' => DoctorCredential::whereIn('user_id', $providerIds)->where('status', CredentialStatus::WORKING)->count(),
+            'pending' => DoctorCredential::whereIn('user_id', $providerIds)->where('status', CredentialStatus::PENDING)->count(),
+            'completed' => DoctorCredential::whereIn('user_id', $providerIds)->where('status', CredentialStatus::COMPLETED)->count(),
+            'return_for_correction' => DoctorCredential::whereIn('user_id', $providerIds)->where('status', CredentialStatus::REVOKED)->count(),
         ];
     }
 
@@ -189,7 +208,32 @@ class DoctorPayerEnrollmentComponent extends Component
 
     private function loadProviders(): void
     {
-        $this->providers = User::where('org_id', Auth::id())
+        // Get individual providers (doctors)
+        $doctors = User::where('org_id', Auth::id())
+            ->where('user_type', UserType::DOCTOR)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        // Get organization provider (the organization admin itself)
+        $organization = User::where('id', Auth::id())
+            ->where('user_type', UserType::ORGANIZATION_ADMIN)
+            ->where('is_active', true)
+            ->first();
+
+        // Combine both types
+        $this->providers = collect();
+        
+        if ($organization) {
+            $this->providers->push($organization);
+        }
+        
+        $this->providers = $this->providers->concat($doctors)->sortBy('name')->values();
+    }
+
+    public function getIndividualProvidersProperty()
+    {
+        return User::where('org_id', Auth::id())
             ->where('user_type', UserType::DOCTOR)
             ->where('is_active', true)
             ->orderBy('name')
@@ -204,14 +248,26 @@ class DoctorPayerEnrollmentComponent extends Component
             ->all();
     }
 
+    private function getOrgProviderIds(): array
+    {
+        // Include organization admin itself
+        $orgAdminId = [Auth::id()];
+        
+        // Include all doctors under this organization
+        $doctorIds = $this->getOrgDoctorIds();
+        
+        // Combine and return
+        return array_merge($orgAdminId, $doctorIds);
+    }
+
     public function updateEnrollmentStatus($enrollmentId, $newStatus)
     {
         try {
             $enrollment = DoctorCredential::findOrFail($enrollmentId);
             
-            // Check if enrollment belongs to org's doctor
-            $doctorIds = $this->getOrgDoctorIds();
-            if (!in_array($enrollment->user_id, $doctorIds)) {
+            // Check if enrollment belongs to org's provider (doctor or organization)
+            $providerIds = $this->getOrgProviderIds();
+            if (!in_array($enrollment->user_id, $providerIds)) {
                 $this->toastError('Unauthorized access');
                 return;
             }

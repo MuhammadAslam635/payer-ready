@@ -219,9 +219,15 @@ class DoctorProfileComponent extends Component
         $primaryAddress = $user->addresses()->where('is_primary', true)->first();
         if ($primaryAddress) {
             $this->address = $primaryAddress->address ?? '';
-            $this->address_state_id = $primaryAddress->state_id ?? '';
+            $this->address_state_id = $primaryAddress->state_id ? (string)$primaryAddress->state_id : '';
             $this->address_country = $primaryAddress->country ?? 'US';
             $this->address_type = $primaryAddress->address_type ?? 'home';
+        } else {
+            // Reset to empty if no address exists
+            $this->address = '';
+            $this->address_state_id = '';
+            $this->address_country = 'US';
+            $this->address_type = 'home';
         }
     }
 
@@ -610,7 +616,7 @@ class DoctorProfileComponent extends Component
                 if ($primaryAddress) {
                     $primaryAddress->update([
                         'address' => $this->address,
-                        'state_id' => $this->address_state_id,
+                        'state_id' => $this->address_state_id ? (int)$this->address_state_id : null,
                         'country' => $this->address_country,
                         'address_type' => $this->address_type,
                     ]);
@@ -621,13 +627,16 @@ class DoctorProfileComponent extends Component
                     Address::create([
                         'user_id' => $user->id,
                         'address' => $this->address,
-                        'state_id' => $this->address_state_id,
+                        'state_id' => $this->address_state_id ? (int)$this->address_state_id : null,
                         'country' => $this->address_country,
                         'address_type' => $this->address_type,
                         'is_primary' => true,
                     ]);
                 }
             }
+            
+            // Reload address data to reflect saved values
+            $this->loadAddress();
 
             // Update DEA in doctor profile
             if ($this->doctorProfile) {

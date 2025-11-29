@@ -3,7 +3,7 @@
         <div class="px-6 py-4 border-b border-slate-200">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-900">Doctor Reports</h1>
+                    <h1 class="text-2xl font-bold text-slate-900">Provider Reports</h1>
                     <p class="mt-1 text-sm text-slate-600">Filter by created date range, then download as PDF/CSV.</p>
                 </div>
                 <div class="mt-4 sm:mt-0">
@@ -37,9 +37,9 @@
                 <thead class="bg-slate-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">About</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Business/Clinic/Organization</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Group NPI</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Specialty/Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Provider Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">License Number</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Created At</th>
                     </tr>
                 </thead>
@@ -51,9 +51,9 @@
                                     {{ $item['category'] }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $item['about'] }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 font-medium">{{ $item['organization'] ?? '—' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ $item['group_npi'] ?? '—' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">{{ $item['specialty_type'] ?? '—' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700 font-medium">{{ $item['provider_name'] ?? '—' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ $item['license_number'] ?? '—' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 @if($item['created_at'])
                                     {{ $item['created_at']->format('M d, Y') }}

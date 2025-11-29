@@ -204,21 +204,55 @@
                                 <div class="flex items-center mb-3">
                                     <div class="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">1</div>
                                     <div>
-                                        <h4 class="text-sm font-medium text-gray-900">Select Provider</h4>
-                                        <p class="text-xs text-gray-500">Choose the provider for this enrollment request</p>
+                                        <h4 class="text-sm font-medium text-gray-900">Select Provider Type</h4>
+                                        <p class="text-xs text-gray-500">Choose provider type for this enrollment request</p>
                                     </div>
                                 </div>
-                                <x-ui.select wire:model="selectedProvider" searchable :invalid="$errors->has('selectedProvider')">
-                                    <x-ui.select.option value="">Select a provider...</x-ui.select.option>
-                                    @foreach ($providers as $provider)
-                                        <x-ui.select.option value="{{ $provider->id }}">{{ $provider->name }}</x-ui.select.option>
-                                    @endforeach
+                                <x-ui.select wire:model.live="providerType" :invalid="$errors->has('providerType')">
+                                    <x-ui.select.option value="">Select provider type...</x-ui.select.option>
+                                    <x-ui.select.option value="provider">Provider</x-ui.select.option>
+                                    <x-ui.select.option value="organization">Organization</x-ui.select.option>
                                 </x-ui.select>
-                                <x-ui.error name="selectedProvider" />
+                                <x-ui.error name="providerType" />
                             </div>
+
+                            @if($providerType === 'organization')
+                                <div class="mb-6">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-8 h-8 {{ $providerType ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">2</div>
+                                        <div>
+                                            <h4 class="text-sm font-medium text-gray-900">Organization</h4>
+                                            <p class="text-xs text-gray-500">Organization name (read-only)</p>
+                                        </div>
+                                    </div>
+                                    <input type="text" 
+                                           value="{{ Auth::user()->business_name ?? Auth::user()->name }}" 
+                                           readonly 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                                </div>
+                            @elseif($providerType === 'provider')
+                                <div class="mb-6">
+                                    <div class="flex items-center mb-3">
+                                        <div class="w-8 h-8 {{ $providerType ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">2</div>
+                                        <div>
+                                            <h4 class="text-sm font-medium text-gray-900">Select Provider</h4>
+                                            <p class="text-xs text-gray-500">Choose the individual provider for this enrollment request</p>
+                                        </div>
+                                    </div>
+                                    <x-ui.select wire:model="selectedProvider" searchable :invalid="$errors->has('selectedProvider')">
+                                        <x-ui.select.option value="">Select a provider...</x-ui.select.option>
+                                        @foreach ($this->individualProviders as $provider)
+                                            <x-ui.select.option value="{{ $provider->id }}">{{ $provider->name }}</x-ui.select.option>
+                                        @endforeach
+                                    </x-ui.select>
+                                    <x-ui.error name="selectedProvider" />
+                                </div>
+                            @endif
+
+                            @if($providerType)
                             <div class="mb-6">
                                 <div class="flex items-center mb-3">
-                                    <div class="w-8 h-8 {{ $selectedProvider ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">2</div>
+                                    <div class="w-8 h-8 {{ $selectedPayer ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">3</div>
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-900">Select Payer</h4>
                                         <p class="text-xs text-gray-500">Choose a payer. Payers the provider is already enrolled with are hidden.</p>
@@ -232,9 +266,10 @@
                                 </x-ui.select>
                                 <x-ui.error name="selectedPayer" />
                             </div>
+
                             <div class="mb-6">
                                 <div class="flex items-center mb-3">
-                                    <div class="w-8 h-8 {{ $selectedPayer ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">3</div>
+                                    <div class="w-8 h-8 {{ $selectedState ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">4</div>
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-900">Select State</h4>
                                         <p class="text-xs text-gray-500">Choose the state for this enrollment</p>
@@ -248,9 +283,10 @@
                                 </x-ui.select>
                                 <x-ui.error name="selectedState" />
                             </div>
+
                             <div class="mb-6">
                                 <div class="flex items-center mb-3">
-                                    <div class="w-8 h-8 {{ $selectedState ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">5</div>
+                                    <div class="w-8 h-8 {{ $selectedRequestType ? 'bg-teal-500' : 'bg-gray-300' }} text-white rounded-full flex items-center justify-center text-sm font-medium mr-3">5</div>
                                     <div>
                                         <h4 class="text-sm font-medium text-gray-900">Select Request Type</h4>
                                         <p class="text-xs text-gray-500">Is this a new enrollment or re-credentialing?</p>
@@ -264,6 +300,7 @@
                                 </x-ui.select>
                                 <x-ui.error name="selectedRequestType" />
                             </div>
+                            @endif
                             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:ml-3 sm:w-auto sm:text-sm">Submit Request</button>
                                 <button type="button" wire:click="closeRequestModal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancel</button>

@@ -6,6 +6,7 @@ use App\Enums\UserType;
 use App\Models\User;
 use App\Models\State;
 use App\Models\Specialty;
+use App\Models\PracticeLocation;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Admin\CrudTrait;
@@ -23,6 +24,10 @@ class ManageStaffComponent extends Component
     public $sortDirection = 'desc';
     public $perPage = 10;
     public $search = '';
+    public $showPracticeLocationsModal = false;
+    public $selectedProviderId = null;
+    public $practiceLocations = [];
+    public $selectedProviderName = '';
 
     protected function getModelClass(): string
     {
@@ -279,6 +284,36 @@ class ManageStaffComponent extends Component
         }
 
         return $query->paginate($this->perPage);
+    }
+
+    /**
+     * View practice locations for a provider
+     */
+    public function viewPracticeLocations($providerId)
+    {
+        $provider = User::findOrFail($providerId);
+        
+        // Verify the provider belongs to this organization
+        if ($provider->org_id !== Auth::id()) {
+            $this->toastError('Unauthorized access.');
+            return;
+        }
+        
+        $this->selectedProviderId = $providerId;
+        $this->selectedProviderName = $provider->name;
+        $this->practiceLocations = PracticeLocation::where('user_id', $providerId)->get()->toArray();
+        $this->showPracticeLocationsModal = true;
+    }
+
+    /**
+     * Close practice locations modal
+     */
+    public function closePracticeLocationsModal()
+    {
+        $this->showPracticeLocationsModal = false;
+        $this->selectedProviderId = null;
+        $this->selectedProviderName = '';
+        $this->practiceLocations = [];
     }
 
     public function render()

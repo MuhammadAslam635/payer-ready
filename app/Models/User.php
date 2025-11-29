@@ -64,6 +64,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'org_id',
         'provider_type',
         'fax_number',
+        'organization_type',
+        'dba_name',
+        'tax_id',
+        'website',
     ];
 
     /**
@@ -288,6 +292,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function primaryPracticeLocation(): HasOne
     {
         return $this->hasOne(PracticeLocation::class)->where('is_primary', true);
+    }
+
+    /**
+     * Get all organization licenses
+     */
+    public function organizationLicenses(): HasMany
+    {
+        return $this->hasMany(OrganizationLicense::class);
+    }
+
+    /**
+     * Get all organization certificates
+     */
+    public function organizationCertificates(): HasMany
+    {
+        return $this->hasMany(OrganizationCertificate::class);
     }
 
     /**

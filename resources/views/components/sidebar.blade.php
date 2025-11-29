@@ -151,6 +151,11 @@
                     <x-ui.icon name="squares-2x2" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">Overview</span>
                 </a>
+                <a href="{{ route('organization-admin.profile') }}" wire:navigate
+                    class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.profile') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
+                    <x-ui.icon name="identification" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <span class="truncate">Organization Profile</span>
+                </a>
                 <a href="{{ route('organization-admin.manage_staff') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.manage_staff') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
                     <x-ui.icon name="users" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
@@ -178,7 +183,7 @@
                 </a>
                 <a href="{{ route('organization-admin.doctor_reports') }}" wire:navigate
                     class="flex items-center px-4 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('organization-admin.doctor_reports') ? 'bg-primary-600 text-white' : 'text-primary-200 hover:bg-primary-800 hover:text-white' }}">
-                    <x-ui.icon name="chart-bar" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
+                    <x-ui.icon name="clipboard-document-list" class="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-primary-100 flex-shrink-0" />
                     <span class="truncate">Provider Reports</span>
                 </a>
                 <a href="{{ route('organization-admin.doctor_invoice_payments') }}" wire:navigate

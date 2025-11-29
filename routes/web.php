@@ -241,6 +241,7 @@ Route::middleware(['auth:sanctum',
 
 Route::group(['prefix' => 'organization-admin', 'as' => 'organization-admin.', 'middleware' => ['auth', 'verified']],function () {
     Route::get('/notifications',OrganizationNotificationComponent::class)->name('notifications');
+    Route::get('/profile', \App\Livewire\OrganizationAdmin\OrganizationProfileComponent::class)->name('profile');
     Route::get('/manage-staff',ManageStaffComponent::class)->name('manage_staff');
     Route::get('/doctor-tasks',DoctorTasksComponent::class)->name('doctor_tasks');
     Route::get('/doctor-licenses',DoctorApplicationsComponent::class)->name('doctor_licenses');

@@ -157,7 +157,7 @@
                                 <x-ui.select wire:model="address_state_id" id="address_state_id" searchable>
                                     <x-ui.select.option value="">Select state...</x-ui.select.option>
                                     @foreach($states as $state)
-                                        <x-ui.select.option value="{{ $state->id }}">{{ $state->name }}</x-ui.select.option>
+                                        <x-ui.select.option value="{{ (string)$state->id }}">{{ $state->name }}</x-ui.select.option>
                                     @endforeach
                                 </x-ui.select>
                                 @error('address_state_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
