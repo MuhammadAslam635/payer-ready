@@ -643,7 +643,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['value' => ''.e($requestType).'']); ?><?php echo e(\App\Enums\CredentialRequest::from($requestType)->label()); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['value' => ''.e($requestType).'']); ?><?php echo e($requestType); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalb178088b41690ba18d9960f87fd0bd48)): ?>
 <?php $attributes = $__attributesOriginalb178088b41690ba18d9960f87fd0bd48; ?>
@@ -685,53 +685,6 @@
 <?php unset($__componentOriginal49789f0e11f6b7c94cbebf11f344eb07); ?>
 <?php endif; ?>
                             </div>
-
-                            <!-- Fee Information Display -->
-                            <!--[if BLOCK]><![endif]--><?php if($showFeeInfo && $calculatedFee && $calculatedFee['total'] > 0): ?>
-                                <div class="mb-6 bg-teal-50 border border-teal-200 rounded-lg p-4">
-                                    <div class="flex items-start">
-                                        <div class="flex-shrink-0">
-                                            <svg class="h-5 w-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3 flex-1">
-                                            <h4 class="text-sm font-semibold text-teal-900 mb-2">Credentialing Fee</h4>
-                                            <div class="space-y-1">
-                                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $calculatedFee['breakdown']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feeItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <div class="flex justify-between text-sm">
-                                                        <span class="text-teal-700"><?php echo e($feeItem['description']); ?></span>
-                                                        <span class="font-medium text-teal-900">$<?php echo e(number_format($feeItem['amount'], 2)); ?></span>
-                                                    </div>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                <!--[if BLOCK]><![endif]--><?php if(count($calculatedFee['breakdown']) > 1): ?>
-                                                    <div class="border-t border-teal-200 mt-2 pt-2 flex justify-between">
-                                                        <span class="text-sm font-semibold text-teal-900">Total Fee</span>
-                                                        <span class="text-base font-bold text-teal-900">$<?php echo e(number_format($calculatedFee['total'], 2)); ?></span>
-                                                    </div>
-                                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                            </div>
-                                            <!--[if BLOCK]><![endif]--><?php if(isset($calculatedFee['fee_type']) && $calculatedFee['fee_type'] === 'provider_linkage'): ?>
-                                                <p class="mt-2 text-xs text-teal-600">
-                                                    <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    Organization is already enrolled with this payer. This is a provider linkage fee.
-                                                </p>
-                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php elseif($showFeeInfo && $calculatedFee && $calculatedFee['total'] == 0): ?>
-                                <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
-                                    <div class="flex items-center">
-                                        <svg class="h-5 w-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <p class="text-sm text-green-800">No fee required for this enrollment.</p>
-                                    </div>
-                                </div>
-                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:ml-3 sm:w-auto sm:text-sm">Submit Request</button>

@@ -145,11 +145,30 @@ class DoctorPayerEnrollmentComponent extends Component
                 ->where('is_active', true)
                 ->get();
             foreach ($adminUsers as $admin) {
-                $admin->notify(new InsuranceNotification($notificationData));
+                // Check if email is valid before sending notification
+                if ($admin->email && filter_var($admin->email, FILTER_VALIDATE_EMAIL)) {
+                    try {
+                        $admin->notify(new InsuranceNotification($notificationData));
+                    } catch (\Exception $e) {
+                        \Log::warning('Failed to send notification to admin: ' . $admin->email . ' - ' . $e->getMessage());
+                    }
+                } else {
+                    \Log::warning('Skipping notification for admin with invalid email: ' . ($admin->email ?? 'NULL') . ' (User ID: ' . $admin->id . ')');
+                }
             }
-            $provider->notify(new InsuranceNotification(array_merge($notificationData, [
-                'type' => 'payer_enrollment_confirmation'
-            ])));
+            
+            // Notify provider if email is valid
+            if ($provider->email && filter_var($provider->email, FILTER_VALIDATE_EMAIL)) {
+                try {
+                    $provider->notify(new InsuranceNotification(array_merge($notificationData, [
+                        'type' => 'payer_enrollment_confirmation'
+                    ])));
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to send notification to provider: ' . $provider->email . ' - ' . $e->getMessage());
+                }
+            } else {
+                \Log::warning('Skipping notification for provider with invalid email: ' . ($provider->email ?? 'NULL') . ' (User ID: ' . $provider->id . ')');
+            }
 
             DB::commit();
 
