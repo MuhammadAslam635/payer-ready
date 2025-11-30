@@ -7,6 +7,8 @@ use App\Models\UserGatewayPayment;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Invoice;
+use App\Models\DoctorCredential;
+use App\Services\OrganizationCredentialingFeeService;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\UserPaymentNotification;
 use Livewire\Attributes\Layout;
@@ -146,28 +148,57 @@ class DoctorInvoicePaymentsComponent extends Component
 
     public function getPendingInvoices()
     {
-        if (!$this->selectedDoctorId) {
-            return collect();
-        }
-
         $adminId = Auth::id();
         $doctorIds = User::query()
             ->where('org_id', $adminId)
             ->where('user_type', \App\Enums\UserType::DOCTOR)
-            ->pluck('id');
+            ->pluck('id')
+            ->toArray();
+        
+        // Include organization admin itself
+        $allUserIds = array_merge([$adminId], $doctorIds);
 
-        if (!in_array((int)$this->selectedDoctorId, $doctorIds->toArray())) {
-            return collect();
+        $query = Invoice::with(['invoiceItems'])
+            ->whereIn('user_id', $allUserIds)
+            ->where('status', 'pending');
+
+        // If doctor is selected, filter by that doctor
+        if ($this->selectedDoctorId) {
+            if (!in_array((int)$this->selectedDoctorId, $allUserIds, true)) {
+                return collect();
+            }
+            $query->where('user_id', $this->selectedDoctorId);
         }
 
-        return Invoice::with(['invoiceItems'])
-            ->where('user_id', $this->selectedDoctorId)
-            ->where('status', 'pending')
-            ->when($this->invoiceSearch, function ($query) {
-                $query->where('invoice_number', 'like', '%' . $this->invoiceSearch . '%');
+        return $query->when($this->invoiceSearch, function ($q) {
+                $q->where('invoice_number', 'like', '%' . $this->invoiceSearch . '%');
             })
             ->orderBy('created_at', 'desc')
             ->get();
+    }
+
+    /**
+     * Generate invoices for pending credentialing enrollments
+     */
+    public function generateCredentialingInvoices()
+    {
+        try {
+            $organization = Auth::user();
+            $feeService = new OrganizationCredentialingFeeService();
+            
+            $result = $feeService->createInvoicesForPendingEnrollments($organization);
+            
+            if ($result['created'] > 0) {
+                session()->flash('success', "Successfully created {$result['created']} invoice(s) for pending enrollments.");
+            } else {
+                session()->flash('info', 'No new invoices to create. All pending enrollments already have invoices.');
+            }
+            
+            $this->dispatch('invoices-generated');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Failed to generate invoices: ' . $e->getMessage());
+            \Log::error('Failed to generate credentialing invoices: ' . $e->getMessage());
+        }
     }
 
     public function getPayments()
@@ -201,11 +232,21 @@ class DoctorInvoicePaymentsComponent extends Component
 
     public function getDoctors()
     {
-        return User::query()
+        $doctors = User::query()
             ->where('org_id', Auth::id())
             ->where('user_type', \App\Enums\UserType::DOCTOR)
             ->orderBy('name')
             ->get(['id','name','email']);
+        
+        // Add organization itself at the beginning
+        $organization = Auth::user();
+        $orgData = (object)[
+            'id' => $organization->id,
+            'name' => $organization->business_name ?? $organization->name,
+            'email' => $organization->email,
+        ];
+        
+        return collect([$orgData])->concat($doctors);
     }
 
     public function save(): void

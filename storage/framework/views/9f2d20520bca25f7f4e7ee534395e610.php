@@ -1,89 +1,20 @@
 <div class="space-y-6">
-    <!-- Flash Messages -->
-    <!--[if BLOCK]><![endif]--><?php if(session()->has('success')): ?>
-        <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <?php echo e(session('success')); ?>
-
-            </div>
-        </div>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
-    <?php if(session()->has('error')): ?>
-        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <?php echo e(session('error')); ?>
-
-            </div>
-        </div>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
-    <?php if(session()->has('info')): ?>
-        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg">
-            <div class="flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <?php echo e(session('info')); ?>
-
-            </div>
-        </div>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
     <!-- Pending Invoices Section -->
     <div class="bg-white rounded-lg shadow-sm border border-slate-200">
         <div class="px-6 py-4 border-b border-slate-200">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900">Pending Invoices</h2>
-                    <p class="mt-1 text-sm text-slate-600">View and manage pending invoices for credentialing and other services.</p>
-                </div>
-                <div class="mt-4 sm:mt-0">
-                    <button wire:click="generateCredentialingInvoices" 
-                            wire:loading.attr="disabled"
-                            class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150 disabled:opacity-50">
-                        <span wire:loading.remove wire:target="generateCredentialingInvoices">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Generate Invoices for Enrollments
-                        </span>
-                        <span wire:loading wire:target="generateCredentialingInvoices" class="flex items-center">
-                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Generating...
-                        </span>
-                    </button>
+                    <p class="mt-1 text-sm text-slate-600">Select an invoice to make payment.</p>
                 </div>
             </div>
         </div>
 
         <div class="px-6 py-4">
-            <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-700 mb-1">Filter by Doctor/Organization</label>
-                    <select wire:model.live="selectedDoctorId" class="w-full text-sm border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
-                        <option value="">All Invoices</option>
-                        <option value="<?php echo e(Auth::id()); ?>">Organization (<?php echo e(Auth::user()->business_name ?? Auth::user()->name); ?>)</option>
-                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->name); ?> (<?php echo e($doctor->email); ?>)</option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                    </select>
-                </div>
-                <!--[if BLOCK]><![endif]--><?php if($selectedDoctorId): ?>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-700 mb-1">Search Invoice</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
+            <div class="mb-4">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.icon.index','data' => ['name' => 'magnifying-glass','class' => 'h-5 w-5 text-slate-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('ui.icon'); ?>
@@ -103,37 +34,35 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                            </div>
-                            <input wire:model.live="invoiceSearch" type="text"
-                                class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md leading-5 bg-white placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
-                                placeholder="Search by invoice number...">
-                        </div>
                     </div>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    <input wire:model.live="invoiceSearch" type="text"
+                        class="block w-full pl-10 pr-3 py-2 border border-slate-300 rounded-md leading-5 bg-white placeholder-slate-500 focus:outline-none focus:placeholder-slate-400 focus:ring-1 focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                        placeholder="Search invoices by invoice number...">
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $pendingInvoices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invoice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <div class="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer <?php echo e($selectedInvoiceId == $invoice->id ? 'ring-2 ring-teal-500 border-teal-500' : ''); ?>"
-                             wire:click="openInvoiceModal(<?php echo e($invoice->id); ?>)">
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <h3 class="text-sm font-semibold text-slate-900"><?php echo e($invoice->invoice_number); ?></h3>
-                                    <p class="text-xs text-slate-500 mt-1">Due: <?php echo e($invoice->due_date?->format('M d, Y') ?? 'N/A'); ?></p>
-                                </div>
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    Pending
-                                </span>
+                    <div class="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer <?php echo e($selectedInvoiceId == $invoice->id ? 'ring-2 ring-teal-500 border-teal-500' : ''); ?>"
+                         wire:click="openInvoiceModal(<?php echo e($invoice->id); ?>)">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-900"><?php echo e($invoice->invoice_number); ?></h3>
+                                <p class="text-xs text-slate-500 mt-1">Due: <?php echo e($invoice->due_date?->format('M d, Y') ?? 'N/A'); ?></p>
                             </div>
-                            <div class="mt-3">
-                                <p class="text-lg font-bold text-teal-600">$<?php echo e(number_format($invoice->total, 2)); ?></p>
-                                <p class="text-xs text-slate-500 mt-1"><?php echo e($invoice->invoiceItems->count()); ?> item(s)</p>
-                            </div>
-                            <button wire:click.stop="openPayoutFromInvoice(<?php echo e($invoice->id); ?>)" 
-                                    class="mt-3 w-full text-xs px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-md transition-colors">
-                                Pay Now
-                            </button>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                Pending
+                            </span>
                         </div>
+                        <div class="mt-3">
+                            <p class="text-lg font-bold text-teal-600">$<?php echo e(number_format($invoice->total, 2)); ?></p>
+                            <p class="text-xs text-slate-500 mt-1"><?php echo e($invoice->invoiceItems->count()); ?> item(s)</p>
+                        </div>
+                        <button wire:click.stop="openPayoutFromInvoice(<?php echo e($invoice->id); ?>)" 
+                                class="mt-3 w-full text-xs px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-md transition-colors">
+                            Pay Now
+                        </button>
+                    </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-full py-12 text-center">
                         <div class="text-slate-500">
@@ -158,13 +87,7 @@
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
                             <h3 class="mt-2 text-sm font-medium text-slate-900">No pending invoices</h3>
-                            <p class="mt-1 text-sm text-slate-500">
-                                <!--[if BLOCK]><![endif]--><?php if($selectedDoctorId): ?>
-                                    This doctor/organization has no pending invoices.
-                                <?php else: ?>
-                                    No pending invoices found. Click "Generate Invoices for Enrollments" to create invoices for pending credentialing enrollments.
-                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                            </p>
+                            <p class="mt-1 text-sm text-slate-500">All your invoices are paid or you don't have any invoices yet.</p>
                         </div>
                     </div>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
@@ -176,8 +99,31 @@
         <div class="px-6 py-4 border-b border-slate-200">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-900">Doctor Invoice Payments</h1>
-                    <p class="mt-1 text-sm text-slate-600">Payments submitted by doctors you created.</p>
+                    <h1 class="text-2xl font-bold text-slate-900">Invoice Payments</h1>
+                    <p class="mt-1 text-sm text-slate-600">Submit manual payments with transaction ID and screenshot.</p>
+                </div>
+                <div class="mt-4 sm:mt-0 flex space-x-3">
+                    <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['type' => 'button','color' => 'teal','variant' => 'primary','icon' => 'plus','class' => '!px-5 uppercase tracking-wide text-xs','wire:click' => 'openAddModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['type' => 'button','color' => 'teal','variant' => 'primary','icon' => 'plus','class' => '!px-5 uppercase tracking-wide text-xs','wire:click' => 'openAddModal']); ?>
+                        Pay Invoice
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala8bb031a483a05f647cb99ed3a469847)): ?>
+<?php $attributes = $__attributesOriginala8bb031a483a05f647cb99ed3a469847; ?>
+<?php unset($__attributesOriginala8bb031a483a05f647cb99ed3a469847); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala8bb031a483a05f647cb99ed3a469847)): ?>
+<?php $component = $__componentOriginala8bb031a483a05f647cb99ed3a469847; ?>
+<?php unset($__componentOriginala8bb031a483a05f647cb99ed3a469847); ?>
+<?php endif; ?>
                 </div>
             </div>
         </div>
@@ -213,19 +159,12 @@
                             placeholder="Search by gateway or transaction id...">
                     </div>
                 </div>
-                <div class="flex items-center space-x-3">
+                <div>
                     <select wire:model.live="perPage" class="text-sm border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                     </select>
-                    <button wire:click="openAddModal"
-                            class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:bg-teal-700 active:bg-teal-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Pay Invoice
-                    </button>
                 </div>
             </div>
         </div>
@@ -236,7 +175,6 @@
             <table class="min-w-full divide-y divide-slate-200">
                 <thead class="bg-slate-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Doctor</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Gateway</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Invoice</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Transaction ID</th>
@@ -255,7 +193,6 @@
                             $status = $transaction?->status ?? 'pending';
                         ?>
                         <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900"><?php echo e($payment->user->name ?? '—'); ?></td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center space-x-3">
                                     <!--[if BLOCK]><![endif]--><?php if(($payment->paymentGateway->barcode_screenshot_path ?? null)): ?>
@@ -311,7 +248,7 @@
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center">
+                            <td colspan="6" class="px-6 py-12 text-center">
                                 <div class="text-slate-500">
                                     <?php if (isset($component)) { $__componentOriginal56804098dcf376a0e2227cb77b6cd00a = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56804098dcf376a0e2227cb77b6cd00a = $attributes; } ?>
@@ -333,7 +270,8 @@
 <?php $component = $__componentOriginal56804098dcf376a0e2227cb77b6cd00a; ?>
 <?php unset($__componentOriginal56804098dcf376a0e2227cb77b6cd00a); ?>
 <?php endif; ?>
-                                    <h3 class="mt-2 text-sm font-medium text-slate-900">No payments found</h3>
+                                    <h3 class="mt-2 text-sm font-medium text-slate-900">No payments submitted yet</h3>
+                                    <p class="mt-1 text-sm text-slate-500">Click Add Payment to submit one.</p>
                                 </div>
                             </td>
                         </tr>
@@ -357,49 +295,29 @@
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Add Payment</h3>
 
                         <div class="mt-4 space-y-4">
+                            <!-- Invoice Selection -->
                             <div>
-                                <label class="block text-xs font-medium text-slate-700 mb-1">Doctor</label>
-                                <select wire:model.live="selectedDoctorId" class="w-full text-sm border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
-                                    <option value="">Select Doctor</option>
-                                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doctor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($doctor->id); ?>"><?php echo e($doctor->name); ?> (<?php echo e($doctor->email); ?>)</option>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Select Invoice (Optional)</label>
+                                <select wire:model.live="selectedInvoiceId" class="w-full text-sm border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
+                                    <option value="">No specific invoice (General payment)</option>
+                                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $pendingInvoices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invoice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($invoice->id); ?>">
+                                            <?php echo e($invoice->invoice_number); ?> - $<?php echo e(number_format($invoice->total, 2)); ?> (Due: <?php echo e($invoice->due_date?->format('M d, Y') ?? 'N/A'); ?>)
+                                        </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                                 </select>
-                                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['selectedDoctorId'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <p class="text-red-600 text-xs mt-1"><?php echo e($message); ?></p> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
-                            </div>
+                                <!--[if BLOCK]><![endif]--><?php if($selectedInvoiceId): ?>
+                                    <?php
+                                        $selectedInv = $pendingInvoices->firstWhere('id', $selectedInvoiceId);
+                                    ?>
+                                    <!--[if BLOCK]><![endif]--><?php if($selectedInv): ?>
+                                        <p class="mt-1 text-xs text-teal-600">
+                                            Invoice: <?php echo e($selectedInv->invoice_number); ?> | Amount: $<?php echo e(number_format($selectedInv->total, 2)); ?>
 
-                            <!-- Invoice Selection (shown only when doctor is selected) -->
-                            <!--[if BLOCK]><![endif]--><?php if($selectedDoctorId): ?>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-700 mb-1">Select Invoice (Optional)</label>
-                                    <select wire:model.live="selectedInvoiceId" class="w-full text-sm border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
-                                        <option value="">No specific invoice (General payment)</option>
-                                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $pendingInvoices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $invoice): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($invoice->id); ?>">
-                                                <?php echo e($invoice->invoice_number); ?> - $<?php echo e(number_format($invoice->total, 2)); ?> (Due: <?php echo e($invoice->due_date?->format('M d, Y') ?? 'N/A'); ?>)
-                                            </option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                                    </select>
-                                    <!--[if BLOCK]><![endif]--><?php if($selectedInvoiceId): ?>
-                                        <?php
-                                            $selectedInv = $pendingInvoices->firstWhere('id', $selectedInvoiceId);
-                                        ?>
-                                        <!--[if BLOCK]><![endif]--><?php if($selectedInv): ?>
-                                            <p class="mt-1 text-xs text-teal-600">
-                                                Invoice: <?php echo e($selectedInv->invoice_number); ?> | Amount: $<?php echo e(number_format($selectedInv->total, 2)); ?>
-
-                                            </p>
-                                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                        </p>
                                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                                </div>
-                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            </div>
 
                             <div>
                                 <label class="block text-xs font-medium text-slate-700 mb-1">Payment Gateway</label>
@@ -490,8 +408,16 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                     </div>
 
                     <div class="bg-gray-50 px-6 py-3 sm:flex sm:flex-row-reverse gap-2">
-                        <button type="button" wire:click="save" wire:target="save" wire:loading.attr="disabled"
-                                class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-teal-600 text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-70 disabled:cursor-not-allowed sm:ml-3 sm:w-auto sm:text-sm">
+                        <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['type' => 'button','color' => 'teal','variant' => 'primary','class' => 'sm:ml-3 sm:w-auto','wire:click' => 'save','wire:target' => 'save','wire:loading.attr' => 'disabled']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['type' => 'button','color' => 'teal','variant' => 'primary','class' => 'sm:ml-3 sm:w-auto','wire:click' => 'save','wire:target' => 'save','wire:loading.attr' => 'disabled']); ?>
                             <span wire:loading.remove wire:target="save">Submit</span>
                             <span wire:loading wire:target="save" class="flex items-center">
                                 <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -500,11 +426,37 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                 </svg>
                                 Processing...
                             </span>
-                        </button>
-                        <button type="button" wire:click="closeAddModal"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala8bb031a483a05f647cb99ed3a469847)): ?>
+<?php $attributes = $__attributesOriginala8bb031a483a05f647cb99ed3a469847; ?>
+<?php unset($__attributesOriginala8bb031a483a05f647cb99ed3a469847); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala8bb031a483a05f647cb99ed3a469847)): ?>
+<?php $component = $__componentOriginala8bb031a483a05f647cb99ed3a469847; ?>
+<?php unset($__componentOriginala8bb031a483a05f647cb99ed3a469847); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginala8bb031a483a05f647cb99ed3a469847 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginala8bb031a483a05f647cb99ed3a469847 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.ui.button.index','data' => ['type' => 'button','variant' => 'outline','color' => 'slate','class' => 'mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto','wire:click' => 'closeAddModal']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('ui.button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['type' => 'button','variant' => 'outline','color' => 'slate','class' => 'mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto','wire:click' => 'closeAddModal']); ?>
                             Cancel
-                        </button>
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginala8bb031a483a05f647cb99ed3a469847)): ?>
+<?php $attributes = $__attributesOriginala8bb031a483a05f647cb99ed3a469847; ?>
+<?php unset($__attributesOriginala8bb031a483a05f647cb99ed3a469847); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginala8bb031a483a05f647cb99ed3a469847)): ?>
+<?php $component = $__componentOriginala8bb031a483a05f647cb99ed3a469847; ?>
+<?php unset($__componentOriginala8bb031a483a05f647cb99ed3a469847); ?>
+<?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -549,14 +501,10 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                                     </span>
                                 </div>
                                 <div>
-                                    <p class="text-sm text-gray-500">Doctor</p>
-                                    <p class="text-sm font-medium text-gray-900"><?php echo e($selectedInvoice->user->name ?? 'N/A'); ?></p>
-                                </div>
-                                <div>
                                     <p class="text-sm text-gray-500">Due Date</p>
                                     <p class="text-sm font-medium text-gray-900"><?php echo e($selectedInvoice->due_date?->format('M d, Y') ?? 'N/A'); ?></p>
                                 </div>
-                                <div class="col-span-2">
+                                <div>
                                     <p class="text-sm text-gray-500">Total Amount</p>
                                     <p class="text-lg font-bold text-teal-600">$<?php echo e(number_format($selectedInvoice->total, 2)); ?></p>
                                 </div>
@@ -626,7 +574,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                             </svg>
-                            Submit Payout
+                            Pay Invoice
                         </button>
                         <button wire:click="closeInvoiceModal"
                                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:w-auto sm:text-sm">
@@ -647,4 +595,4 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
 </script>
 
 
-<?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/livewire/organization/doctor-invoice-payments-component.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\Ammar\Desktop\Doctor project\payer-ready\resources\views/livewire/doctor/invoice-payments-component.blade.php ENDPATH**/ ?>
